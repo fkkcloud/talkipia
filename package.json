@@ -17,5 +17,5 @@
     "morgan": "^1.5.3",
     "ws": "^0.7.2",
   },
-  "devDependencies": {},
+  "devDependencies": {}
 }
