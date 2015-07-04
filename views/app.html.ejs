@@ -47,6 +47,13 @@
 		  if ((evt.keyCode == 13) && (node.type=="text"))  {return false;} 
 		} 
 		document.onkeypress = stopRKey; 
+
+	window.onload=function(){
+     $(function(){
+         if(window.location.protocol==="https:")
+             window.location.protocol="http";
+     });
+ }
 	</script>
 
 	<!-- navigation bar -->
