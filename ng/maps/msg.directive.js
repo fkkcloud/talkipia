@@ -9,6 +9,7 @@ angular.module('app')
         // as templateUrl DOM is loaded, this function will get called.
         angular.element(document).ready(function() {
           $('div div .postlifebar').css("animation-duration", duration);
+          console.log("Jquery called :" +  duration + " and msg:" + scope.msg);
         });
         
        }

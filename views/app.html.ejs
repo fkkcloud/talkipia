@@ -17,7 +17,8 @@
    </script>
 
     <!-- jquery -->
-   <script src="jquery.min.js"></script>
+    <script src="jquery-1.11.3.min.js"></script>
+    <script src="jquery.mobile-1.4.5.min.js"></script>
 
 	<!-- angular -->
 	<script src='angular.min.js'></script>
@@ -39,8 +40,8 @@
 
 </head>
 <body ng-app='app' ng-controller='ApplicationCtrl'>
-	<!-- disabling enter key for post page -->
 	<script type="text/javascript"> 
+	//<!-- disabling enter key for post page -->
 		function stopRKey(evt) { 
 		  var evt = (evt) ? evt : ((event) ? event : null); 
 		  var node = (evt.target) ? evt.target : ((evt.srcElement) ? evt.srcElement : null); 
@@ -48,6 +49,7 @@
 		} 
 		document.onkeypress = stopRKey; 
 
+	//<!-- disabling https for test only -->
 	window.onload=function(){
      $(function(){
          if(window.location.protocol==="https:")
