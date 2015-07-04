@@ -18,8 +18,4 @@
     "ws": "^0.7.2",
   },
   "devDependencies": {},
-  "scripts" : {
-    "start":"node boot.js",
-    "postinstall": "gulp dev"
-  }
 }
