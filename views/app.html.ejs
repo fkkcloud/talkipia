@@ -20,9 +20,6 @@
 	<script src='http://ajax.googleapis.com/ajax/libs/angularjs/1.3.0-rc.4/angular.js'></script>
     <script src='http://ajax.googleapis.com/ajax/libs/angularjs/1.3.0-rc.4/angular-route.js'></script>
 
-   <!-- angular-scroll -->
-   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular-scroll/0.7.1/angular-scroll.min.js"></script>
-
    <script type="text/javascript" src="./ui-bootstrap-tpls-0.13.0.min.js"></script>
 
    <!-- sweet alert -->
@@ -35,9 +32,11 @@
    </script>
 	-->
 
+<!--
 	<script type="text/javascript" 
 	  src="https://maps.googleapis.com/maps/api/js?libraries=places">
 	</script>
+-->
 
     <!-- express static use -->
     <script src='/app.js'></script> 
@@ -94,12 +93,14 @@
 	</nav>
 
 	<!-- global map -->
+	<!--
 	<div ng-if='currentPageId == pageId.post'>
 		<input id="pac-input" class="controls" type="text" placeholder="Search Location">
       <button ng-click='moveToCurrentLocation()' class="btn btn-info" id='btn-curr'> Me </button>
 		<div app-map=""></div>
 	</div>
-
+	-->
+	
 	<!-- pages ngview -->
 	<div ng-view></div>
 	
