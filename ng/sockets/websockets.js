@@ -1,5 +1,5 @@
 angular.module('app')
-.run(function($rootScope){
+.run(function($rootScope, $timeout){
 	//var url = 'ws://192.168.0.4:3000';
 	var url = 'ws://frozen-badlands-8649.herokuapp.com';
 	var connection = new WebSocket(url);
