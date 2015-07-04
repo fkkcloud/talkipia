@@ -1,0 +1,25 @@
+<div class='container'>
+	<form name='postForm' role='form-vertical' novalidate>
+		<div class='form-group'>
+			<div class='input-group'>
+				<input type='text' ng-model='content' maxlength='20'
+					id='sexplace' class='form-control' required>
+				<span id='sexplace' ng-show='postplace'> 
+					{{ postplace }} 
+				</span>
+				<span id='sexplace-placeholder' ng-show='!postplace'> 
+					Click on the map to find place 
+				</span>
+
+				<button ng-disabled='postForm.$invalid || !postplace' ng-click='addPost()' class="btn btn-danger btn-lg btn-block" id='sexsubmit'> Post </button>
+			</div>
+		</div>
+	</form>
+	<ul class='list-group' id='google'>
+		<li ng-repeat="post in posts" class='list-group-item list-group-item-warning'>
+			<p> <strong id='sexplace'> {{ post.body }} </strong> </p>  
+			<button ng-click='moveToLoc($index)' class="btn btn-block btn-warning" id='sexfindbtn'> Find them </button>
+			<tt2> {{ post.date | date:'MM dd, hh:mma, yyyy'}}</tt2>
+		</li>
+	</ul>
+</div>

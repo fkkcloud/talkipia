@@ -1,0 +1,226 @@
+// warning messages
+tt{
+    font-family: Roboto;
+    color: gray;
+    font-weight: 300;
+}
+
+tt2{
+    display:inline-block;
+    vertical-align:bottom;
+    position: absolute; bottom:10px; right:16px;
+    font-family: Roboto;
+    font-size:12px;
+    color: gray;
+    font-weight: 300;
+}
+
+#bubblePost {
+    max-width:100px;
+    font-family: Roboto;
+    font-size: 15px;
+    font-weight: 300;
+}
+
+// gotta get the rounded edges for nav-inverse!
+.navbar-noround {
+    border-radius: 0%;
+}
+
+#navbarcollapse{
+    font-family: Roboto;
+    font-weight: 300;  
+}
+
+// google style-ed font/weight
+#google{
+    font-family: Roboto;
+    font-weight: 300;
+}
+
+// moving to current location button
+#btn-curr {
+    font-family: Roboto;
+    font-size: 13px;
+    font-weight: 300;
+    text-overflow: ellipsis;
+    width:40px;
+    height:40px;
+    margin:5px;
+    padding:6px;
+    text-align: center;
+}
+
+/* mobile phone */
+@media all and (max-width: 768px) {
+    #btn-curr  {
+        margin-right:2px;
+        margin-top:16px;
+        width:40px;
+        height:40px;
+    }
+}
+
+#sexplace {
+ 	font-family: Roboto;
+    font-size: 15px;
+    font-weight: 300;
+
+	min-width:300px;
+	margin-top:10px;
+	margin-bottom:10px;
+	margin-right:10px;
+	padding: 0 11px 0 13px;
+    text-overflow: ellipsis;
+
+    display: inline;
+}
+
+#sexfindbtn {
+    height: 40px;
+    font-family: Roboto;
+    font-size: 15px;
+    font-weight: 300;
+    max-width:150px;
+    margin-top:5px;
+    margin-bottom:5px;
+    margin-right:10px;
+    padding: 0 11px 0 13px;
+    text-overflow: ellipsis;
+
+    display: inline;
+}
+
+#sexlikebtn {
+    height: 40px;
+    font-family: Roboto;
+    font-size: 12px;
+    font-weight: 300;
+    width:40px;
+    margin-top:5px;
+    margin-bottom:5px;
+    margin-right:10px;
+    padding: 0 11px 0 13px;
+    text-overflow: ellipsis;
+
+    display: inline;
+}
+
+#sexposttarget {
+    font-size:24px;
+}
+
+#sexsubmit {
+	height: 40px;
+ 	font-family: Roboto;
+    font-size: 15px;
+    font-weight: 300;
+
+	//width:50%;
+	min-width:300px;
+	margin-top:5px;
+	margin-bottom:5px;
+	margin-right:10px;
+	padding: 0 11px 0 13px;
+    text-overflow: ellipsis;
+
+    display: inline;
+}
+
+#map-canvas {
+		min-height: 500px;
+        max-height: 600px;
+        height: 70%;
+
+        margin: 0px;
+        padding: 0px;
+        margin-top: -20px;
+        margin-bottom: 20px;
+}
+
+/* mobile phone */
+@media all and (max-width: 768px) {
+    #map-canvas {
+        min-height: 400px;
+        max-height: 500px;
+        height: 50%;
+    }
+}
+
+#target {
+        width: 345px;
+}
+
+.controls {
+        margin-top: 16px;
+        border: 1px solid transparent;
+        border-radius: 2px 0 0 2px;
+        box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        height: 32px;
+        outline: none;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+#pac-input {
+    background-color: #fff;
+    font-family: Roboto;
+    font-size: 15px;
+    font-weight: 300;
+    margin-left: 12px;
+    padding: 0 11px 0 13px;
+    text-overflow: ellipsis;
+    width:30%;
+    min-width: 150px;
+}
+
+/* mobile phone */
+@media all and (max-width: 768px) {
+    #pac-input {
+        font-size: 12px;
+        width:55%;
+    }
+}
+
+#pac-input:focus {
+    border-color: #4d90fe;
+}
+
+.pac-container {
+    font-family: Roboto;
+}
+
+#type-selector {
+    color: #fff;
+    background-color: #4d90fe;
+    padding: 5px 11px 0px 11px;
+}
+
+#type-selector label {
+    font-family: Roboto;
+    font-size: 13px;
+    font-weight: 300;
+}
+
+
+div div .bubbleLifeBar {
+  width: 100%;
+    height:5px;
+    background: #f80;
+  width: 0%;
+  animation-name: decrease;
+  animation-duration: 2s;
+  animation-timing-function: linear;
+}
+
+
+@keyframes decrease {
+  from {
+    width: 100%
+  }
+  to {
+    width: 0%
+  }
+}
+
+

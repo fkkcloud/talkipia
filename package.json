@@ -1,0 +1,21 @@
+{
+  "name": "lastsex",
+  "dependencies": {
+    "body-parser": "^1.12.4",
+    "ejs": "^2.3.1",
+    "express": "^4.12.4",
+    "gulp": "^3.9.0",
+    "gulp-concat": "^2.5.2",
+    "gulp-ng-annotate": "^1.0.0",
+    "gulp-nodemon": "^2.0.3",
+    "gulp-sourcemaps": "^1.5.2",
+    "gulp-stylus": "^2.0.3",
+    "gulp-uglify": "^1.2.0",
+    "jwt-simple": "^0.3.0",
+    "lodash": "^3.9.3",
+    "mongoose": "^4.0.5",
+    "morgan": "^1.5.3",
+    "ws": "^0.7.2"
+  },
+  "devDependencies": {}
+}
