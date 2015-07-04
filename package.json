@@ -15,7 +15,11 @@
     "lodash": "^3.9.3",
     "mongoose": "^4.0.5",
     "morgan": "^1.5.3",
-    "ws": "^0.7.2"
+    "ws": "^0.7.2",
   },
-  "devDependencies": {}
+  "devDependencies": {},
+  "scripts" : {
+    "start":"node boot.js",
+    "postinstall": "gulp dev"
+  }
 }
