@@ -19,6 +19,6 @@
   },
   "devDependencies": {},
   "scripts" : {
-    "postinstall": "gulp dev"
+    "postinstall": "gulp build"
   }
 }
