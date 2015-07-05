@@ -10,26 +10,6 @@ angular.module('app')
 		$scope.navCollapsed = true;
 	};
 
-	/*
-	// 강아지 겟으로 맵 업데이트를 하는 방식.
-	$scope.requestRefresh = function(){
-		return $http.get('/api/refresh')
-		.then(
-		function(res){
-			console.log("OKAY, server says we update the map!");
-
-			$scope.$emit('refetch', {}); // to update list
-			google.maps.event.trigger($scope.map, 'maptypeid_changed'); // to update map
-
-			$scope.requestRefresh();
-		},
-		function(err){
-			console.log("Error should not happen for this..:", err);
-		});
-	}
-	$scope.requestRefresh();
-	*/
-
 	// as server socket send 'ws:new_post' , we can update the map!
 	$scope.$on('ws:new_post', function(_, post){
 		google.maps.event.trigger($scope.map, 'maptypeid_changed');

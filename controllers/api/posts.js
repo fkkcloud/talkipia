@@ -14,9 +14,10 @@ router.get('/', function(req, res, next){
 });
 
 router.post('/', function(req, res, next){
-	console.log('body:', req.body.body);
-	console.log('place:', req.body.place);
+	console.log('body:    ', req.body.body);
+	console.log('place:   ', req.body.place);
 	console.log('location:', req.body.location);
+	console.log('guiid:   ', req.body.guid);
 
 	function map_range(value, low1, high1, low2, high2) {
 	    return low2 + (high2 - low2) * (value - low1) / (high1 - low1);
@@ -43,7 +44,8 @@ router.post('/', function(req, res, next){
 		place    : req.body.place,
 		location : req.body.location,
 		lifespan : relativeLifeSpan,
-		lifeend  : relativeLifeEnd
+		lifeend  : relativeLifeEnd,
+		guid     : req.body.guid
 	});
 
 	var history = new History({
@@ -51,7 +53,8 @@ router.post('/', function(req, res, next){
 		place    : req.body.place,
 		location : req.body.location,
 		lifespan : relativeLifeSpan,
-		lifeend  : relativeLifeEnd
+		lifeend  : relativeLifeEnd,
+		guid     : req.body.guid
 	});
 
 	post.save(function(err, post){

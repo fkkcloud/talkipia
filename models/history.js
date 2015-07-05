@@ -6,6 +6,7 @@ var History = db.model('History', {
 	location:    { type: String, required: true },
 	lifespan:    { type: Number, required: true },
 	lifeend :    { type: Number, required: true },
+	guid    :    { type: String, required: true },
 	date    :  	 { type: Date,   required: true, default: Date.now }
 });
 

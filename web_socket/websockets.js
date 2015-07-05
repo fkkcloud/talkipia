@@ -9,11 +9,11 @@ exports.connect = function(server){
 	// 클라이언트가 서버소켓에 연결되었을때, client배열에 클라이언트의 웹소켓을 저장하여
 	// 항상 트랙킹할수 있도록 한다.
 	wss.on('connection', function(ws){ 
-		console.log('new client joined.');
+		console.log('new client connected.:', ws);
 
 		clients.push(ws);
 
-		exports.broadcast('new client joined.'); // 클라이언트가 서버의 웹소켓에 접속할때 broadcast
+		exports.broadcast('server said - new client connected.'); // 클라이언트가 서버의 웹소켓에 접속할때 broadcast
 
 		// 클라이언트가 연결을 끊으면 Lo-Dash를 사용해 목록에서 클라이언트를 제거한다.
 		// 연결이 끊어진 클라이언트로 메세지를 송신하려 시도하면 고약한 에러가 발생하므로,

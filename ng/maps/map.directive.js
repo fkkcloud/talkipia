@@ -1,4 +1,3 @@
-
 angular.module('app')
 .directive('appMap', function(PostsSvc, UtilSvc, $compile, $timeout) {
     // directive link function

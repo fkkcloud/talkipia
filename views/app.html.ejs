@@ -49,16 +49,10 @@
 		  if ((evt.keyCode == 13) && (node.type=="text"))  {return false;} 
 		} 
 		document.onkeypress = stopRKey; 
-
- 	console.log(navigator.userAgent);
- 	if (navigator.userAgent.match(/iPhone/i))
- 	{
- 		console.log("IT IS IPHONE!");
- 	}
- 	else {
- 		console.log("IT IS NOT MOBILE");
- 	}
 	</script>
+
+	<!-- current platform testing -->
+	Platform : {{ curr_platform }}
 
 	<!-- navigation bar -->
 	<nav class='navbar navbar-inverse navbar-noround' role='navigation'>
