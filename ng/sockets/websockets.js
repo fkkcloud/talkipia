@@ -1,8 +1,17 @@
 angular.module('app')
 .run(function($rootScope, $timeout){
+	var url;
 
-	//var url = 'ws://192.168.0.4:5000'; // developmetn locally 
-	var url = 'wss://frozen-badlands-8649.herokuapp.com'; // production
+	var hostname = document.location.hostname;
+	
+	var developmentIP = "192.168.0.4";
+
+	if (hostname == "localhost" || hostname == developmentIP) {
+		url = 'ws://192.168.0.4:5000'; // developmet on socket locally 
+	}
+	else {
+		url = 'wss://frozen-badlands-8649.herokuapp.com'; // production deploy version - still debug mode
+	}
 	var connection = new WebSocket(url);
 
 	var reconnect =function(){

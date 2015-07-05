@@ -40,6 +40,7 @@
 
 </head>
 <body ng-app='app' ng-controller='ApplicationCtrl'>
+
 	<script type="text/javascript"> 
 	//<!-- disabling enter key for post page -->
 		function stopRKey(evt) { 
@@ -55,7 +56,16 @@
          if(window.location.protocol==="https:")
              window.location.protocol="http";
      });
- }
+ 	}
+
+ 	console.log(navigator.userAgent);
+ 	if (navigator.userAgent.match(/iPhone/i))
+ 	{
+ 		console.log("IT IS IPHONE!");
+ 	}
+ 	else {
+ 		console.log("IT IS NOT MOBILE");
+ 	}
 	</script>
 
 	<!-- navigation bar -->
