@@ -42,7 +42,10 @@ angular.module('app')
                 zoom        : 15,
                 MapTypeId   : google.maps.MapTypeId.ROADMAP,
                 scrollwheel : false,
-                streetViewControl: false
+                streetViewControl: false,
+                mapTypeControl: false,
+                panControl: false,
+                //zoomControl: false
             };
             
         // draw map with helper markers
@@ -123,7 +126,7 @@ angular.module('app')
                     var location = angular.fromJson(post.location);
                     var googleLoc = new google.maps.LatLng(location.lat, location.lon);
 
-                    
+
                     // 바운더리 안에 있는지부터 체크를 하장 
                     if (!(googleLoc.lat() < current_map_nw.lat()) ||
                         !(googleLoc.lat() > current_map_se.lat()) ||
