@@ -175,9 +175,6 @@ angular.module('app')
                                 '</div><div id="bubbleLifeBar"></div>';
                     */
 
-
-                    
-
                     // 스코프에서부터 새로운 차일드 스코프를 만들어 each for loop에서 사용한다.
                     // --> 해야, 각 DOM이 각각의 scope를 가져서 post msg가 안 겹친다.
                     var parent = scope;

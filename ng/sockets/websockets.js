@@ -1,8 +1,13 @@
 angular.module('app')
 .run(function($rootScope, $timeout){
-	//var url = 'ws://192.168.0.4:5000'; // developmetn locally 
-	var url = 'wss://frozen-badlands-8649.herokuapp.com'; // production
-	var connection = new WebSocket(url);
+
+	var connect =function(){
+		//var url = 'ws://192.168.0.4:5000'; // developmetn locally 
+		var url = 'wss://frozen-badlands-8649.herokuapp.com'; // production
+		var connection = new WebSocket(url);
+	}
+	
+	connect();
 
 	connection.onopen = function(){
 		console.log('WebSocket connected');
