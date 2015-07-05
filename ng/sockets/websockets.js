@@ -43,7 +43,7 @@ angular.module('app')
 
 		connection.onclose = function(){
 			console.log('WebSocket closed. Reconecting...');
-			$timeout(connect, 10*10000);
+			$timeout(connect, 2000);
 		};
 
 		connection.onmessage = function(e){
