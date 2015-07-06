@@ -35,7 +35,7 @@ angular.module('app')
         setPlace(initialMapCenter);
 
         var zoomControlBool = true;
-        if (scope.curr_platform == "iPhone")
+        if (scope.curr_platform == "iPhone") //temp
             zoomControlBool = false;
 
         var mapOptions = {
@@ -264,13 +264,25 @@ angular.module('app')
             });
         }
 
+        function setMoveToCurrLoc()
+        {
+            var currLocBtn = (document.getElementById('btn-curr')); 
+            map.controls[google.maps.ControlPosition.TOP_RIGHT].push(currLocBtn);
+        }
+
+        function setPostForm()
+        {
+            var postForm = (document.getElementById('sexplace')); 
+            map.controls[google.maps.ControlPosition.BOTTOM_CENTER].push(postForm);
+        }
+
         function setSearchBox()
         {
             // Create the search box and link it to the UI element.
             var input = (document.getElementById('pac-input')); // @type {HTMLInputElement}  
-            var currLocBtn = (document.getElementById('btn-curr'));      
+                 
             map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
-            map.controls[google.maps.ControlPosition.TOP_RIGHT].push(currLocBtn);
+            
 
             var searchBox = new google.maps.places.SearchBox((input)); // @type {HTMLInputElement} 
 
@@ -366,6 +378,10 @@ angular.module('app')
 
             setSearchBox();
 
+            setMoveToCurrLoc();
+
+            setPostForm();
+
             setCenterChanged();
 
             setMoveToCurrentLocation();
@@ -379,6 +395,7 @@ angular.module('app')
             }, 800);
             
         } 
+        
         initMap();
     };
     
