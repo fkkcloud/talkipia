@@ -39,14 +39,18 @@ angular.module('app')
               return;
             }
 
-            scope.$parent.postcouplestatus = 1; // 1- ilikeyou
+            elm.parent().find('div div #bubbleClick').addClass("bubblePost bubblePost_ilikeyou");
+            //scope.$parent.postcouplestatus = 1; // 1- ilikeyou
 
             console.log('emit set:guidtgt', postguid);
             scope.$emit('set:guidtgt', postguid);
           });
 
-          var duration = scope.postlife + "ms";
-          var postlifebar_css = elm.parent().find('div div .postlifebar').css('animation-duration', duration);
+          $timeout(function(){
+            var duration = scope.postlife + "ms";
+            var postlifebar_css = elm.parent().find('div div .postlifebar').css('animation-duration', duration);
+          }, 100);
+          
         });
         
     },

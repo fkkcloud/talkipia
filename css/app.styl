@@ -36,7 +36,7 @@
     zoom: 1.0;
 }
 /* mobile phone */
-@media all and (max-width: 768px) {
+@media only and (max-width: 768px) {
     .navbar-scale {
         zoom: 0.86;
     }
@@ -189,14 +189,14 @@
 /* Portrait */
 @media only screen and (min-device-width: 375px) and (max-device-width: 667px) and (-webkit-min-device-pixel-ratio: 2)and (orientation: portrait) { 
     #map-canvas {
-    height: 667px;
+    height: 624px; // 667 - 43(nav bar height's 86%)
     }
 }
 
 /* Landscape */
 @media only screen and (min-device-width: 375px) and (max-device-width: 667px) and (-webkit-min-device-pixel-ratio: 2)and (orientation: landscape) { 
   #map-canvas {
-    height: 375px;
+    height: 332px; // 375 - 43(nav bar height's 86%)
     }
 }
 
