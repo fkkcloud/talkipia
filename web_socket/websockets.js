@@ -9,7 +9,7 @@ exports.connect = function(server){
 	// 클라이언트가 서버소켓에 연결되었을때, client배열에 클라이언트의 웹소켓을 저장하여
 	// 항상 트랙킹할수 있도록 한다.
 	wss.on('connection', function(ws){ 
-		console.log('new client connected.:', ws);
+		console.log('new client connected.');
 
 		clients.push(ws);
 

@@ -1,29 +1,17 @@
 angular.module('app')
 .run(function($rootScope, $timeout){
 
-	// get current platform
-	$rootScope.curr_platform = navigator.platform;
-
-	// 지금은 난수를 만들고 있으나 GUID자체를 grab해서 쓸수 있도록 바꾸는게 좋을듯 하다.
-	function guid() {
-		function s4() {
-		    return Math.floor((1 + Math.random()) * 0x10000)
-		      .toString(16)
-		      .substring(1);
-		}
-	  	return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
-	}
-
-	$rootScope.guid = guid();
-	// server에 보냄 guid를!
-
 	//---------------------------------------------------------------------------------------------
 
 	var url;
 
 	var hostname = document.location.hostname;
 	var developmentIP = "192.168.0.4";
-	if (hostname == "localhost" || hostname == developmentIP) {
+
+	if (hostname == "localhost"){
+		url = "ws://localhost:5000";
+	}
+	else if (hostname == developmentIP) {
 		url = 'ws://192.168.0.4:5000'; // developmet on socket locally 
 	}
 	else {
@@ -49,8 +37,11 @@ angular.module('app')
 		connection.onmessage = function(e){
 			console.log(e);
 			var payload = JSON.parse(e.data);
+
+			// 새로운 포스트가 올라왔을때 front-end에서 맵이 다시 업데이트 해야 된다고 알려준다!
+			// 매우중요!
 			$rootScope.$broadcast('ws:' + payload.type, payload.data);
-		}
+		};
 	};
 
 	connect();

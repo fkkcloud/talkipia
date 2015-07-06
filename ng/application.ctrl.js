@@ -1,6 +1,28 @@
 
 angular.module('app')
 .controller('ApplicationCtrl', function($rootScope, $scope, $window, $http){
+	// get current platform
+	$scope.curr_platform = navigator.platform;
+
+	// 지금은 난수를 만들고 있으나 GUID자체를 grab해서 쓸수 있도록 바꾸는게 좋을듯 하다.
+	function guid() {
+		function s4() {
+		    return Math.floor((1 + Math.random()) * 0x10000)
+		      .toString(16)
+		      .substring(1);
+		}
+	  	return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
+	}
+
+	$scope.guid = guid();
+
+	$scope.guidtgt = "0"; // 기본값은 0으로 해서 0이면 관심상대guid가 없는 상태이다. 
+
+	$scope.$on('set:guidtgt', function(_, guidtgt){
+		console.log("setting guidtgt", guidtgt);
+		$scope.guidtgt = guidtgt;
+	});
+
 	$scope.pageId = { 
 		post : 0,
 	};

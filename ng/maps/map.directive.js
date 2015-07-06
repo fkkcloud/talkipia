@@ -1,7 +1,7 @@
 angular.module('app')
 .directive('appMap', function(PostsSvc, UtilSvc, $compile, $timeout) {
     // directive link function
-    var link = function(scope, element, attrs) {
+    var link = function(scope, element, attrs, rootScope) {
         var map;
         var current_map_nw;
         var current_map_se;
@@ -23,8 +23,6 @@ angular.module('app')
         };
 
         // map config
-        console.log('window.localStorage.latitude ', window.localStorage.latitude );
-
         var initialMapCenter = new google.maps.LatLng(34.05, -118.24);
         
         if (!isNaN(window.localStorage.latitude) && !isNaN(window.localStorage.longitude))
@@ -32,9 +30,7 @@ angular.module('app')
             initialMapCenter = new google.maps.LatLng(window.localStorage.latitude, window.localStorage.longitude);
         }
 
-        console.log('window.localStorage.latitude ', window.localStorage.latitude );
-        
-        console.log(initialMapCenter);
+        console.log('Initial Map Center:', initialMapCenter);
 
         var mapOptions = {
                 center      : initialMapCenter,
@@ -125,6 +121,36 @@ angular.module('app')
                     var location = angular.fromJson(post.location);
                     var googleLoc = new google.maps.LatLng(location.lat, location.lon);
 
+                    /* coupling status
+                        0 - no status
+                        1 - i like you
+                        2 - you like i
+                        4 - we like each other
+                    */
+                    //console.log ("scope.guidtgt:", scope.guidtgt);
+                    //console.log ("scope.guid:", scope.guid);
+                    //console.log ("post.guidtgt:", post.guidtgt);
+                    //console.log ("post.guid:", post.guid);
+
+                    var coupling_status = 0;
+                    var ilikeyou = scope.guidtgt == post.guid;
+                    var youlikei = scope.guid == post.guidtgt;
+                    if (ilikeyou && youlikei) // 4
+                    {
+                        coupling_status = 4;
+                    }
+                    else if (ilikeyou && !youlikei)
+                    {
+                        coupling_status = 1;
+                    }
+                    else if (!ilikeyou && youlikei)
+                    {
+                        coupling_status = 2;
+                    }
+                    else
+                    {
+                        coupling_status = 0;
+                    }
 
                     // 바운더리 안에 있는지부터 체크를 하장 
                     if (!(googleLoc.lat() < current_map_nw.lat()) ||
@@ -179,7 +205,7 @@ angular.module('app')
                     var parent = scope;
                     var child = parent.$new(true);
 
-                    var openInfoWindow = (function(marker, scope, postmsg, postlife){
+                    var openInfoWindow = (function(marker, child_scope, post, coupling_status){
 
                         return function(){
                             // create new window
@@ -190,16 +216,36 @@ angular.module('app')
 
                             // compile it before loaded
                             var content = '<div map-msg></div>';
-                            var compiled = $compile(content)(scope);
+                            var compiled = $compile(content)(child_scope);
 
                             //to make data available to template
-                            scope.msg = postmsg;
-                            scope.postlife = postlife;
+                            child_scope.msg = post.body;
+                            child_scope.postlife = post.lifespan;
+                            child_scope.postguid = post.guid;
+                            child_scope.postguidtgt = post.guidtgt;
+                            child_scope.postcouplestatus = coupling_status;
+
+                            console.log("coupling_status", child_scope.postcouplestatus);
+
+                            /*
+                            msg.directive에서 하는 과정을 여기서도 할수 있다.
+                            google.maps.event.addListener(infoWindow, 'domready', function() {
+                                $timeout(function(){
+                                    $('div div .postlifebar').css("animation-duration", post.lifespan);
+                                    console.log("Jquery called :" +  post.lifespan + " and msg:" + post.body);
+                                }, 1);
+                                
+                                $('div #bubblePost').click(function(){
+                                    console.log("sending $emit - set_guidtgt", post.guid);
+                                    scope.$emit('set_guidtgt', post.guid);
+                                });  
+                            });
+                            */
 
                             infoWindow.setContent( compiled[0] );
                             infoWindow.open(map , marker);
                         };
-                    })(marker, child, post.body, post.lifespan);
+                    })(marker, child, post, coupling_status);
                     
                     openInfoWindow();
                     ////////////////////// END of DRAWING MESSAGE WINDOW ///////////////////////////////

@@ -45,7 +45,8 @@ router.post('/', function(req, res, next){
 		location : req.body.location,
 		lifespan : relativeLifeSpan,
 		lifeend  : relativeLifeEnd,
-		guid     : req.body.guid
+		guid     : req.body.guid,
+		guidtgt  : req.body.guidtgt
 	});
 
 	var history = new History({
@@ -54,7 +55,8 @@ router.post('/', function(req, res, next){
 		location : req.body.location,
 		lifespan : relativeLifeSpan,
 		lifeend  : relativeLifeEnd,
-		guid     : req.body.guid
+		guid     : req.body.guid,
+		guidtgt  : req.body.guidtgt
 	});
 
 	post.save(function(err, post){
