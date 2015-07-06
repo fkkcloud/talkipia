@@ -32,6 +32,8 @@ angular.module('app')
 
         console.log('Initial Map Center:', initialMapCenter);
 
+        setPlace(initialMapCenter);
+
         var zoomControlBool = true;
         if (scope.curr_platform == "iPhone")
             zoomControlBool = false;
@@ -69,14 +71,12 @@ angular.module('app')
             helperMarkers = [];
         }
 
-        function drawAndSetPlace(location)
+        function setPlace(location)
         {
-            var geocoder = new google.maps.Geocoder();
-            
             // broadcast location infor(lon,lat)
             scope.$emit('loc', location);
 
-            drawHelperMarker(location);
+            var geocoder = new google.maps.Geocoder();
 
             // broadcast place formatted_address and draw icon
             geocoder.geocode( { 'latLng': location }, function(results, status) {
@@ -95,6 +95,12 @@ angular.module('app')
                     scope.$emit('place', "Location does not exists");
                 }
             });
+        }
+
+        function drawAndSetPlace(location)
+        {
+            drawHelperMarker(location);
+            setPlace(location);
         }
 
         // place a marker and infoWindow
