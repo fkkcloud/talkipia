@@ -15,7 +15,7 @@ angular.module('app')
 		url = 'ws://192.168.0.4:5000'; // developmet on socket locally 
 	}
 	else {
-		url = 'wss://frozen-badlands-8649.herokuapp.com'; // production deploy version - still debug mode
+		url = 'wss://fandomchat.herokuapp.com'; // production deploy version - still debug mode
 	}
 
 	/* 개발과정이 끝나고 배포시에는 위부분을 지우고 아래 코드만 남겨도 된다.
