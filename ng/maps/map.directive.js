@@ -30,23 +30,17 @@ angular.module('app')
             initialMapCenter = new google.maps.LatLng(window.localStorage.latitude, window.localStorage.longitude);
         }
 
-        console.log('Initial Map Center:', initialMapCenter);
-
         setPlace(initialMapCenter);
-
-        var zoomControlBool = true;
-        if (scope.curr_platform == "iPhone") //temp
-            zoomControlBool = false;
 
         var mapOptions = {
                 center      : initialMapCenter,
                 zoom        : 15,
                 MapTypeId   : google.maps.MapTypeId.ROADMAP,
-                scrollwheel : false,
+                scrollwheel : true,
                 streetViewControl: false,
                 mapTypeControl: false,
                 panControl: false,
-                zoomControl: zoomControlBool
+                zoomControl: false
             };
             
         // draw map with helper markers
@@ -264,7 +258,7 @@ angular.module('app')
             });
         }
 
-        function setMoveToCurrLoc()
+        function setMoveToCurrLocBtn()
         {
             var currLocBtn = (document.getElementById('btn-curr')); 
             map.controls[google.maps.ControlPosition.TOP_RIGHT].push(currLocBtn);
@@ -272,17 +266,21 @@ angular.module('app')
 
         function setPostForm()
         {
-            var postForm = (document.getElementById('sexplace')); 
+            var postForm = (document.getElementById('posting')); 
             map.controls[google.maps.ControlPosition.BOTTOM_CENTER].push(postForm);
+        }
+
+        function setPostBtn()
+        {
+            var postBtn = (document.getElementById('btn-submit'));
+            map.controls[google.maps.ControlPosition.BOTTOM_CENTER].push(postBtn);
         }
 
         function setSearchBox()
         {
             // Create the search box and link it to the UI element.
             var input = (document.getElementById('pac-input')); // @type {HTMLInputElement}  
-                 
             map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
-            
 
             var searchBox = new google.maps.places.SearchBox((input)); // @type {HTMLInputElement} 
 
@@ -378,9 +376,11 @@ angular.module('app')
 
             setSearchBox();
 
-            setMoveToCurrLoc();
+            setMoveToCurrLocBtn();
 
             setPostForm();
+
+            setPostBtn();
 
             setCenterChanged();
 
@@ -395,7 +395,7 @@ angular.module('app')
             }, 800);
             
         } 
-        
+
         initMap();
     };
     

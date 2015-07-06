@@ -1,8 +1,22 @@
 
 angular.module('app')
 .controller('ApplicationCtrl', function($rootScope, $scope, $window, $http){
-	// get current platform
-	$scope.curr_platform = navigator.platform;
+	// see if its mobile phone
+	$scope.isMobile = function(){
+		if( navigator.userAgent.match(/Android/i)
+		 || navigator.userAgent.match(/webOS/i)
+		 || navigator.userAgent.match(/iPhone/i)
+		 || navigator.userAgent.match(/iPad/i)
+		 || navigator.userAgent.match(/iPod/i)
+		 || navigator.userAgent.match(/BlackBerry/i)
+		 || navigator.userAgent.match(/Windows Phone/i)
+		 ){
+		    return true;
+		  }
+		 else {
+		    return false;
+		  }
+	};
 
 	// 지금은 난수를 만들고 있으나 GUID자체를 grab해서 쓸수 있도록 바꾸는게 좋을듯 하다.
 	function guid() {
@@ -70,19 +84,42 @@ angular.module('app')
         swal({   title: "",   text: "Moving to current location..",   timer: 1500,   showConfirmButton: false });
 	};
 
+	$scope.moveToPostLocation = function(){
+		var latDelta = 0.0;
+
+		if ($scope.isMobile()){
+			var bounds = $scope.map.getBounds();
+	        var ne = bounds.getNorthEast(); // LatLng of the north-east corner
+	        var sw = bounds.getSouthWest(); // LatLng of the south-west corder
+	        current_map_nw = new google.maps.LatLng(ne.lat(), sw.lng());
+	        current_map_se = new google.maps.LatLng(sw.lat(), ne.lng());
+
+	        var latDelta_center2north = 0.5 * Math.abs($scope.postLocation.lat - current_map_nw.lat());
+	        var latDelta_center2south = 0.5 * Math.abs($scope.postLocation.lat - current_map_se.lat());
+
+	        if (latDelta_center2north > latDelta_center2south){
+	        	latDelta = latDelta_center2south;
+	        }
+	        else {
+	        	latDelta = latDelta_center2north;
+	        }
+		}
+
+		var googleLoc = new google.maps.LatLng($scope.postLocation.lat + latDelta, $scope.postLocation.lon);
+		$scope.map.panTo(googleLoc);
+	};
+
 	$scope.$on('pagechange', function(_, pageId){
 		$scope.currentPageId = pageId;
 	});
 
 	$scope.$on('loc', function(_, location){
-		console.log('IN:',location);
 		var lat = location.lat();
 		var lon = location.lng();
 		$scope.postLocation = {
 			lat: lat,
 			lon: lon
 		};
-		console.log('SAVED:', $scope.postLocation);
 	});
 
 	$scope.$on('place', function(_, place){
@@ -90,7 +127,6 @@ angular.module('app')
 		// problem related note: http://www.jeffryhouser.com/index.cfm/2014/6/2/How-do-I-run-code-when-a-variable-changes-with-AngularJS
 		$scope.$apply(function(){
 				$scope.postplace = place;
-				console.log('SAVED:', $scope.postplace);
 			}
 		);
 	});

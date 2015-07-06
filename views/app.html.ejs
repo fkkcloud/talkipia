@@ -34,9 +34,7 @@
 	<link rel="stylesheet" type="text/css" href="./sweetalert.css">
 
 	<!-- express static use -->
-    <script src='/app.js'></script> 
-
-
+	<script src='/app.js'></script> 
 
 </head>
 <body ng-app='app' ng-controller='ApplicationCtrl'>
@@ -50,10 +48,6 @@
 		} 
 		document.onkeypress = stopRKey; 
 	</script>
-	-->
-
-	<!-- current platform testing 
-	Platform : {{ curr_platform }} 
 	-->
 
 	<!-- navigation bar -->
@@ -90,17 +84,29 @@
 	</nav>
 
 	<!-- global map -->
-	<div ng-if='currentPageId == pageId.post'>
+	<div> <!-- this is for multiple page setup later <div ng-if='currentPageId == pageId.post'>-->
 		<input id="pac-input" class="controls" type="text" placeholder="Search Location">
+
       	<button ng-click= 'moveToCurrentLocation()' class="btn btn-info" id='btn-curr'> Me </button>
-      	<form ng-submit= 'addPost()' novalidate>
-      		<input ng-show='curr_platform == "iPhone"' ng-controller='PostsCtrl' type='text' maxlength='20' id='sexplace' required>
+
+      	<form ng-controller='PostsCtrl' name='postForm' novalidate>
+      		<input  type='text' 
+      				ng-model='content' 
+      				ng-focus='moveToPostLocation()'
+      				maxlength='20' 
+      				id='posting' 
+      				placeholder='what will happen today?' required>
+      		<button ng-disabled='postForm.$invalid' 
+      				ng-click='addPost()' 
+      				class="btn btn-danger btn-lg btn-block" 
+      				id='btn-submit'> Post </button>
       	</form>
+
 		<div app-map=""></div>
 	</div>
 
 	<!-- pages ngview temp filter for iPhone-->
-	<div ng-show='curr_platform != "iPhone"' ng-view></div>
+	<!-- <div ng-show='!isMobile()' ng-view></div> -->
 
 </body>
 </html>
