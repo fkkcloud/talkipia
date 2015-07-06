@@ -39,7 +39,8 @@ angular.module('app')
               return;
             }
 
-            elm.parent().find('div div #bubbleClick').addClass("bubblePost bubblePost_ilikeyou");
+            //elm.parent().find('div div #bubbleClick').addClass("bubblePost bubblePost_ilikeyou");
+            //scope.$parent.$apply();
             //scope.$parent.postcouplestatus = 1; // 1- ilikeyou
 
             console.log('emit set:guidtgt', postguid);
