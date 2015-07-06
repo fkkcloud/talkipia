@@ -99,7 +99,7 @@
 /* mobile phone */
 @media all and (max-width: 768px) {
     #btn-submit  {
-        width:66px;
+        width:60px;
         height: 45px;
         margin-bottom:25px;
     }
@@ -126,6 +126,7 @@
     outline: none;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
 }
+
 /* mobile phone */
 @media all and (max-width: 768px) {
     #posting  {
@@ -182,6 +183,21 @@
     /* Remove any browser-default margins. */
     margin: 0;
     margin-top: -20px;     
+}
+
+/* ----------- iPhone 6 ----------- */
+/* Portrait */
+@media only screen and (min-device-width: 375px) and (max-device-width: 667px) and (-webkit-min-device-pixel-ratio: 2)and (orientation: portrait) { 
+    #map-canvas {
+    height: 667px;
+    }
+}
+
+/* Landscape */
+@media only screen and (min-device-width: 375px) and (max-device-width: 667px) and (-webkit-min-device-pixel-ratio: 2)and (orientation: landscape) { 
+  #map-canvas {
+    height: 375px;
+    }
 }
 
 .controls {

@@ -2,8 +2,12 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var logger = require('morgan');
 var socket = require('./web_socket/websockets');
+var favicon = require('serve-favicon');
+
+
 
 var app = express();
+app.use(favicon(__dirname + '/resources/favicon.ico'));
 app.use(bodyParser.json());
 app.use(logger('dev'));
 
