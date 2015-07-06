@@ -51,6 +51,35 @@ angular.module('app')
 		google.maps.event.trigger($scope.map, 'maptypeid_changed');
 	});
 
+	$scope.$on('pagechange', function(_, pageId){
+		$scope.currentPageId = pageId;
+	});
+
+	$scope.$on('loc', function(_, location){
+		var lat = location.lat();
+		var lon = location.lng();
+		$scope.postLocation = {
+			lat: lat,
+			lon: lon
+		};
+	});
+
+	$scope.$on('place', function(_, place){
+		// Forcing the update with $apply() method on $scope
+		// problem related note: http://www.jeffryhouser.com/index.cfm/2014/6/2/How-do-I-run-code-when-a-variable-changes-with-AngularJS
+		$scope.$apply(function(){
+				$scope.postplace = place;
+			}
+		);
+	});
+
+	$scope.$on('mapInit', function(_, map){
+		$scope.map = map;
+		
+		// update map bounds as app launches
+		google.maps.event.trigger($scope.map, 'center_changed');
+	});
+
 	/* move to current location */
 	$scope.moveToCurrentLocation = function(){
 		function getCurrLocSuccess(pos) {
@@ -109,33 +138,5 @@ angular.module('app')
 		$scope.map.panTo(googleLoc);
 	};
 
-	$scope.$on('pagechange', function(_, pageId){
-		$scope.currentPageId = pageId;
-	});
-
-	$scope.$on('loc', function(_, location){
-		var lat = location.lat();
-		var lon = location.lng();
-		$scope.postLocation = {
-			lat: lat,
-			lon: lon
-		};
-	});
-
-	$scope.$on('place', function(_, place){
-		// Forcing the update with $apply() method on $scope
-		// problem related note: http://www.jeffryhouser.com/index.cfm/2014/6/2/How-do-I-run-code-when-a-variable-changes-with-AngularJS
-		$scope.$apply(function(){
-				$scope.postplace = place;
-			}
-		);
-	});
-
-	$scope.$on('mapInit', function(_, map){
-		$scope.map = map;
-		
-		// update map bounds as app launches
-		google.maps.event.trigger($scope.map, 'center_changed');
-	});
 
 });

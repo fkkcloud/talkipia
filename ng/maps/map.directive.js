@@ -14,7 +14,7 @@ angular.module('app')
             scaledSize: new google.maps.Size(17, 25)
         };
 
-         var imageTarget = {
+        var imageTarget = {
             url: 'http://www.clker.com/cliparts/U/P/j/M/I/i/x-mark-yellow-md.png',
             size: new google.maps.Size(100, 100),
             origin: new google.maps.Point(0, 0),
@@ -97,6 +97,34 @@ angular.module('app')
             setPlace(location);
         }
 
+        function calculateCoupling(post_guid, post_guidtgt)
+        {
+            /* coupling status
+                0 - no status
+                1 - i like you
+                2 - you like i
+                4 - we like each other
+            */
+            var ilikeyou = scope.guidtgt == post_guid;
+            var youlikei = scope.guid == post_guidtgt;
+            if (ilikeyou && youlikei)
+            {
+                return 4;
+            }
+            else if (ilikeyou && !youlikei)
+            {
+                return 1;
+            }
+            else if (!ilikeyou && youlikei)
+            {
+                return 2;
+            }
+            else
+            {
+                return 0;
+            }
+        }
+
         // place a marker and infoWindow
         var markers = [];
         function updateMap() {   
@@ -125,37 +153,6 @@ angular.module('app')
                     var location = angular.fromJson(post.location);
                     var googleLoc = new google.maps.LatLng(location.lat, location.lon);
 
-                    /* coupling status
-                        0 - no status
-                        1 - i like you
-                        2 - you like i
-                        4 - we like each other
-                    */
-                    //console.log ("scope.guidtgt:", scope.guidtgt);
-                    //console.log ("scope.guid:", scope.guid);
-                    //console.log ("post.guidtgt:", post.guidtgt);
-                    //console.log ("post.guid:", post.guid);
-
-                    var coupling_status = 0;
-                    var ilikeyou = scope.guidtgt == post.guid;
-                    var youlikei = scope.guid == post.guidtgt;
-                    if (ilikeyou && youlikei) // 4
-                    {
-                        coupling_status = 4;
-                    }
-                    else if (ilikeyou && !youlikei)
-                    {
-                        coupling_status = 1;
-                    }
-                    else if (!ilikeyou && youlikei)
-                    {
-                        coupling_status = 2;
-                    }
-                    else
-                    {
-                        coupling_status = 0;
-                    }
-
                     // 바운더리 안에 있는지부터 체크를 하장 
                     if (!(googleLoc.lat() < current_map_nw.lat()) ||
                         !(googleLoc.lat() > current_map_se.lat()) ||
@@ -164,6 +161,8 @@ angular.module('app')
                     {
                         continue; // skip this post - no need to draw
                     }
+
+                    var coupling_status = calculateCoupling(post.guid, post.guidtgt);
                     
                     // marker option setting
                     var markerOptions = {
@@ -188,7 +187,7 @@ angular.module('app')
                                 
                             };
                         }(marker, post)), 
-                        post.lifespan);
+                    post.lifespan);
                     
                     // add marker to array, this means that it has been drawn to map
                     markers.push(
@@ -215,6 +214,7 @@ angular.module('app')
                             // create new window
                             var infoWindowOptions = { 
                                 pixelOffset: new google.maps.Size(-41.5, 10.0), 
+                                disableAutoPan: true
                             };
                             var infoWindow = new google.maps.InfoWindow(infoWindowOptions);
 
@@ -228,23 +228,6 @@ angular.module('app')
                             child_scope.postguid = post.guid;
                             child_scope.postguidtgt = post.guidtgt;
                             child_scope.postcouplestatus = coupling_status;
-
-                            console.log("coupling_status", child_scope.postcouplestatus);
-
-                            /*
-                            msg.directive에서 하는 과정을 여기서도 할수 있다.
-                            google.maps.event.addListener(infoWindow, 'domready', function() {
-                                $timeout(function(){
-                                    $('div div .postlifebar').css("animation-duration", post.lifespan);
-                                    console.log("Jquery called :" +  post.lifespan + " and msg:" + post.body);
-                                }, 1);
-                                
-                                $('div #bubblePost').click(function(){
-                                    console.log("sending $emit - set_guidtgt", post.guid);
-                                    scope.$emit('set_guidtgt', post.guid);
-                                });  
-                            });
-                            */
 
                             infoWindow.setContent( compiled[0] );
                             infoWindow.open(map , marker);
@@ -327,9 +310,12 @@ angular.module('app')
         function setCenterChanged()
         {
             google.maps.event.addListener(map, 'center_changed', function(){
+                // when map center change, update last location in memory,
+                // so browser will remember it next time you come!
                 window.localStorage.latitude = map.getCenter().lat();
                 window.localStorage.longitude = map.getCenter().lng();
 
+                // when map center change, update bounds info for map
                 updateBounds();
             })
         }
@@ -339,6 +325,15 @@ angular.module('app')
             google.maps.event.addListener(map, 'dragend', function(){
                 updateMap();
             })
+        }
+        
+        function setLoadPostMarkers()
+        {
+            // manually reload markers / REFRESH
+            google.maps.event.addListener(map, 'maptypeid_changed', function() {
+                removeHelperMarker();
+                updateMap();
+            });
         }
 
         function updateBounds()
@@ -350,15 +345,6 @@ angular.module('app')
 
             current_map_nw = new google.maps.LatLng(ne.lat(), sw.lng());
             current_map_se = new google.maps.LatLng(sw.lat(), ne.lng());
-        }
-        
-        function setLoadPostMarkers()
-        {
-            // manually reload markers / REFRESH
-            google.maps.event.addListener(map, 'maptypeid_changed', function() {
-                removeHelperMarker();
-                updateMap();
-            });
         }
 
         // init the map

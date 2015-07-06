@@ -3,10 +3,7 @@ angular.module('app')
   return {
     restrict: 'A',
     templateUrl: './templates/window.html',
-    link: function(scope, attrs) {        
-        var duration = scope.postlife + "ms";
-        var postguid = scope.postguid;
-        var msg = scope.msg;
+    link: function(scope, elm, attrs) {        
 
         /* coupling status
           0 - no status
@@ -29,23 +26,29 @@ angular.module('app')
           }
         };
 
-        // as templateUrl DOM is loaded, this function will get called.
+        // as the document gets ready, set click event and lifebar animation length
         angular.element(document).ready(function() {
-          $timeout(function(){
-            $('div div .postlifebar').css("animation-duration", duration);
-            console.log("Jquery called :" +  duration + " and msg:" + msg);
+          var postguid = scope.postguid;
+          var myguid = scope.$parent.guid;
+          elm.parent().find('div div #bubbleClick').on('click',function(){
 
-            $('div div #bubbleClick').click(function(){
-              if (postguid == scope.guid){
-                console.log("")
-              }
+            console.log('window clicked.');
 
-              scope.postcouplestatus = 1; // 1- ilikeyou
-              console.log('emit set:guidtgt', postguid);
-              scope.$emit('set:guidtgt', postguid);
-            });    
-          }, 2);    
+            // clicking its own post will do nothing
+            if (postguid == myguid){
+              return;
+            }
+
+            scope.$parent.postcouplestatus = 1; // 1- ilikeyou
+
+            console.log('emit set:guidtgt', postguid);
+            scope.$emit('set:guidtgt', postguid);
+          });
+
+          var duration = scope.postlife + "ms";
+          var postlifebar_css = elm.parent().find('div div .postlifebar').css('animation-duration', duration);
         });
+        
     },
   }
 });
