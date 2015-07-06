@@ -15,10 +15,11 @@
     "lodash": "^3.9.3",
     "mongoose": "^4.0.5",
     "morgan": "^1.5.3",
+    "serve-favicon": "^2.3.0",
     "ws": "^0.7.2"
   },
   "devDependencies": {},
-  "scripts" : {
+  "scripts": {
     "postinstall": "gulp build"
   }
 }

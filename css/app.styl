@@ -185,6 +185,21 @@
     margin-top: -20px;     
 }
 
+/* ----------- iPhone 6 ----------- */
+/* Portrait */
+@media only screen and (min-device-width: 375px) and (max-device-width: 667px) and (-webkit-min-device-pixel-ratio: 2)and (orientation: portrait) { 
+    #map-canvas {
+    height: 667px;
+    }
+}
+
+/* Landscape */
+@media only screen and (min-device-width: 375px) and (max-device-width: 667px) and (-webkit-min-device-pixel-ratio: 2)and (orientation: landscape) { 
+  #map-canvas {
+    height: 375px;
+    }
+}
+
 .controls {
         margin-top: 16px;
         border: 1px solid transparent;
