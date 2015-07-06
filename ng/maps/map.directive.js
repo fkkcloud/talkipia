@@ -32,6 +32,10 @@ angular.module('app')
 
         console.log('Initial Map Center:', initialMapCenter);
 
+        var zoomControlBool = true;
+        if (scope.curr_platform == "iPhone")
+            zoomControlBool = false;
+
         var mapOptions = {
                 center      : initialMapCenter,
                 zoom        : 15,
@@ -40,7 +44,7 @@ angular.module('app')
                 streetViewControl: false,
                 mapTypeControl: false,
                 panControl: false,
-                //zoomControl: false
+                zoomControl: zoomControlBool
             };
             
         // draw map with helper markers
