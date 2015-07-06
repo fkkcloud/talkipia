@@ -18,7 +18,7 @@
 
     <!-- jquery -->
     <script src="jquery-1.11.3.min.js"></script>
-    <script src="jquery.mobile-1.4.5.min.js"></script>
+    <!--<script src="jquery.mobile-1.4.5.min.js"></script>-->
 
 	<!-- angular -->
 	<script src='angular.min.js'></script>
@@ -51,11 +51,12 @@
 		document.onkeypress = stopRKey; 
 	</script>
 
-	<!-- current platform testing -->
-	Platform : {{ curr_platform }}
+	<!-- current platform testing 
+	Platform : {{ curr_platform }} 
+	-->
 
 	<!-- navigation bar -->
-	<nav class='navbar navbar-inverse navbar-noround' role='navigation'>
+	<nav class='navbar navbar-inverse navbar-noround navbar-scale' role='navigation'>
 		<div class='container'>
    			<div class="navbar-header">
 	   			<button type="button" class="navbar-toggle" ng-click="navCollapsed = !navCollapsed">
@@ -64,7 +65,7 @@
 	   				<span class='icon-bar'></span>
 	   				<span class='icon-bar'></span>
 	   			</button>
-	            <a class="navbar-brand" id="google" href="/#/">Bubbles</a>
+	            <a class="navbar-brand" id="google" href="/#/">CloudChat</a>
 			</div>
 			<!-- 
 				*To collapse correctly, we need ng-class/ng-click/ng-init*

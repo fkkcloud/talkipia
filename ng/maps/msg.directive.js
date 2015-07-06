@@ -7,7 +7,6 @@ angular.module('app')
         var duration = scope.postlife + "ms";
         var postguid = scope.postguid;
         var msg = scope.msg;
-        var coupling_status = scope.postcouplestatus;
 
         /* coupling status
           0 - no status
@@ -37,6 +36,11 @@ angular.module('app')
             console.log("Jquery called :" +  duration + " and msg:" + msg);
 
             $('div div #bubbleClick').click(function(){
+              if (postguid == scope.guid){
+                console.log("")
+              }
+
+              scope.postcouplestatus = 1; // 1- ilikeyou
               console.log('emit set:guidtgt', postguid);
               scope.$emit('set:guidtgt', postguid);
             });    
