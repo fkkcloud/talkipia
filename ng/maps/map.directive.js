@@ -22,6 +22,13 @@ angular.module('app')
             scaledSize: new google.maps.Size(25, 25)
         };
 
+        // map style
+        var CLOUD_MAP_ID = 'custom_style';
+        // 깔끔이 
+        var featureOpts = [{"featureType":"administrative","elementType":"labels.text.fill","stylers":[{"color":"#6195a0"}]},{"featureType":"landscape","elementType":"all","stylers":[{"color":"#f2f2f2"}]},{"featureType":"landscape","elementType":"geometry.fill","stylers":[{"color":"#ffffff"}]},{"featureType":"poi","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"poi.park","elementType":"geometry.fill","stylers":[{"color":"#e6f3d6"},{"visibility":"on"}]},{"featureType":"road","elementType":"all","stylers":[{"saturation":-100},{"lightness":45},{"visibility":"simplified"}]},{"featureType":"road.highway","elementType":"all","stylers":[{"visibility":"simplified"}]},{"featureType":"road.highway","elementType":"geometry.fill","stylers":[{"color":"#f4d2c5"},{"visibility":"simplified"}]},{"featureType":"road.highway","elementType":"labels.text","stylers":[{"color":"#4e4e4e"}]},{"featureType":"road.arterial","elementType":"geometry.fill","stylers":[{"color":"#f4f4f4"}]},{"featureType":"road.arterial","elementType":"labels.text.fill","stylers":[{"color":"#787878"}]},{"featureType":"road.arterial","elementType":"labels.icon","stylers":[{"visibility":"off"}]},{"featureType":"transit","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"water","elementType":"all","stylers":[{"color":"#eaf6f8"},{"visibility":"on"}]},{"featureType":"water","elementType":"geometry.fill","stylers":[{"color":"#eaf6f8"}]}];
+        // 상큼이
+        //var featureOpts = [{"featureType":"landscape.man_made","elementType":"geometry","stylers":[{"color":"#f7f1df"}]},{"featureType":"landscape.natural","elementType":"geometry","stylers":[{"color":"#d0e3b4"}]},{"featureType":"landscape.natural.terrain","elementType":"geometry","stylers":[{"visibility":"off"}]},{"featureType":"poi","elementType":"labels","stylers":[{"visibility":"off"}]},{"featureType":"poi.business","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"poi.medical","elementType":"geometry","stylers":[{"color":"#fbd3da"}]},{"featureType":"poi.park","elementType":"geometry","stylers":[{"color":"#bde6ab"}]},{"featureType":"road","elementType":"geometry.stroke","stylers":[{"visibility":"off"}]},{"featureType":"road","elementType":"labels","stylers":[{"visibility":"off"}]},{"featureType":"road.highway","elementType":"geometry.fill","stylers":[{"color":"#ffe15f"}]},{"featureType":"road.highway","elementType":"geometry.stroke","stylers":[{"color":"#efd151"}]},{"featureType":"road.arterial","elementType":"geometry.fill","stylers":[{"color":"#ffffff"}]},{"featureType":"road.local","elementType":"geometry.fill","stylers":[{"color":"black"}]},{"featureType":"transit.station.airport","elementType":"geometry.fill","stylers":[{"color":"#cfb2db"}]},{"featureType":"water","elementType":"geometry","stylers":[{"color":"#a2daf2"}]}];
+
         // map config
         var initialMapCenter = new google.maps.LatLng(34.05, -118.24);
         
@@ -35,12 +42,15 @@ angular.module('app')
         var mapOptions = {
                 center      : initialMapCenter,
                 zoom        : 15,
-                MapTypeId   : google.maps.MapTypeId.ROADMAP,
                 scrollwheel : true,
                 streetViewControl: false,
                 mapTypeControl: false,
                 panControl: false,
-                zoomControl: false
+                zoomControl: false,
+                mapTypeControlOptions: {
+                  mapTypeIds: [google.maps.MapTypeId.ROADMAP, CLOUD_MAP_ID]
+                },
+                mapTypeId: CLOUD_MAP_ID
             };
             
         // draw map with helper markers
@@ -351,6 +361,13 @@ angular.module('app')
         function initMap() {
             if (map === void 0) {
                 map = new google.maps.Map(element[0], mapOptions);
+
+                var styledMapOptions = {
+                    name: 'Custom Style'
+                  };
+
+                var customMapType = new google.maps.StyledMapType(featureOpts, styledMapOptions);
+                map.mapTypes.set(CLOUD_MAP_ID, customMapType);
             }
 
             setLoadPostMarkers();
