@@ -41,7 +41,7 @@ angular.module('app')
 
             //elm.parent().find('div div #bubbleClick').addClass("bubblePost bubblePost_ilikeyou");
             //scope.$parent.$apply();
-            //scope.$parent.postcouplestatus = 1; // 1- ilikeyou
+            //scope.$parent.$parent.postcouplestatus = 1; // 1- ilikeyou ??
 
             console.log('emit set:guidtgt', postguid);
             scope.$emit('set:guidtgt', postguid);

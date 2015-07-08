@@ -19,6 +19,8 @@ exports.connect = function(server){
 		// 연결이 끊어진 클라이언트로 메세지를 송신하려 시도하면 고약한 에러가 발생하므로,
 		// 꼭 끊어줘야 된다는 것을 명심하자!
 		ws.on('close', function(){ 
+			console.log('user socket closed.');
+
 			_.remove(clients, ws);
 		});
 	});

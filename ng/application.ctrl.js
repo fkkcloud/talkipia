@@ -1,6 +1,117 @@
 
 angular.module('app')
-.controller('ApplicationCtrl', function($rootScope, $scope, $window, $http){
+.controller('ApplicationCtrl', function(SessionSvc, $rootScope, $scope, $window, $http, $timeout){
+
+	//-----GUID-----------------------------------------------------------------------------
+	// 지금은 난수를 만들고 있으나 GUID자체를 grab해서 쓸수 있도록 바꾸는게 좋을듯 하다.
+	function guid() {
+		function s4() {
+		    return Math.floor((1 + Math.random()) * 0x10000)
+		      .toString(16)
+		      .substring(1);
+		}
+	  	return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
+	}
+
+	$scope.guid = guid();
+
+	//-----END OF GUID------------------------------------------------------------------------
+
+
+	//-----Initials---------------------------------------------------------------------
+	// 윈도우가 닫히려고 하면 리퀘스트 보낸다! 유져 세션을 닫으라고!
+	window.onbeforeunload = function(){
+		SessionSvc.remove($scope.guid); // 서버에서 유저가 나감을 알린다
+	}
+
+	//-----END OF Initials--------------------------------------------------------------
+
+
+	//-----SOCKET-----------------------------------------------------------------------------
+	var url;
+	var hostname = document.location.hostname;
+	var developmentIP = "192.168.0.4";
+
+	if (hostname == "localhost"){
+		url = "ws://localhost:5000";
+	}
+	else if (hostname == developmentIP) {
+		url = 'ws://192.168.0.4:5000'; // developmet on socket locally 
+	}
+	else {
+		url = 'wss://cloudtalk.herokuapp.com'; // production deploy version - still debug mode
+	}
+
+	/* 개발과정이 끝나고 배포시에는 위부분을 지우고 아래 코드만 남겨도 된다.
+	url = 'wss://frozen-badlands-8649.herokuapp.com';
+	*/
+	var connect = function() {
+		connection = new WebSocket(url);
+
+		connection.onopen = function(){
+			function getCurrLocSuccess(pos) {
+				// 맨처음에는 유저의 실제 위치(앱에 입장했을때의 위치)와 센터 포지션을 같이 보내고,
+				// 센터 포지션은 계속 업데이트 되어야 한다.
+	            var crd = pos.coords;
+
+	            var googleLoc = new google.maps.LatLng(crd.latitude, crd.longitude);
+
+	            var watchloc = {
+	            	lat:window.localStorage.latitude,
+	            	lon:window.localStorage.longitude
+	        	};
+
+	        	var location = {
+	        		lat:googleLoc.lat(),
+	        		lon:googleLoc.lng()
+	        	};
+
+	        	var watchlocJSON = JSON.stringify(watchloc);
+	        	var locationJSON = JSON.stringify(location);
+
+	        	console.log("setting watchloc", watchlocJSON);
+	        	console.log("setting location", locationJSON);
+	            
+	            //여기서 비동기적으로 유저의 로케이션을 얻고 세션을 보낼수 있다.
+				var session = {
+					guid:     $scope.guid,
+					location: locationJSON,
+					watchloc: watchlocJSON
+				};
+				SessionSvc.enter(session); // 서버에서 유저가 들어옴을 알린다.
+	        }
+
+	        function getCurrLocError(err) {
+	            console.warn('ERROR(' + err.code + '): ' + err.message);
+	        }
+
+	        /* init map and place some markers, so everything start with this function. */
+	        navigator.geolocation.getCurrentPosition(getCurrLocSuccess, getCurrLocError);
+
+			console.log('WebSocket connected');
+		};
+
+		connection.onclose = function(){
+
+			console.log('WebSocket closed. Reconecting...');
+			$timeout(connect, 2000);
+		};
+
+		connection.onmessage = function(e){
+			console.log('broadcast msg from server:', e);
+			var payload = JSON.parse(e.data);
+
+			/*
+				ws:new_post    - 새로운 포스트가 올라왔을때 front-end에서 맵이 다시 업데이트 해야 된다고 알려준다!
+				ws:new_session - session이 새로 들어오면 된다고 알려준다!
+				매우중요! 
+			*/
+			$rootScope.$broadcast('ws:' + payload.type, payload.data);
+		};
+	};
+	connect();
+	//-----END OF SOCKET-----------------------------------------------------------------------
+
 	// see if its mobile phone
 	$scope.isMobile = function(){
 		if( navigator.userAgent.match(/Android/i)
@@ -18,20 +129,7 @@ angular.module('app')
 		  }
 	};
 
-	// 지금은 난수를 만들고 있으나 GUID자체를 grab해서 쓸수 있도록 바꾸는게 좋을듯 하다.
-	function guid() {
-		function s4() {
-		    return Math.floor((1 + Math.random()) * 0x10000)
-		      .toString(16)
-		      .substring(1);
-		}
-	  	return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
-	}
-
-	$scope.guid = guid();
-
 	$scope.guidtgt = "0"; // 기본값은 0으로 해서 0이면 관심상대guid가 없는 상태이다. 
-
 	$scope.$on('set:guidtgt', function(_, guidtgt){
 		console.log("setting guidtgt", guidtgt);
 		$scope.guidtgt = guidtgt;
@@ -48,7 +146,20 @@ angular.module('app')
 
 	// as server socket send 'ws:new_post' , we can update the map!
 	$scope.$on('ws:new_post', function(_, post){
+		// update posts
 		google.maps.event.trigger($scope.map, 'maptypeid_changed');
+
+		// show responsive users
+		google.maps.event.trigger($scope.map, 'maptypeid_changed', {type:'res_post'});
+	});
+
+	// as server socket send 'ws:new_post' , we can update the map!
+	$scope.$on('ws:new_session', function(_, session){
+		var options = {
+			type: 'res_login',
+			data: session
+		}
+		google.maps.event.trigger($scope.map, 'maptypeid_changed', options);
 	});
 
 	$scope.$on('pagechange', function(_, pageId){
@@ -92,13 +203,15 @@ angular.module('app')
             window.localStorage.latitude = crd.latitude;
             window.localStorage.longitude = crd.longitude;
 
-            //console.log('Latitude : ' + crd.latitude);
-            //console.log('Longitude: ' + crd.longitude);
-            //console.log('More or less ' + crd.accuracy + ' meters.');
             var googleLoc = new google.maps.LatLng(crd.latitude, crd.longitude);
 
-            google.maps.event.trigger($scope.map, 'heading_changed', googleLoc);
-            
+            // draw drop down user position
+           	var options = { type: 'curr_loc', location: googleLoc};
+	        google.maps.event.trigger($scope.map, 'heading_changed', options);
+
+			var options = { type: 'curr_x', location: googleLoc};
+	        google.maps.event.trigger($scope.map, 'heading_changed', options);
+
             $scope.map.panTo(googleLoc)
             $scope.map.setZoom(15);
         }

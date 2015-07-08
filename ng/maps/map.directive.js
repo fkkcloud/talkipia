@@ -1,5 +1,5 @@
 angular.module('app')
-.directive('appMap', function(PostsSvc, UtilSvc, $compile, $timeout) {
+.directive('appMap', function(PostsSvc, UtilSvc, SessionSvc, $compile, $timeout) {
     // directive link function
     var link = function(scope, element, attrs, rootScope) {
         var map;
@@ -22,6 +22,22 @@ angular.module('app')
             scaledSize: new google.maps.Size(25, 25)
         };
 
+        var imageUserLogin = {
+            url: 'http://www.clker.com/cliparts/q/o/2/K/g/V/location-symbol-map-md.png',
+            size: new google.maps.Size(100, 100),
+            origin: new google.maps.Point(0, 0),
+            anchor: new google.maps.Point(17, 34),
+            scaledSize: new google.maps.Size(20, 33)
+        };
+
+        var imageListener = {
+            url: 'http://2.bp.blogspot.com/-djMa_n5nAEM/T1Gvx_-7-zI/AAAAAAAAAQ4/-1N6lleQvZc/s1600/blinking_dot.gif',
+            size: new google.maps.Size(100, 100),
+            origin: new google.maps.Point(0, 0),
+            anchor: new google.maps.Point(17, 34),
+            scaledSize: new google.maps.Size(17, 17)
+        };
+
         // map style
         var CLOUD_MAP_ID = 'custom_style';
         // 깔끔이 
@@ -29,7 +45,10 @@ angular.module('app')
         // 상큼이
         //var featureOpts = [{"featureType":"landscape.man_made","elementType":"geometry","stylers":[{"color":"#f7f1df"}]},{"featureType":"landscape.natural","elementType":"geometry","stylers":[{"color":"#d0e3b4"}]},{"featureType":"landscape.natural.terrain","elementType":"geometry","stylers":[{"visibility":"off"}]},{"featureType":"poi","elementType":"labels","stylers":[{"visibility":"off"}]},{"featureType":"poi.business","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"poi.medical","elementType":"geometry","stylers":[{"color":"#fbd3da"}]},{"featureType":"poi.park","elementType":"geometry","stylers":[{"color":"#bde6ab"}]},{"featureType":"road","elementType":"geometry.stroke","stylers":[{"visibility":"off"}]},{"featureType":"road","elementType":"labels","stylers":[{"visibility":"off"}]},{"featureType":"road.highway","elementType":"geometry.fill","stylers":[{"color":"#ffe15f"}]},{"featureType":"road.highway","elementType":"geometry.stroke","stylers":[{"color":"#efd151"}]},{"featureType":"road.arterial","elementType":"geometry.fill","stylers":[{"color":"#ffffff"}]},{"featureType":"road.local","elementType":"geometry.fill","stylers":[{"color":"black"}]},{"featureType":"transit.station.airport","elementType":"geometry.fill","stylers":[{"color":"#cfb2db"}]},{"featureType":"water","elementType":"geometry","stylers":[{"color":"#a2daf2"}]}];
         // 똑똑이
-        var featureOpts = [{"featureType":"water","elementType":"all","stylers":[{"hue":"#7fc8ed"},{"saturation":55},{"lightness":-6},{"visibility":"on"}]},{"featureType":"water","elementType":"labels","stylers":[{"hue":"#7fc8ed"},{"saturation":55},{"lightness":-6},{"visibility":"off"}]},{"featureType":"poi.park","elementType":"geometry","stylers":[{"hue":"#83cead"},{"saturation":1},{"lightness":-15},{"visibility":"on"}]},{"featureType":"landscape","elementType":"geometry","stylers":[{"hue":"#f3f4f4"},{"saturation":-84},{"lightness":59},{"visibility":"on"}]},{"featureType":"landscape","elementType":"labels","stylers":[{"hue":"#ffffff"},{"saturation":-100},{"lightness":100},{"visibility":"off"}]},{"featureType":"road","elementType":"geometry","stylers":[{"hue":"#ffffff"},{"saturation":-100},{"lightness":100},{"visibility":"on"}]},{"featureType":"road","elementType":"labels","stylers":[{"hue":"#bbbbbb"},{"saturation":-100},{"lightness":26},{"visibility":"on"}]},{"featureType":"road.arterial","elementType":"geometry","stylers":[{"hue":"#ffcc00"},{"saturation":100},{"lightness":-35},{"visibility":"simplified"}]},{"featureType":"road.highway","elementType":"geometry","stylers":[{"hue":"#ffcc00"},{"saturation":100},{"lightness":-22},{"visibility":"on"}]},{"featureType":"poi.school","elementType":"all","stylers":[{"hue":"#d7e4e4"},{"saturation":-60},{"lightness":23},{"visibility":"on"}]}];
+        //var featureOpts = [{"featureType":"water","elementType":"all","stylers":[{"hue":"#7fc8ed"},{"saturation":55},{"lightness":-6},{"visibility":"on"}]},{"featureType":"water","elementType":"labels","stylers":[{"hue":"#7fc8ed"},{"saturation":55},{"lightness":-6},{"visibility":"off"}]},{"featureType":"poi.park","elementType":"geometry","stylers":[{"hue":"#83cead"},{"saturation":1},{"lightness":-15},{"visibility":"on"}]},{"featureType":"landscape","elementType":"geometry","stylers":[{"hue":"#f3f4f4"},{"saturation":-84},{"lightness":59},{"visibility":"on"}]},{"featureType":"landscape","elementType":"labels","stylers":[{"hue":"#ffffff"},{"saturation":-100},{"lightness":100},{"visibility":"off"}]},{"featureType":"road","elementType":"geometry","stylers":[{"hue":"#ffffff"},{"saturation":-100},{"lightness":100},{"visibility":"on"}]},{"featureType":"road","elementType":"labels","stylers":[{"hue":"#bbbbbb"},{"saturation":-100},{"lightness":26},{"visibility":"on"}]},{"featureType":"road.arterial","elementType":"geometry","stylers":[{"hue":"#ffcc00"},{"saturation":100},{"lightness":-35},{"visibility":"simplified"}]},{"featureType":"road.highway","elementType":"geometry","stylers":[{"hue":"#ffcc00"},{"saturation":100},{"lightness":-22},{"visibility":"on"}]},{"featureType":"poi.school","elementType":"all","stylers":[{"hue":"#d7e4e4"},{"saturation":-60},{"lightness":23},{"visibility":"on"}]}];
+        // 초록이
+        var featureOpts = [{"featureType":"landscape","stylers":[{"hue":"#FFA800"},{"saturation":0},{"lightness":0},{"gamma":1}]},{"featureType":"road.highway","stylers":[{"hue":"#53FF00"},{"saturation":-73},{"lightness":40},{"gamma":1}]},{"featureType":"road.arterial","stylers":[{"hue":"#FBFF00"},{"saturation":0},{"lightness":0},{"gamma":1}]},{"featureType":"road.local","stylers":[{"hue":"#00FFFD"},{"saturation":0},{"lightness":30},{"gamma":1}]},{"featureType":"water","stylers":[{"hue":"#00BFFF"},{"saturation":6},{"lightness":8},{"gamma":1}]},{"featureType":"poi","stylers":[{"hue":"#679714"},{"saturation":33.4},{"lightness":-25.4},{"gamma":1}]}];
+        
         // map config
         var initialMapCenter = new google.maps.LatLng(34.05, -118.24);
         
@@ -91,8 +110,7 @@ angular.module('app')
                 // emit broadcase 'place' and send this to application.ctrl
                 try {
                     // broadcast formatted_address
-                    scope.$emit('place', results[1].formatted_address);
-                    
+                    scope.$emit('place', results[1].formatted_address); 
                 }
                 catch(err) {
                     console.log(err);
@@ -136,9 +154,46 @@ angular.module('app')
             }
         }
 
-        // place a marker and infoWindow
-        var markers = [];
-        function updateMap() {   
+        // update responses such as visualization of listeners
+        function updateResponses(){
+            SessionSvc.fetch()
+            .success(function(sessions){
+
+                for (var i = 0; i < sessions.length; i++){
+                    var session = sessions[i];
+
+                    if (session.guid == scope.guid)
+                        continue;
+
+                    // session's watch location will be bounced!
+                    console.log(session.watchloc);
+                    var location = angular.fromJson(session.watchloc);
+                    var googleLoc = new google.maps.LatLng(location.lat, location.lon);
+
+                    // marker option setting
+                    var markerOptions = {
+                        position: googleLoc,
+                        map: map,
+                        //animation: google.maps.Animation.BOUNCE,
+                        title: "UserPin",
+                        icon: imageListener,
+                        optimized: false
+                    };
+
+                    var marker = new google.maps.Marker(markerOptions);
+
+                    setTimeout(
+                        (function(old_marker){
+                            return function(){
+                                old_marker.setMap(null);
+                            };
+                        }(marker)), 
+                    1800);
+                }
+            });
+        }
+
+        function updatePosts(){
             PostsSvc.fetch()
             .success(function(posts){
 
@@ -164,7 +219,7 @@ angular.module('app')
                     var location = angular.fromJson(post.location);
                     var googleLoc = new google.maps.LatLng(location.lat, location.lon);
 
-                    // 바운더리 안에 있는지부터 체크를 하장 
+                    // 바운더리 안에 있는지부터 체크를 하장
                     if (!(googleLoc.lat() < current_map_nw.lat()) ||
                         !(googleLoc.lat() > current_map_se.lat()) ||
                         !(googleLoc.lng() < current_map_se.lng()) ||
@@ -195,7 +250,6 @@ angular.module('app')
                                         markers.splice(k, 1);
                                     }
                                 }
-                                
                             };
                         }(marker, post)), 
                     post.lifespan);
@@ -250,6 +304,12 @@ angular.module('app')
 
                 } // end of for-loop
             });
+        }
+
+        // place a marker and infoWindow
+        var markers = [];
+        function updateMap() { 
+            updatePosts();
         }
 
         function setMoveToCurrLocBtn()
@@ -312,9 +372,16 @@ angular.module('app')
 
         function setMoveToCurrentLocation()
         {
-            // moving to a post's location and draw a marker there
-            google.maps.event.addListener(map, 'heading_changed', function(location) {
-                drawAndSetPlace(location);
+            // moving to a user's location and draw a marker there
+            google.maps.event.addListener(map, 'heading_changed', function(options) {
+                if (options.type == 'curr_x')
+                {
+                    drawAndSetPlace(options.location);
+                }
+                else if (options.type == 'curr_loc')
+                {
+                    drawDropDown(options.location);
+                }
             });
         }
 
@@ -334,17 +401,95 @@ angular.module('app')
         function setMapDragEnd()
         {
             google.maps.event.addListener(map, 'dragend', function(){
+                // update watchloc when center changed.
+                updateWatchLocation();
+
+                // update map as drag end
                 updateMap();
             })
         }
         
+        /* usage
+            meant to implement manually updating elements
+            google.maps.event.trigger($scope.map, 'maptypeid_changed'); // regular update
+            google.maps.event.trigger($scope.map, 'maptypeid_changed', options); // update with options
+        */
         function setLoadPostMarkers()
         {
-            // manually reload markers / REFRESH
-            google.maps.event.addListener(map, 'maptypeid_changed', function() {
-                removeHelperMarker();
-                updateMap();
+            // manually reload/refresh markers
+            google.maps.event.addListener(map, 'maptypeid_changed', function(options) {
+                if (options == null) // if there is no options, just update map
+                {
+                    removeHelperMarker();
+                    updateMap();
+                }
+                else if (options.type == 'res_login') // option for response
+                {
+                    showLogin(options.data);
+                }
+                else if (options.type == 'res_post') // option for response
+                {
+                    updateResponses();
+                }
+                
             });
+        }
+
+        function updateWatchLocation()
+        {
+            var watchloc = {
+                lat: map.getCenter().lat(),
+                lon: map.getCenter().lng()
+            }
+
+            var watchlocJSON = JSON.stringify(watchloc);
+
+            var updatedsession = {
+                watchloc: watchlocJSON,
+                guid: scope.guid
+            };
+
+            // update watchloc when center changed.
+            SessionSvc.update(updatedsession);
+        }
+
+        function drawDropDown(googleLoc)
+        {
+            // 바운더리 안에 있는지부터 체크를 하장
+            if (!(googleLoc.lat() < current_map_nw.lat()) ||
+                !(googleLoc.lat() > current_map_se.lat()) ||
+                !(googleLoc.lng() < current_map_se.lng()) ||
+                !(googleLoc.lng() > current_map_nw.lng()) )
+            {
+                return; // skip this post - no need to draw
+            }
+
+            // marker option setting
+            var markerOptions = {
+                position: googleLoc,
+                map: map,
+                animation: google.maps.Animation.DROP,
+                title: "UserPin",
+                icon: imageUserLogin
+            };
+
+            var marker = new google.maps.Marker(markerOptions);
+
+            setTimeout(
+                (function(old_marker){
+                    return function(){
+                        old_marker.setMap(null);
+                    };
+                }(marker)), 
+            2000);
+        }
+
+        function showLogin(session)
+        {
+            var location = angular.fromJson(session.location);
+            var googleLoc = new google.maps.LatLng(location.lat, location.lon);
+
+            drawDropDown(googleLoc);
         }
 
         function updateBounds()
