@@ -165,11 +165,22 @@ angular.module('app')
                     if (session.guid == scope.guid)
                         continue;
 
-                    // session's watch location will be bounced!
+                     // session's watch location will be bounced!
                     console.log(session.watchloc);
                     var location = angular.fromJson(session.watchloc);
                     var googleLoc = new google.maps.LatLng(location.lat, location.lon);
 
+                    // 바운더리 안에 있는지부터 체크를 하장
+                    updateBounds();
+                    if (!(googleLoc.lat() < current_map_nw.lat()) ||
+                        !(googleLoc.lat() > current_map_se.lat()) ||
+                        !(googleLoc.lng() < current_map_se.lng()) ||
+                        !(googleLoc.lng() > current_map_nw.lng()) )
+                    {
+                        continue; // skip this post - no need to draw
+                    }
+
+                   
                     // marker option setting
                     var markerOptions = {
                         position: googleLoc,
