@@ -34,6 +34,7 @@ router.post('/', function(req, res, next){
 	{
 		relativeLifeSpan = charLen * map_range(charLen, 5, 20, 500, 300);
 	}
+	relativeLifeSpan = 60000 * 1; // debug 1 min - test for longer posts
 
 	var currentDate = new Date();
 	var currentTimeMilli = currentDate.getTime();
@@ -77,9 +78,15 @@ router.post('/', function(req, res, next){
 			Post.findOneAndRemove({ _id: post._id }, function(err){
 				if (err) { return next(err); }
 				console.log("post removed successfully");
+
+				// 10초보다 긴 경우의 것만 서버가 계산을 하고 서버가 보내줘서 frontend에서 지우도록 관리해줘야 한다.
+				var maxInstantLifeSpan = 10000;
+				if (relativeLifeSpan > maxInstantLifeSpan){
+					websockets.broadcast('remove_post', post._id);
+				}
 			});
 		},  
-		relativeLifeSpan );
+		relativeLifeSpan);
 
 		// 201 - The request has been fulfilled and resulted in a new resource being created.
 		res.json(201, post); 

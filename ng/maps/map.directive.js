@@ -220,6 +220,7 @@ angular.module('app')
                     var googleLoc = new google.maps.LatLng(location.lat, location.lon);
 
                     // 바운더리 안에 있는지부터 체크를 하장
+                    updateBounds();
                     if (!(googleLoc.lat() < current_map_nw.lat()) ||
                         !(googleLoc.lat() > current_map_se.lat()) ||
                         !(googleLoc.lng() < current_map_se.lng()) ||
@@ -239,20 +240,27 @@ angular.module('app')
                     };
                     var marker = new google.maps.Marker(markerOptions);
                     
-                    // set up self remove for marker itself and from markers collection at front-end
-                    setTimeout(
-                        (function(old_marker, old_post){
-                            return function(){
-                                old_marker.setMap(null);
-                                for (var k = 0, marker; marker = markers[k]; k++){
-                                    if (old_post._id == marker.post._id)
-                                    {
-                                        markers.splice(k, 1);
+                    // 10초보다 긴 경우의 것만 서버가 계산을 하고 서버가 보내줘서 frontend에서 지우도록 관리해줘야 한다.
+                    var maxInstantLifeSpan = 10000;
+
+                    // 인스턴트 맵 메시지일 경우만 프론트엔드와 서버가 다르게 지워주도록 한다. (일단은 상한선은 10초)
+                    if (post.lifespan < maxInstantLifeSpan){
+                        // set up self remove for marker itself and from markers collection at front-end
+                        setTimeout(
+                            (function(old_marker, old_post){
+                                return function(){
+                                    old_marker.setMap(null);
+                                    for (var k = 0, marker; marker = markers[k]; k++){
+                                        if (old_post._id == marker.post._id)
+                                        {
+                                            markers.splice(k, 1);
+                                        }
                                     }
-                                }
-                            };
-                        }(marker, post)), 
-                    post.lifespan);
+                                };
+                            }(marker, post)), 
+                        post.lifespan);
+                    }
+                    
                     
                     // add marker to array, this means that it has been drawn to map
                     markers.push(
@@ -418,18 +426,31 @@ angular.module('app')
         {
             // manually reload/refresh markers
             google.maps.event.addListener(map, 'maptypeid_changed', function(options) {
+                console.log("maptypeid_changed", options);
                 if (options == null) // if there is no options, just update map
                 {
                     removeHelperMarker();
                     updateMap();
                 }
-                else if (options.type == 'res_login') // option for response
+                else if (options.type == 'res_login') // when user enters map
                 {
                     showLogin(options.data);
                 }
-                else if (options.type == 'res_post') // option for response
+                else if (options.type == 'res_post') // when user posts, response on map
                 {
                     updateResponses();
+                }
+                else if (options.type == 'res_post_remove') // when the longer post get removed
+                {
+                    console.log("starting remove post");
+                    for (var k = 0, marker; marker = markers[k]; k++) {
+                        console.log(options.data);
+                        console.log(marker.post._id);
+                        if (options.data == marker.post._id) {
+                            marker.marker.setMap(null);
+                            markers.splice(k, 1);
+                        }
+                    }
                 }
                 
             });
@@ -455,6 +476,7 @@ angular.module('app')
 
         function drawDropDown(googleLoc)
         {
+            updateBounds();
             // 바운더리 안에 있는지부터 체크를 하장
             if (!(googleLoc.lat() < current_map_nw.lat()) ||
                 !(googleLoc.lat() > current_map_se.lat()) ||
@@ -537,11 +559,9 @@ angular.module('app')
 
             setMapDragEnd();
 
-            updateMap();
-
             $timeout(function(){
-                updateBounds();
-            }, 800);
+                updateMap();
+            }, 100);
             
         } 
 

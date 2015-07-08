@@ -162,6 +162,17 @@ angular.module('app')
 		google.maps.event.trigger($scope.map, 'maptypeid_changed', options);
 	});
 
+	// when server remove the post after time for longer ones, 
+	// update map with coresponding info
+	$scope.$on('ws:remove_post', function(_, postid){
+		var options = {
+			type:'res_post_remove',
+			data: postid
+		}
+		google.maps.event.trigger($scope.map, 'maptypeid_changed', options);
+	});
+
+
 	$scope.$on('pagechange', function(_, pageId){
 		$scope.currentPageId = pageId;
 	});
