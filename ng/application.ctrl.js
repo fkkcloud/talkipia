@@ -2,9 +2,10 @@
 angular.module('app')
 .controller('ApplicationCtrl', function(SessionSvc, $rootScope, $scope, $window, $http, $timeout){
 
-	//-----GUID-----------------------------------------------------------------------------
-	// 지금은 난수를 만들고 있으나 GUID자체를 grab해서 쓸수 있도록 바꾸는게 좋을듯 하다.
-	function guid() {
+    //------------------------------------------------------------------------------------
+    // INITIAL
+    //------------------------------------------------------------------------------------
+    function guid() {
 		function s4() {
 		    return Math.floor((1 + Math.random()) * 0x10000)
 		      .toString(16)
@@ -15,19 +16,15 @@ angular.module('app')
 
 	$scope.guid = guid();
 
-	//-----END OF GUID------------------------------------------------------------------------
 
-
-	//-----Initials---------------------------------------------------------------------
 	// 윈도우가 닫히려고 하면 리퀘스트 보낸다! 유져 세션을 닫으라고!
 	window.onbeforeunload = function(){
 		SessionSvc.remove($scope.guid); // 서버에서 유저가 나감을 알린다
 	}
 
-	//-----END OF Initials--------------------------------------------------------------
-
-
-	//-----SOCKET-----------------------------------------------------------------------------
+    //------------------------------------------------------------------------------------
+    // SOCKET
+    //------------------------------------------------------------------------------------
 	var url;
 	var hostname = document.location.hostname;
 	var developmentIP = "192.168.0.4";
@@ -110,8 +107,11 @@ angular.module('app')
 		};
 	};
 	connect();
-	//-----END OF SOCKET-----------------------------------------------------------------------
 
+
+	//------------------------------------------------------------------------------------
+    // TBD
+    //------------------------------------------------------------------------------------
 	// see if its mobile phone
 	$scope.isMobile = function(){
 		if( navigator.userAgent.match(/Android/i)
@@ -129,11 +129,6 @@ angular.module('app')
 		  }
 	};
 
-	$scope.guidtgt = "0"; // 기본값은 0으로 해서 0이면 관심상대guid가 없는 상태이다. 
-	$scope.$on('set:guidtgt', function(_, guidtgt){
-		console.log("setting guidtgt", guidtgt);
-		$scope.guidtgt = guidtgt;
-	});
 
 	$scope.pageId = { 
 		post : 0,
@@ -144,35 +139,43 @@ angular.module('app')
 		$scope.navCollapsed = true;
 	};
 
+	$scope.guidtgt = "0"; // 기본값은 0으로 해서 0이면 관심상대guid가 없는 상태이다. 
+	$scope.$on('set:guidtgt', function(_, guidtgt){
+		console.log("setting guidtgt", guidtgt);
+		$scope.guidtgt = guidtgt;
+	});
+
+	//------------------------------------------------------------------------------------
+    // SOCKET BROADCAST RECEIVER
+    //------------------------------------------------------------------------------------
 	// as server socket send 'ws:new_post' , we can update the map!
 	$scope.$on('ws:new_post', function(_, post){
 		// update posts
-		google.maps.event.trigger($scope.map, 'maptypeid_changed');
+		$scope.map.updateAndDrawPosts();
 
 		// show responsive users
-		google.maps.event.trigger($scope.map, 'maptypeid_changed', {type:'res_post'});
+		$scope.map.drawResponses();
 	});
 
 	// as server socket send 'ws:new_post' , we can update the map!
 	$scope.$on('ws:new_session', function(_, session){
-		var options = {
-			type: 'res_login',
-			data: session
-		}
-		google.maps.event.trigger($scope.map, 'maptypeid_changed', options);
+
+		var location = angular.fromJson(session.location);
+        var googleLoc = new google.maps.LatLng(location.lat, location.lon);
+
+		$scope.map.drawCurrLocationMarker(googleLoc);
 	});
 
 	// when server remove the post after time for longer ones, 
 	// update map with coresponding info
 	$scope.$on('ws:remove_post', function(_, postid){
-		var options = {
-			type:'res_post_remove',
-			data: postid
-		}
-		google.maps.event.trigger($scope.map, 'maptypeid_changed', options);
+		console.log('remove_post : id', postid);
+		$scope.map.unDrawPost(postid);
 	});
 
-
+	//------------------------------------------------------------------------------------
+    // TBD
+    //------------------------------------------------------------------------------------
 	$scope.$on('pagechange', function(_, pageId){
 		$scope.currentPageId = pageId;
 	});
@@ -197,9 +200,6 @@ angular.module('app')
 
 	$scope.$on('mapInit', function(_, map){
 		$scope.map = map;
-		
-		// update map bounds as app launches
-		google.maps.event.trigger($scope.map, 'center_changed');
 	});
 
 	/* move to current location */
@@ -217,12 +217,12 @@ angular.module('app')
             var googleLoc = new google.maps.LatLng(crd.latitude, crd.longitude);
 
             // draw drop down user position
-           	var options = { type: 'curr_loc', location: googleLoc};
-	        google.maps.event.trigger($scope.map, 'heading_changed', options);
+           	$scope.map.drawCurrLocationMarker(googleLoc);
 
-			var options = { type: 'curr_x', location: googleLoc};
-	        google.maps.event.trigger($scope.map, 'heading_changed', options);
+           	// draw x marker
+	        $scope.map.drawXMarker(googleLoc);
 
+	        // move to the location and zoom into right amount
             $scope.map.panTo(googleLoc)
             $scope.map.setZoom(15);
         }

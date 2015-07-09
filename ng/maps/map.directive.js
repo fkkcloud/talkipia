@@ -1,11 +1,20 @@
 angular.module('app')
-.directive('appMap', function(PostsSvc, UtilSvc, SessionSvc, $compile, $timeout) {
+.directive('appMap', function(PostsSvc, UtilSvc, SessionSvc, $compile) {
     // directive link function
     var link = function(scope, element, attrs, rootScope) {
-        var map;
+
+        //------------------------------------------------------------------------------------
+        // GLOBAL VARIABLES IN LINK FUNCTION
+        //------------------------------------------------------------------------------------
+        var map; // expand from google map for manually created events
+        var map_origin; // for original google map event function links
         var current_map_nw;
         var current_map_se;
-        
+        var mapOptions;
+        var initialMapCenter;
+        var CLOUD_MAP_ID = 'custom_style'; // map style
+        var helperMarkers = [];
+        var markers = [];
         var imagePost = {
             url: 'https://catchme.ifyoucan.com/images/pictures/IYC_Icons/IYC_Location_Icon_Small.png',
             size: new google.maps.Size(100, 100),
@@ -13,7 +22,6 @@ angular.module('app')
             anchor: new google.maps.Point(17, 34),
             scaledSize: new google.maps.Size(17, 25)
         };
-
         var imageTarget = {
             url: 'http://www.clker.com/cliparts/U/P/j/M/I/i/x-mark-yellow-md.png',
             size: new google.maps.Size(100, 100),
@@ -21,7 +29,6 @@ angular.module('app')
             anchor: new google.maps.Point(17, 34),
             scaledSize: new google.maps.Size(25, 25)
         };
-
         var imageUserLogin = {
             url: 'http://www.clker.com/cliparts/q/o/2/K/g/V/location-symbol-map-md.png',
             size: new google.maps.Size(100, 100),
@@ -29,7 +36,6 @@ angular.module('app')
             anchor: new google.maps.Point(17, 34),
             scaledSize: new google.maps.Size(20, 33)
         };
-
         var imageListener = {
             url: 'http://2.bp.blogspot.com/-djMa_n5nAEM/T1Gvx_-7-zI/AAAAAAAAAQ4/-1N6lleQvZc/s1600/blinking_dot.gif',
             size: new google.maps.Size(100, 100),
@@ -38,124 +44,49 @@ angular.module('app')
             scaledSize: new google.maps.Size(17, 17)
         };
 
-        // map style
-        var CLOUD_MAP_ID = 'custom_style';
-        // 깔끔이 
-        //var featureOpts = [{"featureType":"administrative","elementType":"labels.text.fill","stylers":[{"color":"#6195a0"}]},{"featureType":"landscape","elementType":"all","stylers":[{"color":"#f2f2f2"}]},{"featureType":"landscape","elementType":"geometry.fill","stylers":[{"color":"#ffffff"}]},{"featureType":"poi","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"poi.park","elementType":"geometry.fill","stylers":[{"color":"#e6f3d6"},{"visibility":"on"}]},{"featureType":"road","elementType":"all","stylers":[{"saturation":-100},{"lightness":45},{"visibility":"simplified"}]},{"featureType":"road.highway","elementType":"all","stylers":[{"visibility":"simplified"}]},{"featureType":"road.highway","elementType":"geometry.fill","stylers":[{"color":"#f4d2c5"},{"visibility":"simplified"}]},{"featureType":"road.highway","elementType":"labels.text","stylers":[{"color":"#4e4e4e"}]},{"featureType":"road.arterial","elementType":"geometry.fill","stylers":[{"color":"#f4f4f4"}]},{"featureType":"road.arterial","elementType":"labels.text.fill","stylers":[{"color":"#787878"}]},{"featureType":"road.arterial","elementType":"labels.icon","stylers":[{"visibility":"off"}]},{"featureType":"transit","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"water","elementType":"all","stylers":[{"color":"#eaf6f8"},{"visibility":"on"}]},{"featureType":"water","elementType":"geometry.fill","stylers":[{"color":"#eaf6f8"}]}];
-        // 상큼이
-        //var featureOpts = [{"featureType":"landscape.man_made","elementType":"geometry","stylers":[{"color":"#f7f1df"}]},{"featureType":"landscape.natural","elementType":"geometry","stylers":[{"color":"#d0e3b4"}]},{"featureType":"landscape.natural.terrain","elementType":"geometry","stylers":[{"visibility":"off"}]},{"featureType":"poi","elementType":"labels","stylers":[{"visibility":"off"}]},{"featureType":"poi.business","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"poi.medical","elementType":"geometry","stylers":[{"color":"#fbd3da"}]},{"featureType":"poi.park","elementType":"geometry","stylers":[{"color":"#bde6ab"}]},{"featureType":"road","elementType":"geometry.stroke","stylers":[{"visibility":"off"}]},{"featureType":"road","elementType":"labels","stylers":[{"visibility":"off"}]},{"featureType":"road.highway","elementType":"geometry.fill","stylers":[{"color":"#ffe15f"}]},{"featureType":"road.highway","elementType":"geometry.stroke","stylers":[{"color":"#efd151"}]},{"featureType":"road.arterial","elementType":"geometry.fill","stylers":[{"color":"#ffffff"}]},{"featureType":"road.local","elementType":"geometry.fill","stylers":[{"color":"black"}]},{"featureType":"transit.station.airport","elementType":"geometry.fill","stylers":[{"color":"#cfb2db"}]},{"featureType":"water","elementType":"geometry","stylers":[{"color":"#a2daf2"}]}];
-        // 똑똑이
-        //var featureOpts = [{"featureType":"water","elementType":"all","stylers":[{"hue":"#7fc8ed"},{"saturation":55},{"lightness":-6},{"visibility":"on"}]},{"featureType":"water","elementType":"labels","stylers":[{"hue":"#7fc8ed"},{"saturation":55},{"lightness":-6},{"visibility":"off"}]},{"featureType":"poi.park","elementType":"geometry","stylers":[{"hue":"#83cead"},{"saturation":1},{"lightness":-15},{"visibility":"on"}]},{"featureType":"landscape","elementType":"geometry","stylers":[{"hue":"#f3f4f4"},{"saturation":-84},{"lightness":59},{"visibility":"on"}]},{"featureType":"landscape","elementType":"labels","stylers":[{"hue":"#ffffff"},{"saturation":-100},{"lightness":100},{"visibility":"off"}]},{"featureType":"road","elementType":"geometry","stylers":[{"hue":"#ffffff"},{"saturation":-100},{"lightness":100},{"visibility":"on"}]},{"featureType":"road","elementType":"labels","stylers":[{"hue":"#bbbbbb"},{"saturation":-100},{"lightness":26},{"visibility":"on"}]},{"featureType":"road.arterial","elementType":"geometry","stylers":[{"hue":"#ffcc00"},{"saturation":100},{"lightness":-35},{"visibility":"simplified"}]},{"featureType":"road.highway","elementType":"geometry","stylers":[{"hue":"#ffcc00"},{"saturation":100},{"lightness":-22},{"visibility":"on"}]},{"featureType":"poi.school","elementType":"all","stylers":[{"hue":"#d7e4e4"},{"saturation":-60},{"lightness":23},{"visibility":"on"}]}];
-        // 초록이
-        var featureOpts = [{"featureType":"landscape","stylers":[{"hue":"#FFA800"},{"saturation":0},{"lightness":0},{"gamma":1}]},{"featureType":"road.highway","stylers":[{"hue":"#53FF00"},{"saturation":-73},{"lightness":40},{"gamma":1}]},{"featureType":"road.arterial","stylers":[{"hue":"#FBFF00"},{"saturation":0},{"lightness":0},{"gamma":1}]},{"featureType":"road.local","stylers":[{"hue":"#00FFFD"},{"saturation":0},{"lightness":30},{"gamma":1}]},{"featureType":"water","stylers":[{"hue":"#00BFFF"},{"saturation":6},{"lightness":8},{"gamma":1}]},{"featureType":"poi","stylers":[{"hue":"#679714"},{"saturation":33.4},{"lightness":-25.4},{"gamma":1}]}];
-        
-        // map config
-        var initialMapCenter = new google.maps.LatLng(34.05, -118.24);
-        
-        if (!isNaN(window.localStorage.latitude) && !isNaN(window.localStorage.longitude))
+        //------------------------------------------------------------------------------------
+        // EVENT HANDLERS - UPDATE
+        //------------------------------------------------------------------------------------
+        function updateDefaultLocation()
         {
-            initialMapCenter = new google.maps.LatLng(window.localStorage.latitude, window.localStorage.longitude);
+            window.localStorage.latitude = map.getCenter().lat();
+            window.localStorage.longitude = map.getCenter().lng();
         }
 
-        setPlace(initialMapCenter);
+        function updateBounds()
+        {
+            var bounds = map.getBounds();
+            var ne = bounds.getNorthEast(); // LatLng of the north-east corner
+            var sw = bounds.getSouthWest(); // LatLng of the south-west corder
+            //You get north-west and south-east corners from the two above:
 
-        var mapOptions = {
-                center      : initialMapCenter,
-                zoom        : 15,
-                scrollwheel : true,
-                streetViewControl: false,
-                mapTypeControl: false,
-                panControl: false,
-                zoomControl: false,
-                mapTypeControlOptions: {
-                  mapTypeIds: [google.maps.MapTypeId.ROADMAP, CLOUD_MAP_ID]
-                },
-                mapTypeId: CLOUD_MAP_ID
+            current_map_nw = new google.maps.LatLng(ne.lat(), sw.lng());
+            current_map_se = new google.maps.LatLng(sw.lat(), ne.lng());
+        }
+
+        function updateWatchLocation()
+        {
+            var watchloc = {
+                lat: map.getCenter().lat(),
+                lon: map.getCenter().lng()
+            }
+
+            var watchlocJSON = JSON.stringify(watchloc);
+
+            var updatedsession = {
+                watchloc: watchlocJSON,
+                guid: scope.guid
             };
-            
-        // draw map with helper markers
-        var helperMarkers = [];
-        function drawHelperMarker(location){
-            for (var i = 0, marker; marker = helperMarkers[i]; i++) {
-                marker.setMap(null);
-            }
-            helperMarkers = [];
-            var marker = new google.maps.Marker({
-                position: location, 
-                map: map,
-                icon: imageTarget
-            });
-            helperMarkers.push(marker);
+
+            // update watchloc when center changed.
+            SessionSvc.update(updatedsession);
         }
 
-        function removeHelperMarker(){
-            for (var i = 0, marker; marker = helperMarkers[i]; i++) {
-                marker.setMap(null);
-            }
-            helperMarkers = [];
-        }
-
-        function setPlace(location)
-        {
-            // broadcast location infor(lon,lat)
-            scope.$emit('loc', location);
-
-            var geocoder = new google.maps.Geocoder();
-
-            // broadcast place formatted_address and draw icon
-            geocoder.geocode( { 'latLng': location }, function(results, status) {
-                // as user clicks on the map,
-                // we have to save the formatted address in $scope and
-                // it will be used through posts.ctrl
-                // emit broadcase 'place' and send this to application.ctrl
-                try {
-                    // broadcast formatted_address
-                    scope.$emit('place', results[1].formatted_address); 
-                }
-                catch(err) {
-                    console.log(err);
-                    swal("","Location does not exists");
-                    scope.$emit('place', "Location does not exists");
-                }
-            });
-        }
-
-        function drawAndSetPlace(location)
-        {
-            drawHelperMarker(location);
-            setPlace(location);
-        }
-
-        function calculateCoupling(post_guid, post_guidtgt)
-        {
-            /* coupling status
-                0 - no status
-                1 - i like you
-                2 - you like i
-                4 - we like each other
-            */
-            var ilikeyou = scope.guidtgt == post_guid;
-            var youlikei = scope.guid == post_guidtgt;
-            if (ilikeyou && youlikei)
-            {
-                return 4;
-            }
-            else if (ilikeyou && !youlikei)
-            {
-                return 1;
-            }
-            else if (!ilikeyou && youlikei)
-            {
-                return 2;
-            }
-            else
-            {
-                return 0;
-            }
-        }
-
+        //------------------------------------------------------------------------------------
+        // EVENT HANDLERS - DRAW
+        //------------------------------------------------------------------------------------
         // update responses such as visualization of listeners
-        function updateResponses(){
+        function drawResponses(){
             SessionSvc.fetch()
             .success(function(sessions){
 
@@ -179,7 +110,6 @@ angular.module('app')
                     {
                         continue; // skip this post - no need to draw
                     }
-
                    
                     // marker option setting
                     var markerOptions = {
@@ -204,7 +134,7 @@ angular.module('app')
             });
         }
 
-        function updatePosts(){
+        function updateAndDrawPosts(){
             PostsSvc.fetch()
             .success(function(posts){
 
@@ -212,7 +142,7 @@ angular.module('app')
                 for (var i = 0; i < posts.length; i++)
                 {
                     var post = posts[i];
-
+                    console.log('udpateAndDrawPosts:', post);
                     // if the markers post is exisiting one, we don't want to draw it again.
                     // only draw new ones!
                     for (var j = 0, marker; marker = markers[j]; j++){
@@ -286,7 +216,6 @@ angular.module('app')
                                 post.body + 
                                 '</div><div id="bubbleLifeBar"></div>';
                     */
-
                     // 스코프에서부터 새로운 차일드 스코프를 만들어 each for loop에서 사용한다.
                     // --> 해야, 각 DOM이 각각의 scope를 가져서 post msg가 안 겹친다.
                     var parent = scope;
@@ -306,9 +235,15 @@ angular.module('app')
                             var content = '<div map-msg></div>';
                             var compiled = $compile(content)(child_scope);
 
+                            // get current time and subtract it from post's end time.
+                            // that will be accurate post time for instant posts and long posts.
+                            var currentDate = new Date();
+                            var currentTimeMilli = currentDate.getTime();
+                            var postlife = ((post.lifeend - currentTimeMilli) >= 0) ? (post.lifeend - currentTimeMilli) : 0;
+
                             //to make data available to template
                             child_scope.msg = post.body;
-                            child_scope.postlife = post.lifespan;
+                            child_scope.postlife = postlife;
                             child_scope.postguid = post.guid;
                             child_scope.postguidtgt = post.guidtgt;
                             child_scope.postcouplestatus = coupling_status;
@@ -323,166 +258,6 @@ angular.module('app')
 
                 } // end of for-loop
             });
-        }
-
-        // place a marker and infoWindow
-        var markers = [];
-        function updateMap() { 
-            updatePosts();
-        }
-
-        function setMoveToCurrLocBtn()
-        {
-            var currLocBtn = (document.getElementById('btn-curr')); 
-            map.controls[google.maps.ControlPosition.TOP_RIGHT].push(currLocBtn);
-        }
-
-        function setPostForm()
-        {
-            var postForm = (document.getElementById('posting')); 
-            map.controls[google.maps.ControlPosition.BOTTOM_CENTER].push(postForm);
-        }
-
-        function setPostBtn()
-        {
-            var postBtn = (document.getElementById('btn-submit'));
-            map.controls[google.maps.ControlPosition.BOTTOM_CENTER].push(postBtn);
-        }
-
-        function setSearchBox()
-        {
-            // Create the search box and link it to the UI element.
-            var input = (document.getElementById('pac-input')); // @type {HTMLInputElement}  
-            map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
-
-            var searchBox = new google.maps.places.SearchBox((input)); // @type {HTMLInputElement} 
-
-            // Listen for the event fired when the user selects an item from the
-            // pick list. Retrieve the matching places for that item.
-            google.maps.event.addListener(searchBox, 'places_changed', function() {
-                var places = searchBox.getPlaces();
-
-                if (places.length == 0) {
-                  return;
-                }
-
-                // take only 1 spot
-                var place = places[0];
-
-                // when search happens, location will be updated as well for post
-                // scope.$emit('place', place.formatted_address);
-                drawAndSetPlace(place.geometry.location);
-
-                window.localStorage.latitude = place.geometry.location.latitude;
-                window.localStorage.longitude = place.geometry.location.longitude;
-
-                map.panTo(place.geometry.location);
-                map.setZoom(16);
-            });
-        }
-
-        function setClickMap()
-        {
-            // click event on map to draw marker
-            google.maps.event.addListener(map, 'click', function(event) {
-                drawAndSetPlace(event.latLng);
-            });
-        }
-
-        function setMoveToCurrentLocation()
-        {
-            // moving to a user's location and draw a marker there
-            google.maps.event.addListener(map, 'heading_changed', function(options) {
-                if (options.type == 'curr_x')
-                {
-                    drawAndSetPlace(options.location);
-                }
-                else if (options.type == 'curr_loc')
-                {
-                    drawDropDown(options.location);
-                }
-            });
-        }
-
-        function setCenterChanged()
-        {
-            google.maps.event.addListener(map, 'center_changed', function(){
-                // when map center change, update last location in memory,
-                // so browser will remember it next time you come!
-                window.localStorage.latitude = map.getCenter().lat();
-                window.localStorage.longitude = map.getCenter().lng();
-
-                // when map center change, update bounds info for map
-                updateBounds();
-            })
-        }
-
-        function setMapDragEnd()
-        {
-            google.maps.event.addListener(map, 'dragend', function(){
-                // update watchloc when center changed.
-                updateWatchLocation();
-
-                // update map as drag end
-                updateMap();
-            })
-        }
-        
-        /* usage
-            meant to implement manually updating elements
-            google.maps.event.trigger($scope.map, 'maptypeid_changed'); // regular update
-            google.maps.event.trigger($scope.map, 'maptypeid_changed', options); // update with options
-        */
-        function setLoadPostMarkers()
-        {
-            // manually reload/refresh markers
-            google.maps.event.addListener(map, 'maptypeid_changed', function(options) {
-                console.log("maptypeid_changed", options);
-                if (options == null) // if there is no options, just update map
-                {
-                    removeHelperMarker();
-                    updateMap();
-                }
-                else if (options.type == 'res_login') // when user enters map
-                {
-                    showLogin(options.data);
-                }
-                else if (options.type == 'res_post') // when user posts, response on map
-                {
-                    updateResponses();
-                }
-                else if (options.type == 'res_post_remove') // when the longer post get removed
-                {
-                    console.log("starting remove post");
-                    for (var k = 0, marker; marker = markers[k]; k++) {
-                        console.log(options.data);
-                        console.log(marker.post._id);
-                        if (options.data == marker.post._id) {
-                            marker.marker.setMap(null);
-                            markers.splice(k, 1);
-                        }
-                    }
-                }
-                
-            });
-        }
-
-        function updateWatchLocation()
-        {
-            var watchloc = {
-                lat: map.getCenter().lat(),
-                lon: map.getCenter().lng()
-            }
-
-            var watchlocJSON = JSON.stringify(watchloc);
-
-            var updatedsession = {
-                watchloc: watchlocJSON,
-                guid: scope.guid
-            };
-
-            // update watchloc when center changed.
-            SessionSvc.update(updatedsession);
         }
 
         function drawDropDown(googleLoc)
@@ -517,65 +292,342 @@ angular.module('app')
             2000);
         }
 
-        function showLogin(session)
+        function unDrawPost(postid)
         {
-            var location = angular.fromJson(session.location);
-            var googleLoc = new google.maps.LatLng(location.lat, location.lon);
-
-            drawDropDown(googleLoc);
+            console.log("starting remove post");
+            for (var k = 0, marker; marker = markers[k]; k++) {
+                console.log(postid);
+                console.log(marker.post._id);
+                if (postid == marker.post._id) {
+                    marker.marker.setMap(null);
+                    markers.splice(k, 1);
+                    break;
+                }
+            }
         }
 
-        function updateBounds()
+        function drawAndSetPlace(location)
         {
-            var bounds = map.getBounds();
-            var ne = bounds.getNorthEast(); // LatLng of the north-east corner
-            var sw = bounds.getSouthWest(); // LatLng of the south-west corder
-            //You get north-west and south-east corners from the two above:
+            drawHelperMarker(location);
+            setPlace(location);
+        }
 
-            current_map_nw = new google.maps.LatLng(ne.lat(), sw.lng());
-            current_map_se = new google.maps.LatLng(sw.lat(), ne.lng());
+        // draw map with helper markers
+        function drawHelperMarker(location){
+            for (var i = 0, marker; marker = helperMarkers[i]; i++) {
+                marker.setMap(null);
+            }
+            helperMarkers = [];
+            var marker = new google.maps.Marker({
+                position: location, 
+                map: map,
+                icon: imageTarget
+            });
+            helperMarkers.push(marker);
+        }
+
+        function unDrawHelperMarker(){
+            for (var i = 0, marker; marker = helperMarkers[i]; i++) {
+                marker.setMap(null);
+            }
+            helperMarkers = [];
+        }
+
+
+        //------------------------------------------------------------------------------------
+        // UTIL (style and couplings)
+        //------------------------------------------------------------------------------------
+        function setPlace(location)
+        {
+            // broadcast location infor(lon,lat)
+            scope.$emit('loc', location);
+
+            var geocoder = new google.maps.Geocoder();
+
+            // broadcast place formatted_address and draw icon
+            geocoder.geocode( { 'latLng': location }, function(results, status) {
+                // as user clicks on the map,
+                // we have to save the formatted address in $scope and
+                // it will be used through posts.ctrl
+                // emit broadcase 'place' and send this to application.ctrl
+                try {
+                    // broadcast formatted_address
+                    scope.$emit('place', results[1].formatted_address); 
+                }
+                catch(err) {
+                    console.log(err);
+                    swal("","Location does not exists");
+                    scope.$emit('place', "Location does not exists");
+                }
+            });
+        }
+
+        function calculateCoupling(post_guid, post_guidtgt)
+        {
+            /* coupling status
+                0 - no status
+                1 - i like you
+                2 - you like i
+                4 - we like each other
+            */
+            var ilikeyou = scope.guidtgt == post_guid;
+            var youlikei = scope.guid == post_guidtgt;
+            if (ilikeyou && youlikei)
+            {
+                return 4;
+            }
+            else if (ilikeyou && !youlikei)
+            {
+                return 1;
+            }
+            else if (!ilikeyou && youlikei)
+            {
+                return 2;
+            }
+            else
+            {
+                return 0;
+            }
+        }
+
+        //------------------------------------------------------------------------------------
+        // UI
+        //------------------------------------------------------------------------------------
+        function setUIMoveToCurrLocBtn()
+        {
+            var currLocBtn = (document.getElementById('btn-curr')); 
+            map.controls[google.maps.ControlPosition.TOP_RIGHT].push(currLocBtn);
+        }
+
+        function setUIPostForm()
+        {
+            var postForm = (document.getElementById('posting')); 
+            map.controls[google.maps.ControlPosition.BOTTOM_CENTER].push(postForm);
+        }
+
+        function setUIPostBtn()
+        {
+            var postBtn = (document.getElementById('btn-submit'));
+            map.controls[google.maps.ControlPosition.BOTTOM_CENTER].push(postBtn);
+        }
+
+        function setUISearchBox()
+        {
+            // Create the search box and link it to the UI element.
+            var input = (document.getElementById('pac-input')); // @type {HTMLInputElement}  
+            map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+
+            var searchBox = new google.maps.places.SearchBox((input)); // @type {HTMLInputElement} 
+
+            // Listen for the event fired when the user selects an item from the
+            // pick list. Retrieve the matching places for that item.
+            google.maps.event.addListener(searchBox, 'places_changed', function() {
+                var places = searchBox.getPlaces();
+
+                if (places.length == 0) {
+                  return;
+                }
+
+                // take only 1 spot
+                var place = places[0];
+
+                // when search happens, location will be updated as well for post
+                // scope.$emit('place', place.formatted_address);
+                drawAndSetPlace(place.geometry.location);
+
+                window.localStorage.latitude = place.geometry.location.latitude;
+                window.localStorage.longitude = place.geometry.location.longitude;
+
+                map.panTo(place.geometry.location);
+                map.setZoom(16);
+            });
+        }
+
+        //------------------------------------------------------------------------------------
+        // EVENT
+        //------------------------------------------------------------------------------------
+        function setEventClick()
+        {
+            // click event on map to draw marker
+            google.maps.event.addListener(map_origin, 'click', function(event) {
+                drawAndSetPlace(event.latLng);
+            });
+        }
+
+        function setEventCenterChanged()
+        {
+            google.maps.event.addListener(map_origin, 'center_changed', function(){
+                // when map center change, update last location in memory,
+                // so browser will remember it next time you come!
+                updateDefaultLocation();
+
+                // when map center change, update bounds info for map
+                updateBounds();
+            })
+        }
+
+        function setEventDragEnd()
+        {
+            google.maps.event.addListener(map_origin, 'dragend', function(){
+                // update watchloc when center changed.
+                updateWatchLocation();
+
+                // update map as drag end
+                updateAndDrawPosts();
+            })
+        }
+
+        //------------------------------------------------------------------------------------
+        // SETUP FOR MAP
+        //------------------------------------------------------------------------------------
+        // map initial configs
+        function initialMapData(){
+            initialMapCenter = new google.maps.LatLng(34.05, -118.24);
+        
+            if (!isNaN(window.localStorage.latitude) && !isNaN(window.localStorage.longitude))
+            {
+                initialMapCenter = new google.maps.LatLng(window.localStorage.latitude, window.localStorage.longitude);
+            }
+
+            setPlace(initialMapCenter);
+
+            mapOptions = {
+                    center      : initialMapCenter,
+                    zoom        : 15,
+                    scrollwheel : true,
+                    streetViewControl: false,
+                    mapTypeControl: false,
+                    panControl: false,
+                    zoomControl: false,
+                    mapTypeControlOptions: {
+                      mapTypeIds: [google.maps.MapTypeId.ROADMAP, CLOUD_MAP_ID]
+                    },
+                    mapTypeId: CLOUD_MAP_ID
+            };
+        }
+
+        function setManualEvents(){
+            function CloudMap(options){
+                var self = this;
+                console.log("Initializing map");
+            }
+
+            // instantiate google map
+            map_origin = new google.maps.Map(element[0], mapOptions);
+
+            // set prototype of custom map with origin map
+            CloudMap.prototype = map_origin;
+
+            // draw x marker
+            function handleDrawXMarker(location){
+                google.maps.event.trigger(this, 'drawXMarker', location);
+            }
+            CloudMap.prototype.drawXMarker = handleDrawXMarker;
+
+            // draw current location marker
+            function handleDrawCurrLocationMarker(location){
+                google.maps.event.trigger(this, 'drawCurrLocationMarker', location);
+            }
+            CloudMap.prototype.drawCurrLocationMarker = handleDrawCurrLocationMarker;
+
+            // draw posts
+            function handleUpdateAndDrawPosts(){
+                google.maps.event.trigger(this, 'updateAndDrawPosts');
+            }
+            CloudMap.prototype.updateAndDrawPosts = handleUpdateAndDrawPosts;
+
+            // draw responses
+            function handleDrawResponses(){
+                google.maps.event.trigger(this, 'drawResponses');
+            }
+            CloudMap.prototype.drawResponses = handleDrawResponses;
+
+            // undraw posts
+            function handleUnDrawPost(postid){
+                google.maps.event.trigger(this, 'unDrawPost', postid);
+            }
+            CloudMap.prototype.unDrawPost = handleUnDrawPost;
+
+            // create custom map for app
+            map = new CloudMap();
+
+            google.maps.event.addListener(map, 'drawXMarker', function(location){
+                drawAndSetPlace(location);
+            });
+
+            google.maps.event.addListener(map, 'drawCurrLocationMarker', function(location){
+                drawDropDown(location);
+            });
+
+            google.maps.event.addListener(map, 'updateAndDrawPosts', function(){
+                updateAndDrawPosts();
+            });
+
+            google.maps.event.addListener(map, 'drawResponses', function(){
+                drawResponses();
+            });
+
+            google.maps.event.addListener(map, 'unDrawPost', function(postid){
+                unDrawPost(postid);
+            });
+        }
+
+        function setStyleForMap()
+        {
+            // 깔끔이 
+            //var featureOpts = [{"featureType":"administrative","elementType":"labels.text.fill","stylers":[{"color":"#6195a0"}]},{"featureType":"landscape","elementType":"all","stylers":[{"color":"#f2f2f2"}]},{"featureType":"landscape","elementType":"geometry.fill","stylers":[{"color":"#ffffff"}]},{"featureType":"poi","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"poi.park","elementType":"geometry.fill","stylers":[{"color":"#e6f3d6"},{"visibility":"on"}]},{"featureType":"road","elementType":"all","stylers":[{"saturation":-100},{"lightness":45},{"visibility":"simplified"}]},{"featureType":"road.highway","elementType":"all","stylers":[{"visibility":"simplified"}]},{"featureType":"road.highway","elementType":"geometry.fill","stylers":[{"color":"#f4d2c5"},{"visibility":"simplified"}]},{"featureType":"road.highway","elementType":"labels.text","stylers":[{"color":"#4e4e4e"}]},{"featureType":"road.arterial","elementType":"geometry.fill","stylers":[{"color":"#f4f4f4"}]},{"featureType":"road.arterial","elementType":"labels.text.fill","stylers":[{"color":"#787878"}]},{"featureType":"road.arterial","elementType":"labels.icon","stylers":[{"visibility":"off"}]},{"featureType":"transit","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"water","elementType":"all","stylers":[{"color":"#eaf6f8"},{"visibility":"on"}]},{"featureType":"water","elementType":"geometry.fill","stylers":[{"color":"#eaf6f8"}]}];
+            // 상큼이
+            //var featureOpts = [{"featureType":"landscape.man_made","elementType":"geometry","stylers":[{"color":"#f7f1df"}]},{"featureType":"landscape.natural","elementType":"geometry","stylers":[{"color":"#d0e3b4"}]},{"featureType":"landscape.natural.terrain","elementType":"geometry","stylers":[{"visibility":"off"}]},{"featureType":"poi","elementType":"labels","stylers":[{"visibility":"off"}]},{"featureType":"poi.business","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"poi.medical","elementType":"geometry","stylers":[{"color":"#fbd3da"}]},{"featureType":"poi.park","elementType":"geometry","stylers":[{"color":"#bde6ab"}]},{"featureType":"road","elementType":"geometry.stroke","stylers":[{"visibility":"off"}]},{"featureType":"road","elementType":"labels","stylers":[{"visibility":"off"}]},{"featureType":"road.highway","elementType":"geometry.fill","stylers":[{"color":"#ffe15f"}]},{"featureType":"road.highway","elementType":"geometry.stroke","stylers":[{"color":"#efd151"}]},{"featureType":"road.arterial","elementType":"geometry.fill","stylers":[{"color":"#ffffff"}]},{"featureType":"road.local","elementType":"geometry.fill","stylers":[{"color":"black"}]},{"featureType":"transit.station.airport","elementType":"geometry.fill","stylers":[{"color":"#cfb2db"}]},{"featureType":"water","elementType":"geometry","stylers":[{"color":"#a2daf2"}]}];
+            // 똑똑이
+            //var featureOpts = [{"featureType":"water","elementType":"all","stylers":[{"hue":"#7fc8ed"},{"saturation":55},{"lightness":-6},{"visibility":"on"}]},{"featureType":"water","elementType":"labels","stylers":[{"hue":"#7fc8ed"},{"saturation":55},{"lightness":-6},{"visibility":"off"}]},{"featureType":"poi.park","elementType":"geometry","stylers":[{"hue":"#83cead"},{"saturation":1},{"lightness":-15},{"visibility":"on"}]},{"featureType":"landscape","elementType":"geometry","stylers":[{"hue":"#f3f4f4"},{"saturation":-84},{"lightness":59},{"visibility":"on"}]},{"featureType":"landscape","elementType":"labels","stylers":[{"hue":"#ffffff"},{"saturation":-100},{"lightness":100},{"visibility":"off"}]},{"featureType":"road","elementType":"geometry","stylers":[{"hue":"#ffffff"},{"saturation":-100},{"lightness":100},{"visibility":"on"}]},{"featureType":"road","elementType":"labels","stylers":[{"hue":"#bbbbbb"},{"saturation":-100},{"lightness":26},{"visibility":"on"}]},{"featureType":"road.arterial","elementType":"geometry","stylers":[{"hue":"#ffcc00"},{"saturation":100},{"lightness":-35},{"visibility":"simplified"}]},{"featureType":"road.highway","elementType":"geometry","stylers":[{"hue":"#ffcc00"},{"saturation":100},{"lightness":-22},{"visibility":"on"}]},{"featureType":"poi.school","elementType":"all","stylers":[{"hue":"#d7e4e4"},{"saturation":-60},{"lightness":23},{"visibility":"on"}]}];
+            // 초록이
+            var featureOpts = [{"featureType":"landscape","stylers":[{"hue":"#FFA800"},{"saturation":0},{"lightness":0},{"gamma":1}]},{"featureType":"road.highway","stylers":[{"hue":"#53FF00"},{"saturation":-73},{"lightness":40},{"gamma":1}]},{"featureType":"road.arterial","stylers":[{"hue":"#FBFF00"},{"saturation":0},{"lightness":0},{"gamma":1}]},{"featureType":"road.local","stylers":[{"hue":"#00FFFD"},{"saturation":0},{"lightness":30},{"gamma":1}]},{"featureType":"water","stylers":[{"hue":"#00BFFF"},{"saturation":6},{"lightness":8},{"gamma":1}]},{"featureType":"poi","stylers":[{"hue":"#679714"},{"saturation":33.4},{"lightness":-25.4},{"gamma":1}]}];
+            
+            var styledMapOptions = {
+                name: 'Custom Style'
+              };
+
+            var customMapType = new google.maps.StyledMapType(featureOpts, styledMapOptions);
+            map.mapTypes.set(CLOUD_MAP_ID, customMapType);
         }
 
         // init the map
         function initMap() {
             if (map === void 0) {
-                map = new google.maps.Map(element[0], mapOptions);
+                initialMapData();
 
-                var styledMapOptions = {
-                    name: 'Custom Style'
-                  };
+                setManualEvents();
 
-                var customMapType = new google.maps.StyledMapType(featureOpts, styledMapOptions);
-                map.mapTypes.set(CLOUD_MAP_ID, customMapType);
+                setStyleForMap();
             }
-
-            setLoadPostMarkers();
 
             // broadcast to send map to application ctrl
             scope.$emit('mapInit', map);
 
-            setClickMap();
 
-            setSearchBox();
+            // add UI elements to map
+            setUISearchBox();
+            setUIMoveToCurrLocBtn();
+            setUIPostForm();
+            setUIPostBtn();
 
-            setMoveToCurrLocBtn();
+            // add origin native Event handlers to map
+            setEventClick();
+            setEventCenterChanged();
+            setEventDragEnd();
 
-            setPostForm();
-
-            setPostBtn();
-
-            setCenterChanged();
-
-            setMoveToCurrentLocation();
-
-            setMapDragEnd();
-
-            $timeout(function(){
-                updateMap();
+            // update very first time for app
+            setTimeout(function(){
+                updateDefaultLocation();
+                updateBounds();
+                updateWatchLocation();
+                updateAndDrawPosts();
             }, 100);
-            
         } 
 
+        //------------------------------------------------------------------------------------
+        // EXECUTE
+        //------------------------------------------------------------------------------------
         initMap();
     };
     
