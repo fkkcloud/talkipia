@@ -16,6 +16,13 @@ angular.module('app')
 
 	$scope.guid = guid();
 
+	$scope.pageId = { 
+		post : 0,
+	};
+
+	$scope.navCollapsed = true;
+
+	$scope.guidtgt = "0"; // 기본값은 0으로 해서 0이면 관심상대guid가 없는 상태이다. 
 
 	// 윈도우가 닫히려고 하면 리퀘스트 보낸다! 유져 세션을 닫으라고!
 	window.onbeforeunload = function(){
@@ -101,6 +108,7 @@ angular.module('app')
 			/*
 				ws:new_post    - 새로운 포스트가 올라왔을때 front-end에서 맵이 다시 업데이트 해야 된다고 알려준다!
 				ws:new_session - session이 새로 들어오면 된다고 알려준다!
+				ws:remove_post - 포스트가 시간이 다 되어서 사라질때!
 				매우중요! 
 			*/
 			$rootScope.$broadcast('ws:' + payload.type, payload.data);
@@ -108,9 +116,38 @@ angular.module('app')
 	};
 	connect();
 
+	//------------------------------------------------------------------------------------
+    // SOCKET BROADCAST RECEIVER
+    //------------------------------------------------------------------------------------
+	// as server socket send 'ws:new_post' , we can update the map!
+	$scope.$on('ws:new_post', function(_, post){
+		// update posts
+		$scope.map.updateAndDrawPosts();
+
+		// show responsive users only to the user who wrote this post
+		if (post.guid == $scope.guid)
+		{
+			console.log('start drawing responses..');
+			$scope.map.drawResponses(post);
+		}
+	});
+
+	// as server socket send 'ws:new_post' , we can update the map!
+	$scope.$on('ws:new_session', function(_, session){
+
+		var location = angular.fromJson(session.location);
+		$scope.map.drawCurrLocationMarker(location);
+
+	});
+
+	// when server remove the post after time for longer ones, 
+	// update map with coresponding info
+	$scope.$on('ws:remove_post', function(_, postid){
+		$scope.map.unDrawPost(postid);
+	});
 
 	//------------------------------------------------------------------------------------
-    // TBD
+    // APPLICATION LEVEL FUNCTIONS
     //------------------------------------------------------------------------------------
 	// see if its mobile phone
 	$scope.isMobile = function(){
@@ -129,79 +166,6 @@ angular.module('app')
 		  }
 	};
 
-
-	$scope.pageId = { 
-		post : 0,
-	};
-
-	$scope.navCollapsed = true;
-	$scope.collapse = function(){
-		$scope.navCollapsed = true;
-	};
-
-	$scope.guidtgt = "0"; // 기본값은 0으로 해서 0이면 관심상대guid가 없는 상태이다. 
-	$scope.$on('set:guidtgt', function(_, guidtgt){
-		console.log("setting guidtgt", guidtgt);
-		$scope.guidtgt = guidtgt;
-	});
-
-	//------------------------------------------------------------------------------------
-    // SOCKET BROADCAST RECEIVER
-    //------------------------------------------------------------------------------------
-	// as server socket send 'ws:new_post' , we can update the map!
-	$scope.$on('ws:new_post', function(_, post){
-		// update posts
-		$scope.map.updateAndDrawPosts();
-
-		// show responsive users
-		$scope.map.drawResponses();
-	});
-
-	// as server socket send 'ws:new_post' , we can update the map!
-	$scope.$on('ws:new_session', function(_, session){
-
-		var location = angular.fromJson(session.location);
-        var googleLoc = new google.maps.LatLng(location.lat, location.lon);
-
-		$scope.map.drawCurrLocationMarker(googleLoc);
-	});
-
-	// when server remove the post after time for longer ones, 
-	// update map with coresponding info
-	$scope.$on('ws:remove_post', function(_, postid){
-		console.log('remove_post : id', postid);
-		$scope.map.unDrawPost(postid);
-	});
-
-	//------------------------------------------------------------------------------------
-    // TBD
-    //------------------------------------------------------------------------------------
-	$scope.$on('pagechange', function(_, pageId){
-		$scope.currentPageId = pageId;
-	});
-
-	$scope.$on('loc', function(_, location){
-		var lat = location.lat();
-		var lon = location.lng();
-		$scope.postLocation = {
-			lat: lat,
-			lon: lon
-		};
-	});
-
-	$scope.$on('place', function(_, place){
-		// Forcing the update with $apply() method on $scope
-		// problem related note: http://www.jeffryhouser.com/index.cfm/2014/6/2/How-do-I-run-code-when-a-variable-changes-with-AngularJS
-		$scope.$apply(function(){
-				$scope.postplace = place;
-			}
-		);
-	});
-
-	$scope.$on('mapInit', function(_, map){
-		$scope.map = map;
-	});
-
 	/* move to current location */
 	$scope.moveToCurrentLocation = function(){
 		function getCurrLocSuccess(pos) {
@@ -214,13 +178,18 @@ angular.module('app')
             window.localStorage.latitude = crd.latitude;
             window.localStorage.longitude = crd.longitude;
 
-            var googleLoc = new google.maps.LatLng(crd.latitude, crd.longitude);
+            var location = {
+            	lat: crd.latitude, 
+            	lon: crd.longitude
+            };
 
             // draw drop down user position
-           	$scope.map.drawCurrLocationMarker(googleLoc);
+           	$scope.map.drawCurrLocationMarker(location);
 
            	// draw x marker
-	        $scope.map.drawXMarker(googleLoc);
+	        $scope.map.drawXMarker(location);
+
+	        var googleLoc = new google.maps.LatLng(location.lat, location.lon);
 
 	        // move to the location and zoom into right amount
             $scope.map.panTo(googleLoc)
@@ -262,5 +231,40 @@ angular.module('app')
 		$scope.map.panTo(googleLoc);
 	};
 
+	$scope.collapse = function(){
+		$scope.navCollapsed = true;
+	};
 
+	//------------------------------------------------------------------------------------
+    // GENERAL BROADCAST RECEIVER
+    //------------------------------------------------------------------------------------
+    $scope.$on('mapInit', function(_, map){
+		$scope.map = map;
+	});
+
+    $scope.$on('set:guidtgt', function(_, guidtgt){
+		$scope.guidtgt = guidtgt;
+	});
+
+	$scope.$on('pagechange', function(_, pageId){
+		$scope.currentPageId = pageId;
+	});
+
+	$scope.$on('loc', function(_, location){
+		var lat = location.lat();
+		var lon = location.lng();
+		$scope.postLocation = {
+			lat: lat,
+			lon: lon
+		};
+	});
+
+	$scope.$on('place', function(_, place){
+		// Forcing the update with $apply() method on $scope
+		// problem related note: http://www.jeffryhouser.com/index.cfm/2014/6/2/How-do-I-run-code-when-a-variable-changes-with-AngularJS
+		$scope.$apply(function(){
+				$scope.postplace = place;
+			}
+		);
+	});
 });

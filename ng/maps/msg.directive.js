@@ -5,6 +5,9 @@ angular.module('app')
     templateUrl: './templates/window.html',
     link: function(scope, elm, attrs) {        
 
+        //------------------------------------------------------------------------------------
+        // COUPLING CLASS
+        //------------------------------------------------------------------------------------
         /* coupling status
           0 - no status
           1 - i like you
@@ -26,14 +29,23 @@ angular.module('app')
           }
         };
 
+        //------------------------------------------------------------------------------------
+        // DOCUMENT READY
+        //------------------------------------------------------------------------------------
         // as the document gets ready, set click event and lifebar animation length
         angular.element(document).ready(function() {
+          
+          updateGuidTarget();
+
+          updatePostTimer();
+          
+        });
+
+        function updateGuidTarget(){
+          // update status for guid target
           var postguid = scope.postguid;
           var myguid = scope.$parent.guid;
           elm.parent().find('div div #bubbleClick').on('click',function(){
-
-            console.log('window clicked.');
-
             // clicking its own post will do nothing
             if (postguid == myguid){
               return;
@@ -43,16 +55,17 @@ angular.module('app')
             //scope.$parent.$apply();
             //scope.$parent.$parent.postcouplestatus = 1; // 1- ilikeyou ??
 
-            console.log('emit set:guidtgt', postguid);
             scope.$emit('set:guidtgt', postguid);
           });
+        }
 
+        function updatePostTimer(){
+          // set timer for post life bar
           $timeout(function(){
             var duration = scope.postlife + "ms";
             var postlifebar_css = elm.parent().find('div div .postlifebar').css('animation-duration', duration);
           }, 100);
-          
-        });
+        }
         
     },
   }

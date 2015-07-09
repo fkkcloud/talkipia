@@ -66,51 +66,74 @@ angular.module('app')
 
         function updateWatchLocation()
         {
-            var watchloc = {
+            var bounds = map.getBounds();
+            var ne = bounds.getNorthEast(); // LatLng of the north-east corner
+            var sw = bounds.getSouthWest(); // LatLng of the south-west corder
+            //You get north-west and south-east corners from the two above:
+
+            current_map_nw = { 
+                lat: ne.lat(), 
+                lon: sw.lng()
+            };
+            current_map_se = {
+                lat: sw.lat(), 
+                lon: ne.lng()
+            };
+            current_map_center = {
                 lat: map.getCenter().lat(),
                 lon: map.getCenter().lng()
-            }
-
-            var watchlocJSON = JSON.stringify(watchloc);
-
-            var updatedsession = {
-                watchloc: watchlocJSON,
-                guid: scope.guid
             };
 
-            // update watchloc when center changed.
-            SessionSvc.update(updatedsession);
+            SessionSvc.updateWatchLocation(current_map_nw, current_map_se, current_map_center, scope.guid);
         }
 
         //------------------------------------------------------------------------------------
         // EVENT HANDLERS - DRAW
         //------------------------------------------------------------------------------------
         // update responses such as visualization of listeners
-        function drawResponses(){
+        function drawResponses(post){
+            console.log('reference post:', post);
+
             SessionSvc.fetch()
             .success(function(sessions){
 
                 for (var i = 0; i < sessions.length; i++){
                     var session = sessions[i];
 
+                    // skip my session - no need to draw 내 자신의 세션은 그릴필요가 없다.
                     if (session.guid == scope.guid)
                         continue;
 
                      // session's watch location will be bounced!
-                    console.log(session.watchloc);
-                    var location = angular.fromJson(session.watchloc);
-                    var googleLoc = new google.maps.LatLng(location.lat, location.lon);
+                    console.log('session watch location:', session.watchloc);
+                    console.log('post location:', post.location);
+                    var watch_location = angular.fromJson(session.watchloc);
+                    var post_location = angular.fromJson(post.location);
+                    
+                    // 유저가 보고 있는 바운더리 안에 그 session(다른유저) 체킁
 
-                    // 바운더리 안에 있는지부터 체크를 하장
+                    console.log(current_map_se, current_map_nw);
+
                     updateBounds();
-                    if (!(googleLoc.lat() < current_map_nw.lat()) ||
-                        !(googleLoc.lat() > current_map_se.lat()) ||
-                        !(googleLoc.lng() < current_map_se.lng()) ||
-                        !(googleLoc.lng() > current_map_nw.lng()) )
+                    if (!(watch_location.center_lat < current_map_nw.lat()) ||
+                        !(watch_location.center_lat > current_map_se.lat()) ||
+                        !(watch_location.center_lon < current_map_se.lng()) ||
+                        !(watch_location.center_lon > current_map_nw.lng()) )
                     {
-                        continue; // skip this post - no need to draw
+                        continue;
+                    }
+
+                    // session(다른유저)들이 그 포스트를 보고 있지 않으면 스킵.
+                    if (!(post_location.lat < watch_location.nw_lat) ||
+                        !(post_location.lat > watch_location.se_lat) ||
+                        !(post_location.lon < watch_location.se_lon) ||
+                        !(post_location.lon > watch_location.nw_lon) )
+                    {
+                        continue;
                     }
                    
+                    var googleLoc = new google.maps.LatLng(watch_location.center_lat, watch_location.center_lon);
+
                     // marker option setting
                     var markerOptions = {
                         position: googleLoc,
@@ -142,7 +165,6 @@ angular.module('app')
                 for (var i = 0; i < posts.length; i++)
                 {
                     var post = posts[i];
-                    console.log('udpateAndDrawPosts:', post);
                     // if the markers post is exisiting one, we don't want to draw it again.
                     // only draw new ones!
                     for (var j = 0, marker; marker = markers[j]; j++){
@@ -260,8 +282,10 @@ angular.module('app')
             });
         }
 
-        function drawDropDown(googleLoc)
+        function drawDropDown(location)
         {
+            var googleLoc = new google.maps.LatLng(location.lat, location.lon);
+
             updateBounds();
             // 바운더리 안에 있는지부터 체크를 하장
             if (!(googleLoc.lat() < current_map_nw.lat()) ||
@@ -308,8 +332,9 @@ angular.module('app')
 
         function drawAndSetPlace(location)
         {
-            drawHelperMarker(location);
-            setPlace(location);
+            var googleLoc = new google.maps.LatLng(location.lat, location.lon);
+            drawHelperMarker(googleLoc);
+            setPlace(googleLoc);
         }
 
         // draw map with helper markers
@@ -335,7 +360,7 @@ angular.module('app')
 
 
         //------------------------------------------------------------------------------------
-        // UTIL (style and couplings)
+        // UTIL
         //------------------------------------------------------------------------------------
         function setPlace(location)
         {
@@ -433,7 +458,11 @@ angular.module('app')
 
                 // when search happens, location will be updated as well for post
                 // scope.$emit('place', place.formatted_address);
-                drawAndSetPlace(place.geometry.location);
+                var location = {
+                    lat: place.geometry.location.lat(),
+                    lon: place.geometry.location.lng()
+                };
+                drawAndSetPlace(location);
 
                 window.localStorage.latitude = place.geometry.location.latitude;
                 window.localStorage.longitude = place.geometry.location.longitude;
@@ -450,20 +479,29 @@ angular.module('app')
         {
             // click event on map to draw marker
             google.maps.event.addListener(map_origin, 'click', function(event) {
-                drawAndSetPlace(event.latLng);
+                var location = {
+                    lat: event.latLng.lat(),
+                    lon: event.latLng.lng()
+                };
+                drawAndSetPlace(location);
             });
         }
 
         function setEventCenterChanged()
         {
-            google.maps.event.addListener(map_origin, 'center_changed', function(){
+            google.maps.event.addListener(map_origin, 'center_changed', function(){                
                 // when map center change, update last location in memory,
                 // so browser will remember it next time you come!
                 updateDefaultLocation();
+            });
+        }
 
+        function setEventBoundsChanged()
+        {
+            google.maps.event.addListener(map_origin, 'bounds_changed', function(){
                 // when map center change, update bounds info for map
-                updateBounds();
-            })
+                updateBounds();  
+            });
         }
 
         function setEventDragEnd()
@@ -474,7 +512,29 @@ angular.module('app')
 
                 // update map as drag end
                 updateAndDrawPosts();
-            })
+            });
+        }
+
+        function setEventResize()
+        {
+            google.maps.event.addListener(map_origin, 'resize', function(){
+                // update watchloc when center changed.
+                updateWatchLocation();
+
+                // update map as drag end
+                updateAndDrawPosts();
+            });
+        }
+
+        function setEventZoomChanged()
+        {
+            google.maps.event.addListener(map_origin, 'zoom_changed', function(){
+                // update watchloc when center changed.
+                updateWatchLocation();
+
+                // update map as drag end
+                updateAndDrawPosts();
+            });
         }
 
         //------------------------------------------------------------------------------------
@@ -537,8 +597,8 @@ angular.module('app')
             CloudMap.prototype.updateAndDrawPosts = handleUpdateAndDrawPosts;
 
             // draw responses
-            function handleDrawResponses(){
-                google.maps.event.trigger(this, 'drawResponses');
+            function handleDrawResponses(post){
+                google.maps.event.trigger(this, 'drawResponses', post);
             }
             CloudMap.prototype.drawResponses = handleDrawResponses;
 
@@ -563,8 +623,8 @@ angular.module('app')
                 updateAndDrawPosts();
             });
 
-            google.maps.event.addListener(map, 'drawResponses', function(){
-                drawResponses();
+            google.maps.event.addListener(map, 'drawResponses', function(post){
+                drawResponses(post);
             });
 
             google.maps.event.addListener(map, 'unDrawPost', function(postid){
@@ -604,7 +664,6 @@ angular.module('app')
             // broadcast to send map to application ctrl
             scope.$emit('mapInit', map);
 
-
             // add UI elements to map
             setUISearchBox();
             setUIMoveToCurrLocBtn();
@@ -615,6 +674,9 @@ angular.module('app')
             setEventClick();
             setEventCenterChanged();
             setEventDragEnd();
+            setEventResize();
+            setEventZoomChanged();
+            setEventBoundsChanged();
 
             // update very first time for app
             setTimeout(function(){
@@ -622,7 +684,7 @@ angular.module('app')
                 updateBounds();
                 updateWatchLocation();
                 updateAndDrawPosts();
-            }, 100);
+            }, 200);
         } 
 
         //------------------------------------------------------------------------------------
