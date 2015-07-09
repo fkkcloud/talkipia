@@ -20,7 +20,7 @@ angular.module('app')
             size: new google.maps.Size(100, 100),
             origin: new google.maps.Point(0, 0),
             anchor: new google.maps.Point(17, 34),
-            scaledSize: new google.maps.Size(17, 25)
+            scaledSize: new google.maps.Size(1, 1)
         };
         var imageTarget = {
             url: 'http://www.clker.com/cliparts/U/P/j/M/I/i/x-mark-yellow-md.png',
@@ -79,11 +79,29 @@ angular.module('app')
                 lat: sw.lat(), 
                 lon: ne.lng()
             };
-            current_map_center = {
-                lat: map.getCenter().lat(),
-                lon: map.getCenter().lng()
-            };
 
+            var current_map_center ;
+
+            // see if the latest x marker or post location is within user's view
+            if (!(scope.postLocation.lat < current_map_nw.lat) ||
+                !(scope.postLocation.lat > current_map_se.lat) ||
+                !(scope.postLocation.lon < current_map_se.lon) ||
+                !(scope.postLocation.lon > current_map_nw.lon) )
+            {
+                // if it is not within user's view, then just use map center
+                current_map_center = {
+                    lat: map.getCenter().lat(),
+                    lon: map.getCenter().lng()
+                };
+            }
+            else
+            {
+                // if it is within user's view, use x marker location a.k.a post location
+                current_map_center = {
+                    lat: scope.postLocation.lat,
+                    lon: scope.postLocation.lon
+                };
+            }
             SessionSvc.updateWatchLocation(current_map_nw, current_map_se, current_map_center, scope.guid);
         }
 
@@ -335,6 +353,9 @@ angular.module('app')
             var googleLoc = new google.maps.LatLng(location.lat, location.lon);
             drawHelperMarker(googleLoc);
             setPlace(googleLoc);
+
+            // make sure server gets updated whenever setting new place with marker
+            updateWatchLocation();
         }
 
         // draw map with helper markers
