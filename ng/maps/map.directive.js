@@ -528,33 +528,33 @@ angular.module('app')
         function setEventDragEnd()
         {
             google.maps.event.addListener(map_origin, 'dragend', function(){
-                // update watchloc when center changed.
-                updateWatchLocation();
-
                 // update map as drag end
                 updateAndDrawPosts();
+
+                // update watchloc when center changed.
+                updateWatchLocation();
             });
         }
 
         function setEventResize()
         {
             google.maps.event.addListener(map_origin, 'resize', function(){
-                // update watchloc when center changed.
-                updateWatchLocation();
-
                 // update map as drag end
                 updateAndDrawPosts();
+
+                // update watchloc when center changed.
+                updateWatchLocation();
             });
         }
 
         function setEventZoomChanged()
         {
             google.maps.event.addListener(map_origin, 'zoom_changed', function(){
-                // update watchloc when center changed.
-                updateWatchLocation();
-
                 // update map as drag end
                 updateAndDrawPosts();
+
+                // update watchloc when center changed.
+                updateWatchLocation();
             });
         }
 
@@ -705,7 +705,7 @@ angular.module('app')
                 updateBounds();
                 updateWatchLocation();
                 updateAndDrawPosts();
-            }, 200);
+            }, 800);
         } 
 
         //------------------------------------------------------------------------------------

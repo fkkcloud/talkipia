@@ -54,28 +54,54 @@ angular.module('app')
 
 		connection.onopen = function(){
 			function getCurrLocSuccess(pos) {
+				
+				////////////////// PHYSICAL LOCATION
 				// 맨처음에는 유저의 실제 위치(앱에 입장했을때의 위치)와 센터 포지션을 같이 보내고,
 				// 센터 포지션은 계속 업데이트 되어야 한다.
 	            var crd = pos.coords;
 
 	            var googleLoc = new google.maps.LatLng(crd.latitude, crd.longitude);
 
-	            var watchloc = {
+	            var location = {
+	        		lat:googleLoc.lat(),
+	        		lon:googleLoc.lng()
+	        	};
+	        	var locationJSON = JSON.stringify(location);
+	        	console.log("setting location", locationJSON);
+
+	        	////////////////// WATCH LOCATION
+	        	var bounds = $scope.map.getBounds();
+	            var ne = bounds.getNorthEast(); // LatLng of the north-east corner
+	            var sw = bounds.getSouthWest(); // LatLng of the south-west corder
+	            //You get north-west and south-east corners from the two above:
+
+	            var current_map_nw = { 
+	                lat: ne.lat(), 
+	                lon: sw.lng()
+	            };
+	            var current_map_se = {
+	                lat: sw.lat(), 
+	                lon: ne.lng()
+	            };
+
+	            var current_map_center = {
 	            	lat:window.localStorage.latitude,
 	            	lon:window.localStorage.longitude
 	        	};
 
-	        	var location = {
-	        		lat:googleLoc.lat(),
-	        		lon:googleLoc.lng()
-	        	};
+	            var watchloc = {
+		            nw_lat    : current_map_nw.lat,
+		            nw_lon    : current_map_nw.lon,
+		            se_lat    : current_map_se.lat,
+		            se_lon	  : current_map_se.lon,
+		            center_lat: current_map_center.lat,
+		            center_lon: current_map_center.lon
+		        }
 
 	        	var watchlocJSON = JSON.stringify(watchloc);
-	        	var locationJSON = JSON.stringify(location);
-
 	        	console.log("setting watchloc", watchlocJSON);
-	        	console.log("setting location", locationJSON);
 	            
+	            ////////////////// LOCATION UPDATE WITH SESSION ENTER
 	            //여기서 비동기적으로 유저의 로케이션을 얻고 세션을 보낼수 있다.
 				var session = {
 					guid:     $scope.guid,
