@@ -9,8 +9,8 @@ angular.module('app')
 	};
 
 	this.remove = function(post){
-		console.log("deleting posting");
-		console.log('post._id:', post._id);
+		//console.log("deleting posting");
+		//console.log('post._id:', post._id);
 		return $http.put('/api/posts', post);
 	};
 });

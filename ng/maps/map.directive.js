@@ -110,7 +110,7 @@ angular.module('app')
         //------------------------------------------------------------------------------------
         // update responses such as visualization of listeners
         function drawResponses(post){
-            console.log('reference post:', post);
+            //console.log('reference post:', post);
 
             SessionSvc.fetch()
             .success(function(sessions){
@@ -123,14 +123,14 @@ angular.module('app')
                         continue;
 
                      // session's watch location will be bounced!
-                    console.log('session watch location:', session.watchloc);
-                    console.log('post location:', post.location);
+                    //console.log('session watch location:', session.watchloc);
+                    //console.log('post location:', post.location);
                     var watch_location = angular.fromJson(session.watchloc);
                     var post_location = angular.fromJson(post.location);
                     
                     // 유저가 보고 있는 바운더리 안에 그 session(다른유저) 체킁
 
-                    console.log(current_map_se, current_map_nw);
+                    //console.log(current_map_se, current_map_nw);
 
                     updateBounds();
                     if (!(watch_location.center_lat < current_map_nw.lat()) ||
@@ -278,7 +278,6 @@ angular.module('app')
                             var postlife = ((post.lifeend - currentTimeMilli) >= 0) ? (post.lifeend - currentTimeMilli) : 0;
 
                             var lifepercentage = (postlife / post.lifespan).toFixed(2)
-                            console.log("Life %:", lifepercentage);
 
                             //to make data available to template
                             child_scope.msg = post.body;
@@ -344,10 +343,10 @@ angular.module('app')
 
         function unDrawPost(postid)
         {
-            console.log("starting remove post");
+            //console.log("starting remove post");
             for (var k = 0, marker; marker = markers[k]; k++) {
-                console.log(postid);
-                console.log(marker.post._id);
+                //console.log(postid);
+                //console.log(marker.post._id);
                 if (postid == marker.post._id) {
                     marker.marker.setMap(null);
                     markers.splice(k, 1);
@@ -467,10 +466,8 @@ angular.module('app')
 
         function setUITimeSlider()
         {
-            /*
             var timeSlider = (document.getElementById('timeSlider'));
             map.controls[google.maps.ControlPosition.BOTTOM_CENTER].push(timeSlider);
-            */
         }
 
         function setUISearchBox()
@@ -606,7 +603,7 @@ angular.module('app')
         function setManualEvents(){
             function CloudMap(options){
                 var self = this;
-                console.log("Initializing map");
+                //console.log("Initializing map");
             }
 
             // instantiate google map

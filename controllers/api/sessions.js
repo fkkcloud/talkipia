@@ -34,10 +34,10 @@ router.post('/', function(req, res, next){
 		if (err) { return next(err); }
 
 		serssionhistory.save(function(err, serssionhistory){
-			console.log("session history saved");
+			//console.log("session history saved");
 		});
 
-		console.log("session logged");
+		//console.log("session logged");
 
 		// broadcast to all clients about the new message coming in!
 		websockets.broadcast('new_session', session);
@@ -49,12 +49,12 @@ router.post('/', function(req, res, next){
 
 // for manual remove
 router.put('/', function(req, res, next){
-	console.log("session remove request for :", req.body.guid);
+	//console.log("session remove request for :", req.body.guid);
 	var query = { 'guid': req.body.guid };
 	Session.findOneAndRemove(query, function(err){
 		if (err) { return next(err); }
 		
-		console.log("session removed successfully");
+		//console.log("session removed successfully");
 		res.sendStatus(200);
 	});
 });
@@ -68,7 +68,7 @@ router.post('/update', function(req, res, next){
 	Session.findOneAndUpdate(query, newWatchLoc, options, function(err, doc){
     	if (err) return res.send(500, { error: err });
 
-    	console.log('updated session:', doc);
+    	//console.log('updated session:', doc);
 
     	return res.json(201, doc);
 	});

@@ -14,27 +14,15 @@ router.get('/', function(req, res, next){
 });
 
 router.post('/', function(req, res, next){
+	/*
 	console.log('body:    ', req.body.body);
 	console.log('place:   ', req.body.place);
 	console.log('location:', req.body.location);
 	console.log('guiid:   ', req.body.guid);
+	console.log('lifespan:', req.body.lifespan);
+	*/
 
-	function map_range(value, low1, high1, low2, high2) {
-	    return low2 + (high2 - low2) * (value - low1) / (high1 - low1);
-	}
-
-	var charLen = req.body.body.length;
-
-	var relativeLifeSpan;
-	if (charLen < 5)
-	{
-		relativeLifeSpan = 3000;
-	}
-	else
-	{
-		relativeLifeSpan = charLen * map_range(charLen, 5, 20, 500, 300);
-	}
-	relativeLifeSpan = 60000 * 1; // debug 1 min - test for longer posts
+	var relativeLifeSpan = req.body.lifespan;
 
 	var currentDate = new Date();
 	var currentTimeMilli = currentDate.getTime();
@@ -65,7 +53,7 @@ router.post('/', function(req, res, next){
 
 		// save history once post is saved
 		history.save(function(err, history){
-			console.log("history saved");
+			//console.log("history saved");
 		});
 
 		// broadcast to all clients about the new message coming in!
@@ -77,7 +65,7 @@ router.post('/', function(req, res, next){
 		setTimeout( function() {
 			Post.findOneAndRemove({ _id: post._id }, function(err){
 				if (err) { return next(err); }
-				console.log("post removed successfully");
+				//console.log("post removed successfully");
 
 				// 10초보다 긴 경우의 것만 서버가 계산을 하고 서버가 보내줘서 frontend에서 지우도록 관리해줘야 한다.
 				var maxInstantLifeSpan = 10000;
@@ -98,7 +86,7 @@ router.put('/', function(req, res, next){
 	Post.findOneAndRemove({ _id: req.body._id }, function(err){
 		if (err) { return next(err); }
 		
-		console.log("post removed successfully");
+		//console.log("post removed successfully");
 		res.json(200);
 	});
 });

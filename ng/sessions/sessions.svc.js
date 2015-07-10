@@ -9,8 +9,8 @@ angular.module('app')
 	};
 
 	this.remove = function(guid){
-		console.log("deleting session");
-		console.log('session.guid:', guid);
+		//console.log("deleting session");
+		//console.log('session.guid:', guid);
 		var session = {guid: guid};
 		return $http.put('/api/sessions', session);
 	};
@@ -34,7 +34,7 @@ angular.module('app')
 
         // update watchloc when center changed.
         console.log("updating watch location");
-		console.log("updatedsession:", updatedsession);
+		//console.log("updatedsession:", updatedsession);
 		return $http.post('/api/sessions/update', updatedsession);
 	};
 });

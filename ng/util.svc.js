@@ -19,4 +19,8 @@ angular.module('app')
 	  var d = R * c;
 	  return d;
 	};
+
+	svc.mapRange = function (value, low1, high1, low2, high2) {
+	    return low2 + (high2 - low2) * (value - low1) / (high1 - low1);
+	}
 });

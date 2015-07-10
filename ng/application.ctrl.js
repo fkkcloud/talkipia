@@ -36,6 +36,8 @@ angular.module('app')
         },
     };
 
+    $scope.timevalue = 5000;
+
 	$scope.navCollapsed = true;
 
 	$scope.guidtgt = "0"; // 기본값은 0으로 해서 0이면 관심상대guid가 없는 상태이다. 
@@ -107,7 +109,7 @@ angular.module('app')
 	        		lon:googleLoc.lng()
 	        	};
 	        	var locationJSON = JSON.stringify(location);
-	        	console.log("setting location", locationJSON);
+	        	//console.log("setting location", locationJSON);
 
 	        	////////////////// WATCH LOCATION
 	        	var bounds = $scope.map.getBounds();
@@ -139,7 +141,7 @@ angular.module('app')
 		        }
 
 	        	var watchlocJSON = JSON.stringify(watchloc);
-	        	console.log("setting watchloc", watchlocJSON);
+	        	//console.log("setting watchloc", watchlocJSON);
 	            
 	            ////////////////// LOCATION UPDATE WITH SESSION ENTER
 	            //여기서 비동기적으로 유저의 로케이션을 얻고 세션을 보낼수 있다.
@@ -152,6 +154,7 @@ angular.module('app')
 	        }
 
 	        function getCurrLocError(err) {
+	        	swal("", "Need to turn on location service for proper use.");
 	            console.warn('ERROR(' + err.code + '): ' + err.message);
 	        }
 
@@ -168,7 +171,7 @@ angular.module('app')
 		};
 
 		connection.onmessage = function(e){
-			console.log('broadcast msg from server:', e);
+			//console.log('broadcast msg from server:', e);
 			var payload = JSON.parse(e.data);
 
 			/*
@@ -193,7 +196,7 @@ angular.module('app')
 		// show responsive users only to the user who wrote this post
 		if (post.guid == $scope.guid)
 		{
-			console.log('start drawing responses..');
+			//console.log('start drawing responses..');
 			$scope.map.drawResponses(post);
 		}
 	});

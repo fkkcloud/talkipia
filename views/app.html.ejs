@@ -17,7 +17,8 @@
     <script src="angular-route.min.js"></script>
 
     <!-- angular-slider -->
-
+    <script src="slider.js"></script> 
+	<link rel="stylesheet" type="text/css" href="slider.css">
 
    <!-- sweet alert -->
 	<script src="/sweetalert.min.js"></script> 
@@ -88,8 +89,12 @@
       		<button ng-disabled='postForm.$invalid' 
       				ng-click='addPost()' 
       				class="btn btn-danger btn-lg btn-block" 
-      				id='btn-submit'> Post </button>
+      				id='btn-submit'> {{ timevalue | date:"mm : ss" }} </button>
       	</form>
+
+      	<div id='timeSlider'>
+			<slider floor="5000" ceiling="300000" step="20" precision="2" ng-model="timevalue"></slider>
+		</div>
 
 		<div app-map=""></div>
 	</div>
