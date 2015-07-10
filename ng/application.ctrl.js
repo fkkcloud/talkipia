@@ -20,6 +20,22 @@ angular.module('app')
 		post : 0,
 	};
 
+	$scope.sliderOptions = {
+        from: 1,
+        to: 300000,
+        step: 5000,
+        dimension: ' km',
+        vertical: false,
+        limits: false,
+        css: {
+            background: {'background-color': 'yellow'},
+            before: {'background-color': 'purple'},
+            default: {'background-color': 'white'},
+            after: {'background-color': 'green'},
+            pointer: {'background-color': 'red'}
+        },
+    };
+
 	$scope.navCollapsed = true;
 
 	$scope.guidtgt = "0"; // 기본값은 0으로 해서 0이면 관심상대guid가 없는 상태이다. 

@@ -277,12 +277,16 @@ angular.module('app')
                             var currentTimeMilli = currentDate.getTime();
                             var postlife = ((post.lifeend - currentTimeMilli) >= 0) ? (post.lifeend - currentTimeMilli) : 0;
 
+                            var lifepercentage = (postlife / post.lifespan).toFixed(2)
+                            console.log("Life %:", lifepercentage);
+
                             //to make data available to template
                             child_scope.msg = post.body;
                             child_scope.postlife = postlife;
                             child_scope.postguid = post.guid;
                             child_scope.postguidtgt = post.guidtgt;
                             child_scope.postcouplestatus = coupling_status;
+                            child_scope.postlifepercentage = lifepercentage;
 
                             child_scope.$on('set:coupling', function(_, coupling_update){
                                 child_scope.postcouplestatus = coupling_update;
@@ -461,13 +465,13 @@ angular.module('app')
             map.controls[google.maps.ControlPosition.BOTTOM_CENTER].push(postBtn);
         }
 
-        /*
         function setUITimeSlider()
         {
-            var timeSlider = (document.getElementById('mySlider1'));
-            map.controls[google.map.ControlPosition.TOP_LEFT].push(timeSlider);
+            /*
+            var timeSlider = (document.getElementById('timeSlider'));
+            map.controls[google.maps.ControlPosition.BOTTOM_CENTER].push(timeSlider);
+            */
         }
-        */
 
         function setUISearchBox()
         {
@@ -702,7 +706,7 @@ angular.module('app')
             setUIMoveToCurrLocBtn();
             setUIPostForm();
             setUIPostBtn();
-            //setUITimeSlider();
+            setUITimeSlider();
 
             // add origin native Event handlers to map
             setEventClick();

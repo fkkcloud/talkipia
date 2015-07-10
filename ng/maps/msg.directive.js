@@ -68,10 +68,38 @@ angular.module('app')
         }
 
         function updatePostTimer(){
+          console.log("Life %:", scope.postlifepercentage);
+
           // set timer for post life bar
           $timeout(function(){
             var duration = scope.postlife + "ms";
             var postlifebar_css = angular.element(element).parent().find('div div .postlifebar').css('-webkit-animation-duration', duration);
+
+            if (scope.postlifepercentage > 0.75){
+              /* Chrome, Safari, Opera */
+              var postlifebar_css = angular.element(element).parent().find('div div .postlifebar').css('-webkit-animation-name', 'postlifeanim_q_four');
+              
+              var postlifebar_css = angular.element(element).parent().find('div div .postlifebar').css('animation-name', 'postlifeanim_q_four');
+            }
+            else if (scope.postlifepercentage <= 0.75 && scope.postlifepercentage > 0.5){
+              /* Chrome, Safari, Opera */
+              var postlifebar_css = angular.element(element).parent().find('div div .postlifebar').css('-webkit-animation-name', 'postlifeanim_q_three');
+              
+              var postlifebar_css = angular.element(element).parent().find('div div .postlifebar').css('animation-name', 'postlifeanim_q_three');
+            }
+            else if (scope.postlifepercentage <= 0.5 && scope.postlifepercentage > 0.20){
+              /* Chrome, Safari, Opera */
+              var postlifebar_css = angular.element(element).parent().find('div div .postlifebar').css('-webkit-animation-name', 'postlifeanim_q_two');
+              
+              var postlifebar_css = angular.element(element).parent().find('div div .postlifebar').css('animation-name', 'postlifeanim_q_two');
+            }
+            else{
+              /* Chrome, Safari, Opera */
+              var postlifebar_css = angular.element(element).parent().find('div div .postlifebar').css('-webkit-animation-name', 'postlifeanim_q_one');
+              
+              var postlifebar_css = angular.element(element).parent().find('div div .postlifebar').css('animation-name', 'postlifeanim_q_one');
+            }
+          
           }, 100);
         }
         

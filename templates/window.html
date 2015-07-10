@@ -1,37 +1,53 @@
 <style>
 	div div .postlifebar {
-	  width: 100%;
 	  height:3px;
 	  background: #2ff0c4;
 	  width: 0%;
 	  /* Chrome, Safari, Opera */
-	  -webkit-animation-name: postlifeanim;
+	  -webkit-animation-name: postlifeanim_q_four;
 	  -webkit-animation-duration: 0s;
-	  -webkit-animation-timing-function: linear;
+	  -webkit-animation-timing-function: easeout;
 
-	  animation-name: postlifeanim;
+	  animation-name: postlifeanim_q_four;
 	  animation-duration: 0s;
-	  animation-timing-function: linear;
+	  animation-timing-function: easeout;
 	}
 
 	/* Chrome, Safari, Opera */
-	@-webkit-keyframes postlifeanim {
-	  from {
-	    width: 100%
-	  }
-	  to {
-	    width: 0%
-	  }
+	@-webkit-keyframes postlifeanim_q_four {
+	  from { width: 100% }
+	  to   { width: 0%   }
+	}
+	@-webkit-keyframes postlifeanim_q_three {
+	  from { width: 75% }
+	  to   { width: 0%   }
+	}
+	@-webkit-keyframes postlifeanim_q_two {
+	  from { width: 50% }
+	  to   { width: 0%   }
+	}
+	@-webkit-keyframes postlifeanim_q_one {
+	  from { width: 20% }
+	  to   { width: 0%   }
 	}
 
-	@keyframes postlifeanim {
-	  from {
-	    width: 100%
-	  }
-	  to {
-	    width: 0%
-	  }
+	@keyframes postlifeanim_q_four {
+	  from { width: 100% }
+	  to   { width: 0%   }
 	}
+	@keyframes postlifeanim_q_three {
+	  from { width: 75% }
+	  to   { width: 0%   }
+	}
+	@keyframes postlifeanim_q_two {
+	  from { width: 50% }
+	  to   { width: 0%   }
+	}
+	@keyframes postlifeanim_q_one {
+	  from { width: 20% }
+	  to   { width: 0%   }
+	}
+
 </style>
 <div>
     <div id="bubbleClick" ng-class="get_coupling(postcouplestatus)" >{{msg}}</div>
