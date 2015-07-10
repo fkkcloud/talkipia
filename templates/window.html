@@ -1,23 +1,39 @@
-<div>
-    <div id="bubbleClick" ng-class="get_coupling(postcouplestatus)" >{{msg}}</div>
-    <div class="postlifebar"></div>
-</div>
 <style>
 	div div .postlifebar {
 	  width: 100%;
 	  height:3px;
 	  background: #2ff0c4;
 	  width: 0%;
+	  /* Chrome, Safari, Opera */
+	  -webkit-animation-name: postlifeanim;
+	  -webkit-animation-duration: 0s;
+	  -webkit-animation-timing-function: linear;
+
 	  animation-name: postlifeanim;
 	  animation-duration: 0s;
 	  animation-timing-function: linear;
 	}
-@keyframes postlifeanim {
-  from {
-    width: 100%
-  }
-  to {
-    width: 0%
-  }
-}
+
+	/* Chrome, Safari, Opera */
+	@-webkit-keyframes postlifeanim {
+	  from {
+	    width: 100%
+	  }
+	  to {
+	    width: 0%
+	  }
+	}
+
+	@keyframes postlifeanim {
+	  from {
+	    width: 100%
+	  }
+	  to {
+	    width: 0%
+	  }
+	}
 </style>
+<div>
+    <div id="bubbleClick" ng-class="get_coupling(postcouplestatus)" >{{msg}}</div>
+    <div class="postlifebar"></div>
+</div>

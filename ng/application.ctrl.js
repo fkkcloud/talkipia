@@ -247,6 +247,7 @@ angular.module('app')
         }
 
         function getCurrLocError(err) {
+        	swal("", "Need to turn on location service for proper use.");
             console.warn('ERROR(' + err.code + '): ' + err.message);
         }
 
@@ -254,6 +255,31 @@ angular.module('app')
         navigator.geolocation.getCurrentPosition(getCurrLocSuccess, getCurrLocError);
 
         swal({   title: "",   text: "Moving to current location..",   timer: 1500,   showConfirmButton: false });
+	};
+
+	$scope.moveToPostLocation = function(){
+		var latDelta = 0.0;
+
+		if ($scope.isMobile()){
+			var bounds = $scope.map.getBounds();
+	        var ne = bounds.getNorthEast(); // LatLng of the north-east corner
+	        var sw = bounds.getSouthWest(); // LatLng of the south-west corder
+	        current_map_nw = new google.maps.LatLng(ne.lat(), sw.lng());
+	        current_map_se = new google.maps.LatLng(sw.lat(), ne.lng());
+
+	        var latDelta_center2north = 0.5 * Math.abs($scope.postLocation.lat - current_map_nw.lat());
+	        var latDelta_center2south = 0.5 * Math.abs($scope.postLocation.lat - current_map_se.lat());
+
+	        if (latDelta_center2north > latDelta_center2south){
+	        	latDelta = latDelta_center2south;
+	        }
+	        else {
+	        	latDelta = latDelta_center2north;
+	        }
+		}
+
+		var googleLoc = new google.maps.LatLng($scope.postLocation.lat + latDelta, $scope.postLocation.lon);
+		$scope.map.panTo(googleLoc);
 	};
 
 	$scope.collapse = function(){

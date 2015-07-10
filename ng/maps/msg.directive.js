@@ -71,7 +71,7 @@ angular.module('app')
           // set timer for post life bar
           $timeout(function(){
             var duration = scope.postlife + "ms";
-            var postlifebar_css = angular.element(element).parent().find('div div .postlifebar').css('animation-duration', duration);
+            var postlifebar_css = angular.element(element).parent().find('div div .postlifebar').css('-webkit-animation-duration', duration);
           }, 100);
         }
         
