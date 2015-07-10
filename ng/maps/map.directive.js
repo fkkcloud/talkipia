@@ -271,10 +271,6 @@ angular.module('app')
                             };
                             var infoWindow = new google.maps.InfoWindow(infoWindowOptions);
 
-                            // compile it before loaded
-                            var content = '<div map-msg></div>';
-                            var compiled = $compile(content)(child_scope);
-
                             // get current time and subtract it from post's end time.
                             // that will be accurate post time for instant posts and long posts.
                             var currentDate = new Date();
@@ -287,6 +283,14 @@ angular.module('app')
                             child_scope.postguid = post.guid;
                             child_scope.postguidtgt = post.guidtgt;
                             child_scope.postcouplestatus = coupling_status;
+
+                            child_scope.$on('set:coupling', function(_, coupling_update){
+                                child_scope.postcouplestatus = coupling_update;
+                            });
+
+                            // compile it before loaded
+                            var content = '<div map-msg></div>';
+                            var compiled = $compile(content)(child_scope);
 
                             infoWindow.setContent( compiled[0] );
                             infoWindow.open(map , marker);

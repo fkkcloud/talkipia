@@ -1,9 +1,7 @@
 angular.module('app')
 .directive('mapMsg', function ($timeout) {
-  return {
-    restrict: 'A',
-    templateUrl: './templates/window.html',
-    link: function(scope, elm, attrs) {        
+
+    var link = function(scope, elm, attrs) {        
 
         //------------------------------------------------------------------------------------
         // COUPLING CLASS
@@ -33,12 +31,14 @@ angular.module('app')
         // DOCUMENT READY
         //------------------------------------------------------------------------------------
         // as the document gets ready, set click event and lifebar animation length
+        var manualClick = false;
+
         angular.element(document).ready(function() {
-          
+
           updateGuidTarget();
 
           updatePostTimer();
-          
+
         });
 
         function updateGuidTarget(){
@@ -51,11 +51,19 @@ angular.module('app')
               return;
             }
 
-            //elm.parent().find('div div #bubbleClick').addClass("bubblePost bubblePost_ilikeyou");
-            //scope.$parent.$apply();
-            //scope.$parent.$parent.postcouplestatus = 1; // 1- ilikeyou ??
+            // this have to be update to be communicated through the server
 
-            scope.$emit('set:guidtgt', postguid);
+            if (scope.$parent.guidtgt == 0){
+              scope.$emit('set:coupling', 1); // propagate to upper scope for coupling update
+              scope.$emit('set:guidtgt', postguid); // propagate to upper scope for guidtgt update
+              scope.$apply(); // force to update DOM
+            }
+            else if (scope.postcouplestatus == 1 && scope.$parent.guidtgt != 0){
+              scope.$emit('set:coupling', 0); // propagate to upper scope for coupling update
+              scope.$emit('set:guidtgt', 0); // propagate to upper scope for guidtgt update
+              scope.$apply(); // force to update DOM
+            }
+
           });
         }
 
@@ -67,6 +75,11 @@ angular.module('app')
           }, 100);
         }
         
-    },
-  }
+    }
+
+    return {
+        restrict: 'A',
+        templateUrl: './templates/window.html',
+        link: link
+    };
 });
