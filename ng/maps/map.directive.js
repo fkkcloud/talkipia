@@ -461,6 +461,14 @@ angular.module('app')
             map.controls[google.maps.ControlPosition.BOTTOM_CENTER].push(postBtn);
         }
 
+        /*
+        function setUITimeSlider()
+        {
+            var timeSlider = (document.getElementById('mySlider1'));
+            map.controls[google.map.ControlPosition.TOP_LEFT].push(timeSlider);
+        }
+        */
+
         function setUISearchBox()
         {
             // Create the search box and link it to the UI element.
@@ -694,6 +702,7 @@ angular.module('app')
             setUIMoveToCurrLocBtn();
             setUIPostForm();
             setUIPostBtn();
+            //setUITimeSlider();
 
             // add origin native Event handlers to map
             setEventClick();
