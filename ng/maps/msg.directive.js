@@ -1,7 +1,7 @@
 angular.module('app')
 .directive('mapMsg', function ($timeout) {
 
-    var link = function(scope, elm, attrs) {        
+    var link = function(scope, element, attrs) {        
 
         //------------------------------------------------------------------------------------
         // COUPLING CLASS
@@ -45,7 +45,7 @@ angular.module('app')
           // update status for guid target
           var postguid = scope.postguid;
           var myguid = scope.$parent.guid;
-          elm.parent().find('div div #bubbleClick').on('click',function(){
+          angular.element(element).parent().find('div div #bubbleClick').on('click',function(){
             // clicking its own post will do nothing
             if (postguid == myguid){
               return;
@@ -71,7 +71,7 @@ angular.module('app')
           // set timer for post life bar
           $timeout(function(){
             var duration = scope.postlife + "ms";
-            var postlifebar_css = elm.parent().find('div div .postlifebar').css('animation-duration', duration);
+            var postlifebar_css = angular.element(element).parent().find('div div .postlifebar').css('animation-duration', duration);
           }, 100);
         }
         

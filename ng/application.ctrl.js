@@ -24,10 +24,34 @@ angular.module('app')
 
 	$scope.guidtgt = "0"; // 기본값은 0으로 해서 0이면 관심상대guid가 없는 상태이다. 
 
+	/*
 	// 윈도우가 닫히려고 하면 리퀘스트 보낸다! 유져 세션을 닫으라고!
-	window.onbeforeunload = function(){
+	window.onunload = function (){
 		SessionSvc.remove($scope.guid); // 서버에서 유저가 나감을 알린다
+	};
+	*/
+	/*
+	window.unload = onchange;
+
+	document.unload = onchange;
+
+	function onchange (evt) {
+	    alert("Session delete");
+	    SessionSvc.remove($scope.guid);
+	  }
+	*/
+
+	window.onbeforeunload = function(){
+		SessionSvc.remove($scope.guid);
+	};
+
+	/*
+	window.pagehide = function(){
+		 // 서버에서 유저가 나감을 알린다
+		alert("on before unload");
 	}
+	*/
+	
 
     //------------------------------------------------------------------------------------
     // SOCKET
@@ -230,31 +254,6 @@ angular.module('app')
         navigator.geolocation.getCurrentPosition(getCurrLocSuccess, getCurrLocError);
 
         swal({   title: "",   text: "Moving to current location..",   timer: 1500,   showConfirmButton: false });
-	};
-
-	$scope.moveToPostLocation = function(){
-		var latDelta = 0.0;
-
-		if ($scope.isMobile()){
-			var bounds = $scope.map.getBounds();
-	        var ne = bounds.getNorthEast(); // LatLng of the north-east corner
-	        var sw = bounds.getSouthWest(); // LatLng of the south-west corder
-	        current_map_nw = new google.maps.LatLng(ne.lat(), sw.lng());
-	        current_map_se = new google.maps.LatLng(sw.lat(), ne.lng());
-
-	        var latDelta_center2north = 0.5 * Math.abs($scope.postLocation.lat - current_map_nw.lat());
-	        var latDelta_center2south = 0.5 * Math.abs($scope.postLocation.lat - current_map_se.lat());
-
-	        if (latDelta_center2north > latDelta_center2south){
-	        	latDelta = latDelta_center2south;
-	        }
-	        else {
-	        	latDelta = latDelta_center2north;
-	        }
-		}
-
-		var googleLoc = new google.maps.LatLng($scope.postLocation.lat + latDelta, $scope.postLocation.lon);
-		$scope.map.panTo(googleLoc);
 	};
 
 	$scope.collapse = function(){
