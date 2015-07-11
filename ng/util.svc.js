@@ -22,5 +22,14 @@ angular.module('app')
 
 	svc.mapRange = function (value, low1, high1, low2, high2) {
 	    return low2 + (high2 - low2) * (value - low1) / (high1 - low1);
-	}
+	};
+
+	svc.getGuid = function () {
+		function s4() {
+		    return Math.floor((1 + Math.random()) * 0x10000)
+		      .toString(16)
+		      .substring(1);
+		}
+	  	return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
+	};
 });

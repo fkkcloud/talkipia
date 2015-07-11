@@ -10,7 +10,53 @@
 
 	  animation-name: postlifeanim_q_four;
 	  animation-duration: 0s;
-	  animation-timing-function: easeout;
+	  animation-timing-function: easein;
+	}
+
+	.gm-style-iw {
+   	   top: 15px !important;
+	   background-color: #fff;
+	   box-shadow: 0 1px 6px rgba(178, 178, 178, 0.6);
+	   border: 0px;
+	   border-radius: 3px 3px 0 0;
+	}
+
+	#postmsg {
+	    font-family: Roboto;
+	    font-size: 15px;
+	    font-weight: 300;
+	    text-overflow: ellipsis;
+	    margin:5px;
+	    padding:6px;
+	    text-align: center;
+	}
+
+	.coupling {
+	    width:100%;
+	    padding-top: 3px;
+	    padding-bottom: 3px;
+	    border-radius: 3px 0px 0 0;
+	    top-margin: -10px;
+	}
+
+	.coupling-ilikeyou {
+	    background-color: #3a9bf4;
+	}
+
+	.coupling-youlikei {
+	    background-color: #ff0080;
+	}
+
+	.coupling-couple {
+	    background-color: #aff6a0;
+	}
+
+	.coupling-none {
+	    background-color: #4d4d4d;
+	}
+
+	#iw-container {
+		margin-bottom: 0px;
 	}
 
 	/* Chrome, Safari, Opera */
@@ -49,7 +95,9 @@
 	}
 
 </style>
-<div>
-    <div id="bubbleClick" ng-class="get_coupling(postcouplestatus)" >{{msg}}</div>
-    <div class="postlifebar"></div>
+<div id="iw-container">
+	<div ng-class="get_coupling(postcouplestatus)"> </div>
+	<div class="postlifebar"></div>
+    <div id="postmsg">{{msg}}</div>
+    
 </div>

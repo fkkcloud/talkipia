@@ -61,15 +61,16 @@ router.post('/', function(req, res, next){
 
 		// post will destryo itself after the lifespan
 		// 포스트가 됨과 동시에 자기 스스로 lifespan이 다 되면 사라지는 것을 넣어주 (스스로 지워진다)
-		// 확인후 지울 코
+		// 서버가 24시간 항상 돌고 있어야 post들이 알아서 잘 지워진다.
 		setTimeout( function() {
 			Post.findOneAndRemove({ _id: post._id }, function(err){
 				if (err) { return next(err); }
 				//console.log("post removed successfully");
 
-				// 10초보다 긴 경우의 것만 서버가 계산을 하고 서버가 보내줘서 frontend에서 지우도록 관리해줘야 한다.
-				var maxInstantLifeSpan = 10000;
+				// 5초보다 긴 경우의 것만 서버가 계산을 하고 서버가 보내줘서 frontend에서 지우도록 관리해줘야 한다.
+				var maxInstantLifeSpan = 5000;
 				if (relativeLifeSpan > maxInstantLifeSpan){
+					// 인스턴트 메시지가 아니였다면, 프론트엔드에서 맵을 업데이트 해줘야 한다.
 					websockets.broadcast('remove_post', post._id);
 				}
 			});

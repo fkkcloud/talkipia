@@ -1,91 +1,47 @@
 
 angular.module('app')
-.controller('ApplicationCtrl', function(SessionSvc, $rootScope, $scope, $window, $http, $timeout){
+.controller('ApplicationCtrl', function(SessionSvc, UtilSvc, ConfigSvc, $rootScope, $scope, $window, $http, $timeout){
 
     //------------------------------------------------------------------------------------
     // INITIAL
     //------------------------------------------------------------------------------------
-    function guid() {
-		function s4() {
-		    return Math.floor((1 + Math.random()) * 0x10000)
-		      .toString(16)
-		      .substring(1);
-		}
-	  	return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
-	}
 
-	$scope.guid = guid();
+	$scope.guid = UtilSvc.getGuid();
 
 	$scope.pageId = { 
 		post : 0,
 	};
 
-	$scope.sliderOptions = {
-        from: 1,
-        to: 300000,
-        step: 5000,
-        dimension: ' km',
-        vertical: false,
-        limits: false,
-        css: {
-            background: {'background-color': 'yellow'},
-            before: {'background-color': 'purple'},
-            default: {'background-color': 'white'},
-            after: {'background-color': 'green'},
-            pointer: {'background-color': 'red'}
-        },
-    };
-
-    $scope.timevalue = 5000;
+    $scope.timevalue = ConfigSvc.maxInstantLifeSpan;
 
 	$scope.navCollapsed = true;
 
 	$scope.guidtgt = "0"; // 기본값은 0으로 해서 0이면 관심상대guid가 없는 상태이다. 
 
 	/*
-	// 윈도우가 닫히려고 하면 리퀘스트 보낸다! 유져 세션을 닫으라고!
-	window.onunload = function (){
-		SessionSvc.remove($scope.guid); // 서버에서 유저가 나감을 알린다
+	document.onbeforeunload = function(){
+		SessionSvc.remove($scope.guid);
 	};
-	*/
-	/*
-	window.unload = onchange;
-
-	document.unload = onchange;
-
-	function onchange (evt) {
-	    alert("Session delete");
-	    SessionSvc.remove($scope.guid);
-	  }
 	*/
 
 	window.onbeforeunload = function(){
 		SessionSvc.remove($scope.guid);
 	};
 
-	/*
-	window.pagehide = function(){
-		 // 서버에서 유저가 나감을 알린다
-		alert("on before unload");
-	}
-	*/
-	
-
     //------------------------------------------------------------------------------------
     // SOCKET
     //------------------------------------------------------------------------------------
 	var url;
 	var hostname = document.location.hostname;
-	var developmentIP = "192.168.0.4";
 
-	if (hostname == "localhost"){
-		url = "ws://localhost:5000";
+	if (hostname == ConfigSvc.local){
+		url = ConfigSvc.web_socket + ConfigSvc.local + ':' + ConfigSvc.port;
 	}
-	else if (hostname == developmentIP) {
-		url = 'ws://192.168.0.4:5000'; // developmet on socket locally 
+	else if (hostname == ConfigSvc.local_ip) {
+		url = ConfigSvc.web_socket + ConfigSvc.local_ip + ':' + ConfigSvc.port; // developmet on socket locally 
 	}
 	else {
-		url = 'wss://cloudtalk.herokuapp.com'; // production deploy version - still debug mode
+		url = ConfigSvc.web_socket_secure + ConfigSve.deploy_dns; // production deploy version - still debug mode
 	}
 
 	/* 개발과정이 끝나고 배포시에는 위부분을 지우고 아래 코드만 남겨도 된다.
@@ -308,7 +264,7 @@ angular.module('app')
 	//------------------------------------------------------------------------------------
     // GENERAL BROADCAST RECEIVER
     //------------------------------------------------------------------------------------
-    $scope.$on('mapInit', function(_, map){
+    $scope.$on('set:map', function(_, map){
 		$scope.map = map;
 	});
 
@@ -316,11 +272,11 @@ angular.module('app')
 		$scope.guidtgt = guidtgt;
 	});
 
-	$scope.$on('pagechange', function(_, pageId){
+	$scope.$on('set:pagechange', function(_, pageId){
 		$scope.currentPageId = pageId;
 	});
 
-	$scope.$on('loc', function(_, location){
+	$scope.$on('set:loc', function(_, location){
 		var lat = location.lat();
 		var lon = location.lng();
 		$scope.postLocation = {
@@ -329,7 +285,7 @@ angular.module('app')
 		};
 	});
 
-	$scope.$on('place', function(_, place){
+	$scope.$on('set:place', function(_, place){
 		// Forcing the update with $apply() method on $scope
 		// problem related note: http://www.jeffryhouser.com/index.cfm/2014/6/2/How-do-I-run-code-when-a-variable-changes-with-AngularJS
 		$scope.$apply(function(){

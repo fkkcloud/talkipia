@@ -14,16 +14,16 @@ angular.module('app')
         */
         scope.get_coupling = function(coupling_status){
           if (coupling_status == 4){
-            return "bubblePost bubblePost_couple";
+            return "coupling coupling-couple";
           }
           else if (coupling_status == 1){
-            return "bubblePost bubblePost_ilikeyou";
+            return "coupling coupling-ilikeyou";
           }
           else if (coupling_status == 2){
-            return "bubblePost bubblePost_youlikei";
+            return "coupling coupling-youlikei";
           }
           else {
-            return "bubblePost bubblePost_none";
+            return "coupling coupling-none";
           }
         };
 
@@ -39,13 +39,15 @@ angular.module('app')
 
           updatePostTimer();
 
+          $timeout(customizeInfoWindow, 10);
+
         });
 
         function updateGuidTarget(){
           // update status for guid target
           var postguid = scope.postguid;
           var myguid = scope.$parent.guid;
-          angular.element(element).parent().find('div div #bubbleClick').on('click',function(){
+          angular.element(element).parent().find('div #iw-container').on('click',function(){
             // clicking its own post will do nothing
             if (postguid == myguid){
               return;
@@ -63,7 +65,6 @@ angular.module('app')
               scope.$emit('set:guidtgt', 0); // propagate to upper scope for guidtgt update
               scope.$apply(); // force to update DOM
             }
-
           });
         }
 
@@ -102,7 +103,33 @@ angular.module('app')
           
           }, 100);
         }
-        
+
+        function customizeInfoWindow(){
+          // Reference to the DIV that wraps the bottom of infowindow
+          var iwOuter = $('.gm-style-iw');
+          
+          var iwBackground = iwOuter.prev();
+
+          // Remove the background shadow DIV
+           iwBackground.children(':nth-child(2)').css({'display' : 'none'});
+
+           // Remove the white background DIV
+           iwBackground.children(':nth-child(4)').css({'display' : 'none'});
+
+          // Changes the desired tail shadow color.
+          iwBackground.children(':nth-child(3)').find('div').children().css({
+            'box-shadow': '0 1px 6px rgba(178, 178, 178, 0.6)', 
+            'z-index' : '1',
+            'border': '0px'});
+
+          var iwCloseBtn = iwOuter.next();
+
+          // Apply the desired effect to the close button
+          iwCloseBtn.css({
+            opacity: '0.6', // by default the close button has an opacity of 0.7
+            right: '20px', top: '17px', // button repositioning
+          });     
+        }
     }
 
     return {

@@ -1,7 +1,7 @@
 angular.module('app')
-.directive('appMap', function(PostsSvc, UtilSvc, SessionSvc, $compile) {
+.directive('appMap', function(PostsSvc, UtilSvc, ConfigSvc, SessionSvc, $compile, $timeout) {
     // directive link function
-    var link = function(scope, element, attrs, rootScope) {
+    var link = function(scope, element, attrs) {
 
         //------------------------------------------------------------------------------------
         // GLOBAL VARIABLES IN LINK FUNCTION
@@ -164,13 +164,15 @@ angular.module('app')
 
                     var marker = new google.maps.Marker(markerOptions);
 
-                    setTimeout(
+                    var user_location_marker_lifespan = 1800;
+
+                    $timeout(
                         (function(old_marker){
                             return function(){
                                 old_marker.setMap(null);
                             };
                         }(marker)), 
-                    1800);
+                    user_location_marker_lifespan);
                 }
             });
         }
@@ -221,13 +223,11 @@ angular.module('app')
                     };
                     var marker = new google.maps.Marker(markerOptions);
                     
-                    // 10초보다 긴 경우의 것만 서버가 계산을 하고 서버가 보내줘서 frontend에서 지우도록 관리해줘야 한다.
-                    var maxInstantLifeSpan = 10000;
 
                     // 인스턴트 맵 메시지일 경우만 프론트엔드와 서버가 다르게 지워주도록 한다. (일단은 상한선은 10초)
-                    if (post.lifespan < maxInstantLifeSpan){
+                    if (post.lifespan < ConfigSvc.maxInstantLifeSpan){
                         // set up self remove for marker itself and from markers collection at front-end
-                        setTimeout(
+                        $timeout(
                             (function(old_marker, old_post){
                                 return function(){
                                     old_marker.setMap(null);
@@ -332,7 +332,7 @@ angular.module('app')
 
             var marker = new google.maps.Marker(markerOptions);
 
-            setTimeout(
+            $timeout(
                 (function(old_marker){
                     return function(){
                         old_marker.setMap(null);
@@ -393,7 +393,7 @@ angular.module('app')
         function setPlace(location)
         {
             // broadcast location infor(lon,lat)
-            scope.$emit('loc', location);
+            scope.$emit('set:loc', location);
 
             var geocoder = new google.maps.Geocoder();
 
@@ -405,12 +405,12 @@ angular.module('app')
                 // emit broadcase 'place' and send this to application.ctrl
                 try {
                     // broadcast formatted_address
-                    scope.$emit('place', results[1].formatted_address); 
+                    scope.$emit('set:place', results[1].formatted_address); 
                 }
                 catch(err) {
                     console.log(err);
                     swal("","Location does not exists");
-                    scope.$emit('place', "Location does not exists");
+                    scope.$emit('set:place', "Location does not exists");
                 }
             });
         }
@@ -491,7 +491,6 @@ angular.module('app')
                 var place = places[0];
 
                 // when search happens, location will be updated as well for post
-                // scope.$emit('place', place.formatted_address);
                 var location = {
                     lat: place.geometry.location.lat(),
                     lon: place.geometry.location.lng()
@@ -696,7 +695,7 @@ angular.module('app')
             }
 
             // broadcast to send map to application ctrl
-            scope.$emit('mapInit', map);
+            scope.$emit('set:map', map);
 
             // add UI elements to map
             setUISearchBox();
@@ -714,7 +713,7 @@ angular.module('app')
             setEventBoundsChanged();
 
             // update very first time for app
-            setTimeout(function(){
+            $timeout(function(){
                 updateDefaultLocation();
                 updateBounds();
                 updateWatchLocation();
