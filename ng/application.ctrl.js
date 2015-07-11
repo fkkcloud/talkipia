@@ -41,7 +41,7 @@ angular.module('app')
 		url = ConfigSvc.web_socket + ConfigSvc.local_ip + ':' + ConfigSvc.port; // developmet on socket locally 
 	}
 	else {
-		url = ConfigSvc.web_socket_secure + ConfigSve.deploy_dns; // production deploy version - still debug mode
+		url = ConfigSvc.web_socket_secure + ConfigSvc.deploy_dns; // production deploy version - still debug mode
 	}
 
 	/* 개발과정이 끝나고 배포시에는 위부분을 지우고 아래 코드만 남겨도 된다.
