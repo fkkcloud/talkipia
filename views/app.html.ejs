@@ -37,9 +37,14 @@
 	<!-- express static use -->
 	<script src='/app.js'></script> 
 
-</head>
-<body ng-app='app' ng-controller='ApplicationCtrl'>
+	<script type="text/javascript" language="text/javascript"> 
+		function handleBrowserCloseButton(event) { 
+	    	alert("REALLY? MAN!");  
+		} 
+	</script>
 
+</head>
+<body ng-app='app' ng-controller='ApplicationCtrl' onpagehide="handleBrowserCloseButton(event);">
 	<!-- navigation bar -->
 	<nav class='navbar navbar-inverse navbar-noround navbar-scale' role='navigation'>
 		<div class='container'>

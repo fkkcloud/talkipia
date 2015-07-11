@@ -37,9 +37,9 @@ angular.module('app')
 
           updateGuidTarget();
 
-          updatePostTimer();
+          $timeout(updatePostTimer, 1);
 
-          $timeout(customizeInfoWindow, 10);
+          $timeout(customizeInfoWindow, 1);
 
         });
 
@@ -69,11 +69,12 @@ angular.module('app')
         }
 
         function updatePostTimer(){
-          console.log("Life %:", scope.postlifepercentage);
+          //console.log("Life %:", scope.postlifepercentage);
 
-          // set timer for post life bar
-          $timeout(function(){
-            var duration = scope.postlife + "ms";
+            var server_latency = 50; // simulate some latency from server
+            var postlife_with_latency = server_latency + scope.postlife;
+            var duration = postlife_with_latency + "ms";
+
             var postlifebar_css = angular.element(element).parent().find('div div .postlifebar').css('-webkit-animation-duration', duration);
 
             if (scope.postlifepercentage > 0.75){
@@ -100,8 +101,6 @@ angular.module('app')
               
               var postlifebar_css = angular.element(element).parent().find('div div .postlifebar').css('animation-name', 'postlifeanim_q_one');
             }
-          
-          }, 100);
         }
 
         function customizeInfoWindow(){
