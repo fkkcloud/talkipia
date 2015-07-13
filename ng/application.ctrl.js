@@ -6,7 +6,18 @@ angular.module('app')
     // INITIAL
     //------------------------------------------------------------------------------------
 
-	$scope.guid = UtilSvc.getGuid();	
+    console.log("CHECKING GUID STORED IN LOCAL STORAGE", window.localStorage.guid);
+	if (window.localStorage.guid == 'undefined' || 
+		window.localStorage.guid == 'null' ||
+		!window.localStorage.guid){
+		console.log("GUID SAVED TO LOCAL STORAGE", window.localStorage.guid);
+		window.localStorage.guid = UtilSvc.getGuid();
+	} else {
+		console.log("GUID EXISTS IN LOCAL STORAGE", window.localStorage.guid);
+	}
+
+	$scope.guid = window.localStorage.guid;
+
 	$scope.guidtgt = "0"; // interested opponent guid number
 
 	$scope.pageId = { 
@@ -30,11 +41,13 @@ angular.module('app')
 	document.onbeforeunload = function(){
 		SessionSvc.remove($scope.guid);
 	};
-	*/
+	
 
 	window.onbeforeunload = function(){
 		SessionSvc.remove($scope.guid);
 	};
+
+	*/
 
     //------------------------------------------------------------------------------------
     // SOCKET

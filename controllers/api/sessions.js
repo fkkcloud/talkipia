@@ -14,10 +14,11 @@ router.get('/', function(req, res, next){
 });
 
 router.post('/', function(req, res, next){
-	console.log('location:', req.body.location);
-	console.log('watchloc:', req.body.watchloc);
-	console.log('guid:   ', req.body.guid);
+	//console.log('location:', req.body.location);
+	//console.log('watchloc:', req.body.watchloc);
+	//console.log('guid:   ', req.body.guid);
 
+	/*
 	var session = new Session({
 		location : req.body.location,
 		watchloc : req.body.watchloc,
@@ -31,7 +32,33 @@ router.post('/', function(req, res, next){
 		guid     : req.body.guid,
 		guidtgt  : req.body.guidtgt,
 	});
+*/
 
+	var query = {'guid': req.body.guid};
+	
+	var update_session = {
+		location : req.body.location,
+		watchloc : req.body.watchloc,
+		guid     : req.body.guid,
+		guidtgt  : req.body.guidtgt,
+	};
+	
+
+	Session.findOneAndUpdate(query, update_session, {upsert:true}, function(err, doc){
+	    if (err) return res.send(500, { error: err });
+
+	    console.log('POST - / for session upsert log :', doc);
+
+	    SessionHistory.findOneAndUpdate(query, update_session, {upsert:true}, function(err, doc){
+	    	console.log("session history saved");
+	    });
+
+	    websockets.broadcast('new_session', doc);
+
+	    res.status(201).json(doc);
+	});
+
+	/*
 	session.save(function(err, session){
 		if (err) { return next(err); }
 
@@ -47,6 +74,7 @@ router.post('/', function(req, res, next){
 		// 201 - The request has been fulfilled and resulted in a new resource being created.
 		res.status(201).json(session); 
 	});
+	*/
 });
 
 // for manual remove
