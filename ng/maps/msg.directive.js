@@ -56,17 +56,17 @@ angular.module('app')
               return;
             }
 
+            var update_guidtgt = postguid;
             if (postguid == myguidtgt) {
-              console.log("CLICK : Im already following this guidtgt!");
-              return;
+              update_guidtgt = '0';
             }
 
             // propagate to upper scope for guidtgt update
-            scope.$emit('set:guidtgt', postguid); 
+            scope.$emit('set:guidtgt', update_guidtgt); 
 
             // update session information of mine so my session tells me that,
             // I like this guid at this moment in server db
-            SessionSvc.updateCoupling(myguid, postguid)
+            SessionSvc.updateCoupling(myguid, update_guidtgt)
               .then(function(doc){
                   //console.log("Successfully udpated coupling", doc);
               })
@@ -75,7 +75,7 @@ angular.module('app')
             // this update is for the people who are looking at my posts
             var updates = {
               guid    : myguid,
-              guidtgt : postguid
+              guidtgt : update_guidtgt
             };
             PostsSvc.updateGuidtgt(updates)
               .then(function(doc){
