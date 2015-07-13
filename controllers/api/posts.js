@@ -99,9 +99,11 @@ router.post('/update_guidtgt', function(req, res, next){
 });
 
 // for manual remove
-router.delete('/', function(req, res, next){
-	Post.findOneAndRemove({ _id: req.body._id }, function(err){
+router.post('/posts_delete', function(req, res, next){
+	Post.remove({ _id: req.body._id }, function(err, doc){
 		if (err) { return next(err); }
+
+		console.log('POST - /posts_delete log:', doc);
 		
 		websockets.broadcast('remove_post', req.body._id);
 		res.status(201);

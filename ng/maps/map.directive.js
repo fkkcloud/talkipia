@@ -305,6 +305,26 @@ angular.module('app')
                             var compiled = $compile(content)(child_scope);
 
                             infoWindow.setContent( compiled[0] );
+
+                            google.maps.event.addListener(infoWindow,'closeclick',function(){
+                                if (post.guid == scope.guid){
+                                   swal({   
+                                    title: "Are you sure?",   
+                                    text: "You will not be able to recover this imaginary file!",   
+                                    type: "warning",   
+                                    showCancelButton: true,   
+                                    confirmButtonColor: "#DD6B55",   
+                                    confirmButtonText: "Yes, delete it!",   
+                                    closeOnConfirm: false }, 
+                                    function(){
+                                        PostsSvc.remove(post);
+                                        swal("Deleted!", "Your imaginary file has been deleted.", "success");
+                                    }); 
+                                }
+
+                            });
+
+
                             infoWindow.open(map , marker);
                         };
                     })(marker, child, post, coupling_status, local_status);
