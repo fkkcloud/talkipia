@@ -6,19 +6,24 @@ angular.module('app')
     // INITIAL
     //------------------------------------------------------------------------------------
 
-    console.log("CHECKING GUID STORED IN LOCAL STORAGE", window.localStorage.guid);
+    // load and set latest guid
 	if (window.localStorage.guid == 'undefined' || 
 		window.localStorage.guid == 'null' ||
-		!window.localStorage.guid){
-		console.log("GUID SAVED TO LOCAL STORAGE", window.localStorage.guid);
+		!window.localStorage.guid)
+	{
 		window.localStorage.guid = UtilSvc.getGuid();
-	} else {
-		console.log("GUID EXISTS IN LOCAL STORAGE", window.localStorage.guid);
 	}
-
 	$scope.guid = window.localStorage.guid;
 
-	$scope.guidtgt = "0"; // interested opponent guid number
+	// load and set latest guidtgt
+	if (window.localStorage.guidtgt == 'undefined' || 
+		window.localStorage.guidtgt == 'null' ||
+		!window.localStorage.guidtgt)
+	{
+		window.localStorage.guidtgt = "0";
+	}
+	$scope.guidtgt = window.localStorage.guidtgt; // interested opponent guid number
+
 
 	$scope.pageId = { 
 		post : 0,
@@ -38,15 +43,14 @@ angular.module('app')
 	};
 
 	/*
+	// TODO : log out (session remove from server)
 	document.onbeforeunload = function(){
 		SessionSvc.remove($scope.guid);
 	};
-	
 
 	window.onbeforeunload = function(){
 		SessionSvc.remove($scope.guid);
 	};
-
 	*/
 
     //------------------------------------------------------------------------------------
@@ -306,8 +310,10 @@ angular.module('app')
 	});
 
     $scope.$on('set:guidtgt', function(_, guidtgt){
-    	console.log("guid tgt CHANGED!");
 		$scope.guidtgt = guidtgt;
+
+		// its very imporant to set local storage guidtgt
+		window.localStorage.guidtgt = guidtgt;
 	});
 
 	$scope.$on('set:pagechange', function(_, pageId){
