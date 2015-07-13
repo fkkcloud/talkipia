@@ -6,17 +6,25 @@ angular.module('app')
     // INITIAL
     //------------------------------------------------------------------------------------
 
-	$scope.guid = UtilSvc.getGuid();
+	$scope.guid = UtilSvc.getGuid();	
+	$scope.guidtgt = "0"; // interested opponent guid number
 
 	$scope.pageId = { 
 		post : 0,
 	};
 
-    $scope.timevalue = ConfigSvc.maxInstantLifeSpan;
-
 	$scope.navCollapsed = true;
 
-	$scope.guidtgt = "0"; // 기본값은 0으로 해서 0이면 관심상대guid가 없는 상태이다. 
+	// value from time slider in UI
+	// default is max instant life span
+    $scope.timevalue = ConfigSvc.maxInstantLifeSpan;
+
+
+	// user's current location storage
+	$scope.userLocation = {
+		lat: 0.0,
+		lon: 0.0
+	};
 
 	/*
 	document.onbeforeunload = function(){
@@ -51,6 +59,10 @@ angular.module('app')
 		connection = new WebSocket(url);
 
 		connection.onopen = function(){
+
+			// send guid to server for ws identification
+			connection.send($scope.guid);
+
 			function getCurrLocSuccess(pos) {
 				
 				////////////////// PHYSICAL LOCATION
@@ -59,6 +71,12 @@ angular.module('app')
 	            var crd = pos.coords;
 
 	            var googleLoc = new google.maps.LatLng(crd.latitude, crd.longitude);
+
+	            // save the user location into application scope variable
+	            $scope.userLocation = {
+	            	lat: crd.latitude,
+	            	lon: crd.longitude
+	            };
 
 	            var location = {
 	        		lat:googleLoc.lat(),
@@ -102,7 +120,8 @@ angular.module('app')
 	            ////////////////// LOCATION UPDATE WITH SESSION ENTER
 	            //여기서 비동기적으로 유저의 로케이션을 얻고 세션을 보낼수 있다.
 				var session = {
-					guid:     $scope.guid,
+					guidtgt : $scope.guidtgt,
+					guid    : $scope.guid,
 					location: locationJSON,
 					watchloc: watchlocJSON
 				};
@@ -136,6 +155,7 @@ angular.module('app')
 				ws:remove_post - 포스트가 시간이 다 되어서 사라질때!
 				매우중요! 
 			*/
+			console.log('ws:' + payload.type);
 			$rootScope.$broadcast('ws:' + payload.type, payload.data);
 		};
 	};
@@ -146,7 +166,7 @@ angular.module('app')
     //------------------------------------------------------------------------------------
 	// as server socket send 'ws:new_post' , we can update the map!
 	$scope.$on('ws:new_post', function(_, post){
-		// update posts
+		// update posts on map
 		$scope.map.updateAndDrawPosts();
 
 		// show responsive users only to the user who wrote this post
@@ -159,7 +179,6 @@ angular.module('app')
 
 	// as server socket send 'ws:new_post' , we can update the map!
 	$scope.$on('ws:new_session', function(_, session){
-
 		var location = angular.fromJson(session.location);
 		$scope.map.drawCurrLocationMarker(location);
 
@@ -169,6 +188,11 @@ angular.module('app')
 	// update map with coresponding info
 	$scope.$on('ws:remove_post', function(_, postid){
 		$scope.map.unDrawPost(postid);
+	});
+
+	$scope.$on('ws:update_guidtgt', function(_, updatedSession){
+		// update posts on map
+		$scope.map.updateAndDrawPosts();
 	});
 
 	//------------------------------------------------------------------------------------
@@ -269,6 +293,7 @@ angular.module('app')
 	});
 
     $scope.$on('set:guidtgt', function(_, guidtgt){
+    	console.log("guid tgt CHANGED!");
 		$scope.guidtgt = guidtgt;
 	});
 

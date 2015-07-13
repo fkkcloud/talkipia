@@ -20,6 +20,7 @@ router.post('/', function(req, res, next){
 	console.log('location:', req.body.location);
 	console.log('guiid:   ', req.body.guid);
 	console.log('lifespan:', req.body.lifespan);
+	console.log('islocal :', req.body.islocal);
 	*/
 
 	var relativeLifeSpan = req.body.lifespan;
@@ -35,7 +36,8 @@ router.post('/', function(req, res, next){
 		lifespan : relativeLifeSpan,
 		lifeend  : relativeLifeEnd,
 		guid     : req.body.guid,
-		guidtgt  : req.body.guidtgt
+		guidtgt  : req.body.guidtgt,
+		islocal  : req.body.islocal
 	});
 
 	var history = new History({
@@ -45,7 +47,8 @@ router.post('/', function(req, res, next){
 		lifespan : relativeLifeSpan,
 		lifeend  : relativeLifeEnd,
 		guid     : req.body.guid,
-		guidtgt  : req.body.guidtgt
+		guidtgt  : req.body.guidtgt,
+		islocal  : req.body.islocal
 	});
 
 	post.save(function(err, post){
@@ -67,28 +70,41 @@ router.post('/', function(req, res, next){
 				if (err) { return next(err); }
 				//console.log("post removed successfully");
 
-				// 5초보다 긴 경우의 것만 서버가 계산을 하고 서버가 보내줘서 frontend에서 지우도록 관리해줘야 한다.
-				var maxInstantLifeSpan = 5000;
-				if (relativeLifeSpan > maxInstantLifeSpan){
-					// 인스턴트 메시지가 아니였다면, 프론트엔드에서 맵을 업데이트 해줘야 한다.
-					websockets.broadcast('remove_post', post._id);
-				}
+				websockets.broadcast('remove_post', post._id);
 			});
 		},  
 		relativeLifeSpan);
 
 		// 201 - The request has been fulfilled and resulted in a new resource being created.
-		res.json(201, post); 
+		res.status(201).json(post); 
+	});
+});
+
+router.post('/update_guidtgt', function(req, res, next){
+	var query       = {'guid'    :req.body.guid};
+	var newGuidtgt  = {'guidtgt' :req.body.guidtgt} ;
+	var options     = {multi:true};
+
+	Post.update(query, newGuidtgt, options, function(err, doc){
+    	if (err) return res.send(500, { error: err });
+
+    	Post.find(query, function(err, post){
+    		if (err) return res.send(500, { error: err });
+
+    		console.log('POST - /update_guidtgt log :', doc);
+
+    		return res.status(201).json(post);
+    	});
 	});
 });
 
 // for manual remove
-router.put('/', function(req, res, next){
+router.delete('/', function(req, res, next){
 	Post.findOneAndRemove({ _id: req.body._id }, function(err){
 		if (err) { return next(err); }
 		
-		//console.log("post removed successfully");
-		res.json(200);
+		websockets.broadcast('remove_post', req.body._id);
+		res.status(201);
 	});
 });
 

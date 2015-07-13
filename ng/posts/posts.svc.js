@@ -1,7 +1,7 @@
 angular.module('app')
 .service('PostsSvc', function($http){
-	this.fetch = function(){
-		return $http.get('/api/posts');
+	this.fetch = function(guidObj){
+		return $http.get('/api/posts', guidObj);
 	};
 
 	this.create = function(post){
@@ -13,4 +13,8 @@ angular.module('app')
 		//console.log('post._id:', post._id);
 		return $http.put('/api/posts', post);
 	};
+
+	this.updateGuidtgt = function(updates){
+		return $http.post('/api/posts/update_guidtgt', updates);
+	}
 });

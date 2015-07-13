@@ -2,6 +2,11 @@ var _ = require('lodash');
 var ws = require('ws');
 
 var clients = [];
+var clients_guid = [];
+
+exports.getClients = function(){
+	return clients;
+};
 
 exports.connect = function(server){
 	var wss = new ws.Server({server: server});
@@ -13,6 +18,11 @@ exports.connect = function(server){
 
 		clients.push(ws);
 
+		// save ws with guid as key to clinets array
+		ws.on('message', function(guid){
+			clients_guid[guid] = ws; 
+		})
+		
 		exports.broadcast('server said - new client connected.'); // 클라이언트가 서버의 웹소켓에 접속할때 broadcast
 
 		// 클라이언트가 연결을 끊으면 Lo-Dash를 사용해 목록에서 클라이언트를 제거한다.
@@ -29,8 +39,15 @@ exports.connect = function(server){
 exports.broadcast = function(type, data){
 	var json = JSON.stringify({type: type, data: data});
 
+	// 각각의 선택된 클라이언트에게 json을 보낸다.
+	clients.forEach(function(client){
+		client.send(json)
+	});
+
+	/*
 	// 각각의 클라이언트에게 json을 보낸다.
 	clients.forEach(function(client){
 		client.send(json);
 	});
+	*/
 };

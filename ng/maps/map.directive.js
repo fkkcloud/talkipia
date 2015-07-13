@@ -14,7 +14,10 @@ angular.module('app')
         var initialMapCenter;
         var CLOUD_MAP_ID = 'custom_style'; // map style
         var helperMarkers = [];
-        var markers = [];
+        var markersOnMap = [];
+        var prevGuidtgt = '0';
+        var isGuidtgtChanged;
+
         var imagePost = {
             url: 'https://catchme.ifyoucan.com/images/pictures/IYC_Icons/IYC_Location_Icon_Small.png',
             size: new google.maps.Size(100, 100),
@@ -126,7 +129,7 @@ angular.module('app')
                     //console.log('session watch location:', session.watchloc);
                     //console.log('post location:', post.location);
                     var watch_location = angular.fromJson(session.watchloc);
-                    var post_location = angular.fromJson(post.location);
+                    var post_location  = angular.fromJson(post.location);
                     
                     // 유저가 보고 있는 바운더리 안에 그 session(다른유저) 체킁
 
@@ -178,31 +181,25 @@ angular.module('app')
         }
 
         function updateAndDrawPosts(){
+            // see if my guidtgt has changed;
+            isGuidtgtChanged = prevGuidtgt != scope.guidtgt;
+            // update previous guidtgt
+            prevGuidtgt = scope.guidtgt;
+            console.log('guid tgt CHANGED:', scope.guidtgt);
+            console.log('guid tgt CHANGED:', isGuidtgtChanged);
+
+            //var guidObj = {guid: scope.guid}
             PostsSvc.fetch()
             .success(function(posts){
 
-                // draw latest update
                 for (var i = 0; i < posts.length; i++)
                 {
                     var post = posts[i];
-                    // if the markers post is exisiting one, we don't want to draw it again.
-                    // only draw new ones!
-                    for (var j = 0, marker; marker = markers[j]; j++){
-                        if (post._id == marker.post._id)
-                        {
-                            post = null; // 이미 그려진 포스트라면, null로.
-                            break; // 이 loop은 post._id만 검사용임으로, 만약 겹치면 바로 loop을 멈춰도 괜찮다.
-                        }
-                    }
 
-                    // post가 원래 있엇던것이면 post가 null로 셋 되었을것이고, location프로퍼티도 있는지 확인하자
-                    if (!post || !post.hasOwnProperty('location'))
-                        continue; // skip this post - no need to draw
-
+                    ////////////////////// START - CHECK IF ITS WITHIN VIEW ///////////////////////////////
                     var location = angular.fromJson(post.location);
                     var googleLoc = new google.maps.LatLng(location.lat, location.lon);
 
-                    // 바운더리 안에 있는지부터 체크를 하장
                     updateBounds();
                     if (!(googleLoc.lat() < current_map_nw.lat()) ||
                         !(googleLoc.lat() > current_map_se.lat()) ||
@@ -211,9 +208,38 @@ angular.module('app')
                     {
                         continue; // skip this post - no need to draw
                     }
+                    ////////////////////// END - CHECK IF ITS WITHIN VIEW ///////////////////////////////
 
-                    var coupling_status = calculateCoupling(post.guid, post.guidtgt);
-                    
+
+                    ////////////////////// START - CHECK WE HAVE TO REDRAW ///////////////////////////////
+                    // if the markers post is exisiting one, we don't want to draw it again.
+                    // only draw new ones!
+                    for (var j = 0, marker; marker = markersOnMap[j]; j++){
+
+                        //이부분 로직을 다시 짜야함
+                        var isAlreadyDrawn = post._id == marker.post._id;
+                        if (isAlreadyDrawn) // 이미 그려졌는지 테스트
+                        {
+                            if (isGuidtgtChanged){
+                                unDrawPost(post._id);
+                                break;
+                            } else if (marker.post.guidtgt == post.guidtgt){  // 이미 그려진것중, guidtgt이 바뀌었는가
+                                post = null; // 이미 그려진 포스트라면, null로.
+                                break; // 이 loop은 post._id만 검사용임으로, 만약 겹치면 바로 loop을 멈춰도 괜찮다.}
+                            } else {
+                                unDrawPost(post._id);
+                                break;
+                            }
+                        }
+                    }
+
+                    if (post == null){
+                        continue; // skip this post - no need to draw
+                    }
+                    ////////////////////// END - CHECK WE HAVE TO REDRAW ///////////////////////////////
+
+
+                    ////////////////////// START - DRAWING POST ///////////////////////////////
                     // marker option setting
                     var markerOptions = {
                         position: googleLoc,
@@ -222,89 +248,74 @@ angular.module('app')
                         icon: imagePost
                     };
                     var marker = new google.maps.Marker(markerOptions);
-                    
-
-                    // 인스턴트 맵 메시지일 경우만 프론트엔드와 서버가 다르게 지워주도록 한다. (일단은 상한선은 10초)
-                    if (post.lifespan < ConfigSvc.maxInstantLifeSpan){
-                        // set up self remove for marker itself and from markers collection at front-end
-                        $timeout(
-                            (function(old_marker, old_post){
-                                return function(){
-                                    old_marker.setMap(null);
-                                    for (var k = 0, marker; marker = markers[k]; k++){
-                                        if (old_post._id == marker.post._id)
-                                        {
-                                            markers.splice(k, 1);
-                                        }
-                                    }
-                                };
-                            }(marker, post)), 
-                        post.lifespan);
-                    }
-                    
-                    
                     // add marker to array, this means that it has been drawn to map
-                    markers.push(
+                    markersOnMap.push(
                         {
                             marker: marker,
                             post  : post
                         });
 
-                    ////////////////////// DRAWING MESSAGE WINDOW ///////////////////////////////
-                    /*
-                    var html = '<div id="bubblePost">' + 
-                                post.body + 
-                                '</div><div id="bubbleLifeBar"></div>';
-                    */
+                    ////////////////////// START - DRAWING MESSAGE WINDOW ///////////////////////////////
+                    var coupling_status = calculateCoupling(post.guid, post.guidtgt);
+
+                    //console.log("post.isLocal", post.islocal);
+                    var local_status = post.islocal;
+
                     // 스코프에서부터 새로운 차일드 스코프를 만들어 each for loop에서 사용한다.
                     // --> 해야, 각 DOM이 각각의 scope를 가져서 post msg가 안 겹친다.
                     var parent = scope;
                     var child = parent.$new(true);
 
-                    var openInfoWindow = (function(marker, child_scope, post, coupling_status){
+                    var openInfoWindow = (function(marker, child_scope, post, coupling_status, local_status){
 
                         return function(){
                             // create new window
-                            var infoWindowOptions = { 
-                                pixelOffset: new google.maps.Size(-41.5, 10.0), 
+                            var infoWindowOptions = {
+                                pixelOffset: new google.maps.Size(-39.5, 16.0),
                                 disableAutoPan: true
                             };
                             var infoWindow = new google.maps.InfoWindow(infoWindowOptions);
 
                             // get current time and subtract it from post's end time.
                             // that will be accurate post time for instant posts and long posts.
-                            var currentDate = new Date();
+                            var currentDate      = new Date();
                             var currentTimeMilli = currentDate.getTime();
-                            var postlife = ((post.lifeend - currentTimeMilli) >= 0) ? (post.lifeend - currentTimeMilli) : 0;
+                            var postlife         = ((post.lifeend - currentTimeMilli) >= 0) ? (post.lifeend - currentTimeMilli) : 0;
 
                             var lifepercentage = (postlife / post.lifespan).toFixed(2)
 
                             //to make data available to template
-                            child_scope.msg = post.body;
-                            child_scope.postlife = postlife;
-                            child_scope.postguid = post.guid;
-                            child_scope.postguidtgt = post.guidtgt;
-                            child_scope.postcouplestatus = coupling_status;
+                            child_scope.msg                = post.body;
+                            child_scope.postlife           = postlife;
+                            child_scope.postguid           = post.guid;
+                            child_scope.postguidtgt        = post.guidtgt;
+                            child_scope.postcouplestatus   = coupling_status;
                             child_scope.postlifepercentage = lifepercentage;
+                            child_scope.postlocalstatus    = local_status;
 
+                            /*
+                            // this enables changing coupling value instantly.
                             child_scope.$on('set:coupling', function(_, coupling_update){
                                 child_scope.postcouplestatus = coupling_update;
                             });
+                            */
 
                             // compile it before loaded
-                            var content = '<div map-msg></div>';
+                            var content  = '<div map-msg></div>';
                             var compiled = $compile(content)(child_scope);
 
                             infoWindow.setContent( compiled[0] );
                             infoWindow.open(map , marker);
                         };
-                    })(marker, child, post, coupling_status);
+                    })(marker, child, post, coupling_status, local_status);
                     
                     openInfoWindow();
-                    ////////////////////// END of DRAWING MESSAGE WINDOW ///////////////////////////////
+                    ////////////////////// END - DRAWING MESSAGE WINDOW ///////////////////////////////
+
+                    ////////////////////// END - DRAWING POST ///////////////////////////////
 
                 } // end of for-loop
-            });
+            }); // end of post fetch success
         }
 
         function drawDropDown(location)
@@ -344,12 +355,12 @@ angular.module('app')
         function unDrawPost(postid)
         {
             //console.log("starting remove post");
-            for (var k = 0, marker; marker = markers[k]; k++) {
+            for (var k = 0, marker; marker = markersOnMap[k]; k++) {
                 //console.log(postid);
                 //console.log(marker.post._id);
                 if (postid == marker.post._id) {
                     marker.marker.setMap(null);
-                    markers.splice(k, 1);
+                    markersOnMap.splice(k, 1);
                     break;
                 }
             }
@@ -510,7 +521,7 @@ angular.module('app')
         //------------------------------------------------------------------------------------
         function setEventClick()
         {
-            // click event on map to draw marker
+            // click event on map to draw X marker and set Post location
             google.maps.event.addListener(map_origin, 'click', function(event) {
                 var location = {
                     lat: event.latLng.lat(),

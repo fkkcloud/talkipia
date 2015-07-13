@@ -17,24 +17,38 @@ angular.module('app')
 
 	this.updateWatchLocation = function(current_map_nw, current_map_se, current_map_center, guid){
 		var watchloc = {
-            nw_lat    : current_map_nw.lat,
-            nw_lon    : current_map_nw.lon,
-            se_lat    : current_map_se.lat,
-            se_lon	  : current_map_se.lon,
-            center_lat: current_map_center.lat,
-            center_lon: current_map_center.lon
+            nw_lat     : current_map_nw.lat,
+            nw_lon     : current_map_nw.lon,
+            se_lat     : current_map_se.lat,
+            se_lon	   : current_map_se.lon,
+            center_lat : current_map_center.lat,
+            center_lon : current_map_center.lon
         }
 
         var watchlocJSON = JSON.stringify(watchloc);
 
         var updatedsession = {
             watchloc: watchlocJSON,
-            guid: guid
+            guid    : guid
         };
 
         // update watchloc when center changed.
         console.log("updating watch location");
+
 		//console.log("updatedsession:", updatedsession);
-		return $http.post('/api/sessions/update', updatedsession);
+		return $http.post('/api/sessions/update_session', updatedsession);
+	};
+
+	this.updateCoupling = function(guid, guidtgt){
+		
+		var updatedguidtgt = {
+			guid   : guid,
+			guidtgt: guidtgt
+		};
+
+		// update watchloc when center changed.
+        console.log("updating coupling");
+
+		return $http.post('/api/sessions/update_coupling', updatedguidtgt)
 	};
 });

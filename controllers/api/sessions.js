@@ -16,18 +16,20 @@ router.get('/', function(req, res, next){
 router.post('/', function(req, res, next){
 	console.log('location:', req.body.location);
 	console.log('watchloc:', req.body.watchloc);
-	console.log('guiid:   ', req.body.guid);
+	console.log('guid:   ', req.body.guid);
 
 	var session = new Session({
 		location : req.body.location,
 		watchloc : req.body.watchloc,
 		guid     : req.body.guid,
+		guidtgt  : req.body.guidtgt,
 	});
 
 	var serssionhistory = new SessionHistory({
 		location : req.body.location,
 		watchloc : req.body.watchloc,
 		guid     : req.body.guid,
+		guidtgt  : req.body.guidtgt,
 	});
 
 	session.save(function(err, session){
@@ -43,7 +45,7 @@ router.post('/', function(req, res, next){
 		websockets.broadcast('new_session', session);
 
 		// 201 - The request has been fulfilled and resulted in a new resource being created.
-		res.json(201, session); 
+		res.status(201).json(session); 
 	});
 });
 
@@ -55,22 +57,47 @@ router.put('/', function(req, res, next){
 		if (err) { return next(err); }
 		
 		//console.log("session removed successfully");
-		res.sendStatus(200);
+		res.status(200);
 	});
 });
 
 // for updating watch location constantly
-router.post('/update', function(req, res, next){
-	var query = {'guid':req.body.guid};
+router.post('/update_session', function(req, res, next){
+	var query       = {'guid':req.body.guid};
 	var newWatchLoc = {'watchloc':req.body.watchloc};
-	var options = {upsert:false};
+	var options     = {upsert:false};
 
-	Session.findOneAndUpdate(query, newWatchLoc, options, function(err, doc){
+	Session.findOneAndUpdate(query, newWatchLoc, options, function(err, session){
     	if (err) return res.send(500, { error: err });
 
-    	//console.log('updated session:', doc);
+    	//console.log('POST - /update_session log :', doc);
 
-    	return res.json(201, doc);
+    	return res.status(201).json(session);
+	});
+});
+
+// for updating watch location constantly
+router.post('/update_coupling', function(req, res, next){
+
+	var query      = {'guid'    :req.body.guid};
+	var newGuidtgt = {'guidtgt' :req.body.guidtgt};
+	var options    = {upsert:false};
+
+	// update guidtgt for the session!
+	Session.update(query, newGuidtgt, options, function(err, doc){
+    	if (err) return res.send(500, { error: err });
+
+    	// return the session data which updated!
+    	Session.findOne(query, function(err, session){
+    		if (err) return res.send(500, { error: err });
+
+    		console.log('POST - /update_coupling log :', doc);
+
+    		// broadcast to all clients about the new message coming in!
+			websockets.broadcast('update_guidtgt', session);
+
+    		return res.status(201).json(session);
+    	});
 	});
 });
 
