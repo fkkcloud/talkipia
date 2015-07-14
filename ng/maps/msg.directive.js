@@ -50,13 +50,22 @@ angular.module('app')
           var myguidtgt = scope.$parent.guidtgt;
 
           angular.element(element).parent().find('div #iw-container').on('click',function(){
-            // clicking its own post will do nothing
-            if (postguid == myguid){
-              console.log("CLICK : Its my post!");
-              return;
-            }
 
             var update_guidtgt = postguid;
+
+            // clicking my message window
+            // if its on coupling, break it!
+            if (postguid == myguid){
+              if (scope.$parent.guidtgt != '0'){
+                update_guidtgt = '0'; 
+              }
+              else {
+                return;
+              }
+            }
+
+            // cliking the one that I liked
+            // to dislike the message window
             if (postguid == myguidtgt) {
               update_guidtgt = '0';
             }

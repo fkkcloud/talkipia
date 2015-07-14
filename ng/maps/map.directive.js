@@ -15,6 +15,7 @@ angular.module('app')
         var CLOUD_MAP_ID = 'custom_style'; // map style
         var helperMarkers = [];
         var markersOnMap = [];
+
         var prevGuidtgt = '0';
         var isGuidtgtChanged;
 
@@ -134,7 +135,6 @@ angular.module('app')
                     // 유저가 보고 있는 바운더리 안에 그 session(다른유저) 체킁
 
                     //console.log(current_map_se, current_map_nw);
-
                     updateBounds();
                     if (!(watch_location.center_lat < current_map_nw.lat()) ||
                         !(watch_location.center_lat > current_map_se.lat()) ||
@@ -181,14 +181,12 @@ angular.module('app')
         }
 
         function updateAndDrawPosts(){
-            // see if my guidtgt has changed;
-            isGuidtgtChanged = prevGuidtgt != scope.guidtgt;
-            // update previous guidtgt
-            prevGuidtgt = scope.guidtgt;
-            console.log('guid tgt CHANGED:', scope.guidtgt);
-            console.log('guid tgt CHANGED:', isGuidtgtChanged);
+            
+            // for checking local posts - isPointingYou
+            isGuidtgtChanged = prevGuidtgt != scope.guidtgt; // see if my guidtgt has changed;
+            prevGuidtgt = scope.guidtgt; // update previous guidtgt
 
-            //var guidObj = {guid: scope.guid}
+            //var guidObj = {guid: scope.guid} // for socket fetch optimization TODO
             PostsSvc.fetch()
             .success(function(posts){
 
@@ -454,17 +452,25 @@ angular.module('app')
                 2 - you like i
                 4 - we like each other
             */
-            var ilikeyou = scope.guidtgt == post_guid;
-            var youlikei = scope.guid == post_guidtgt;
-            if (ilikeyou && youlikei)
+
+            var isPointingYou     = scope.guidtgt == post_guid;
+            var isPointingMe      = scope.guid    == post_guidtgt;
+            var isMyPost          = scope.guid    == post_guid;
+            var isPointingSomeone = scope.guidtgt != '0';
+
+            if (isMyPost && isPointingSomeone && !scope.isOnCoupling)
+            {
+                return 2; // for my view's my post to be "I like someone"
+            }
+            else if (isPointingYou && isPointingMe)
             {
                 return 4;
             }
-            else if (ilikeyou && !youlikei)
+            else if (isPointingYou && !isPointingMe)
             {
                 return 1;
             }
-            else if (!ilikeyou && youlikei)
+            else if (!isPointingYou && isPointingMe)
             {
                 return 2;
             }

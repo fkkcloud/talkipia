@@ -24,7 +24,6 @@ angular.module('app')
 	}
 	$scope.guidtgt = window.localStorage.guidtgt; // interested opponent guid number
 
-
 	$scope.pageId = { 
 		post : 0,
 	};
