@@ -44,7 +44,7 @@ angular.module('app')
             url: 'http://2.bp.blogspot.com/-djMa_n5nAEM/T1Gvx_-7-zI/AAAAAAAAAQ4/-1N6lleQvZc/s1600/blinking_dot.gif',
             size: new google.maps.Size(100, 100),
             origin: new google.maps.Point(0, 0),
-            anchor: new google.maps.Point(17, 34),
+            anchor: new google.maps.Point(10, 10),
             scaledSize: new google.maps.Size(17, 17)
         };
 
