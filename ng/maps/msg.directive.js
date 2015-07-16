@@ -13,6 +13,7 @@ angular.module('app')
           4 - we like each other
         */
         scope.get_coupling = function(coupling_status){
+          
           if (coupling_status == 4){
             return "coupling coupling-couple";
           }

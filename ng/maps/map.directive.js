@@ -450,7 +450,7 @@ angular.module('app')
                 0 - no status
                 1 - i like you
                 2 - you like i
-                4 - we like each other
+                4 - we like each other // disabled.
             */
 
             var isPointingYou     = scope.guidtgt == post_guid;
@@ -458,7 +458,7 @@ angular.module('app')
             var isMyPost          = scope.guid    == post_guid;
             var isPointingSomeone = scope.guidtgt != '0';
 
-            if (isMyPost && isPointingSomeone && !scope.isOnCoupling)
+            if (isMyPost && isPointingSomeone)
             {
                 return 2; // for my view's my post to be "I like someone"
             }
