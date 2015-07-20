@@ -13,6 +13,24 @@ router.get('/', function(req, res, next){
 	});
 });
 
+/* pagination
+	http://localhost:3000/api/posts/page?perpage=page
+	http://localhost:3000/api/posts/1?perpage=2
+*/
+router.get('/:page', function(req, res, next){
+	var perPage = req.query.perpage;
+	var page    = req.params.page;
+
+	/* Post use instead of History for test*/
+	Post.find()
+	.sort('-date')
+    .limit(perPage)
+	.skip(perPage * page)  	
+	.exec(function(err, posts) {
+     	return res.json(posts);
+    })
+});
+
 router.post('/', function(req, res, next){
 	/*
 	console.log('body:    ', req.body.body);
