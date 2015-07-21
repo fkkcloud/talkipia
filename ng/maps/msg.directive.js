@@ -50,7 +50,7 @@ angular.module('app')
           var myguid    = scope.$parent.guid;
           var myguidtgt = scope.$parent.guidtgt;
 
-          angular.element(element).parent().find('div #iw-container').on('click',function(){
+          element.children().on('click',function(){
 
             var update_guidtgt = postguid;
 
@@ -114,67 +114,69 @@ angular.module('app')
           //console.log("Life %:", scope.postlifepercentage);
             var duration = scope.postlife + "ms";
 
-            var postlifebar_css = angular.element(element).parent().find('div div .postlifebar').css('-webkit-animation-duration', duration);
+            var postbarlife = element.children().children(".postlifebar");
+
+            var postlifebar_css = postbarlife.css('-webkit-animation-duration', duration);
 
             if (scope.postlifepercentage > 0.95){
               /* Chrome, Safari, Opera */
-              var postlifebar_css = angular.element(element).parent().find('div div .postlifebar').css('-webkit-animation-name', 'postlifeanim_a');
+              var postlifebar_css = postbarlife.css('-webkit-animation-name', 'postlifeanim_a');
               
-              var postlifebar_css = angular.element(element).parent().find('div div .postlifebar').css('animation-name', 'postlifeanim_a');
+              var postlifebar_css = postbarlife.css('animation-name', 'postlifeanim_a');
             }
             else if (scope.postlifepercentage <= 0.95 && scope.postlifepercentage > 0.9){
               /* Chrome, Safari, Opera */
-              var postlifebar_css = angular.element(element).parent().find('div div .postlifebar').css('-webkit-animation-name', 'postlifeanim_b');
+              var postlifebar_css = postbarlife.css('-webkit-animation-name', 'postlifeanim_b');
               
-              var postlifebar_css = angular.element(element).parent().find('div div .postlifebar').css('animation-name', 'postlifeanim_b');
+              var postlifebar_css = postbarlife.css('animation-name', 'postlifeanim_b');
             }
             else if (scope.postlifepercentage <= 0.9 && scope.postlifepercentage > 0.85){
               /* Chrome, Safari, Opera */
-              var postlifebar_css = angular.element(element).parent().find('div div .postlifebar').css('-webkit-animation-name', 'postlifeanim_c');
+              var postlifebar_css = postbarlife.css('-webkit-animation-name', 'postlifeanim_c');
               
-              var postlifebar_css = angular.element(element).parent().find('div div .postlifebar').css('animation-name', 'postlifeanim_c');
+              var postlifebar_css = postbarlife.css('animation-name', 'postlifeanim_c');
             }
             else if (scope.postlifepercentage <= 0.85 && scope.postlifepercentage > 0.75){
               /* Chrome, Safari, Opera */
-              var postlifebar_css = angular.element(element).parent().find('div div .postlifebar').css('-webkit-animation-name', 'postlifeanim_d');
+              var postlifebar_css = postbarlife.css('-webkit-animation-name', 'postlifeanim_d');
               
-              var postlifebar_css = angular.element(element).parent().find('div div .postlifebar').css('animation-name', 'postlifeanim_d');
+              var postlifebar_css = postbarlife.css('animation-name', 'postlifeanim_d');
             }
             else if (scope.postlifepercentage <= 0.75 && scope.postlifepercentage > 0.6){
               /* Chrome, Safari, Opera */
-              var postlifebar_css = angular.element(element).parent().find('div div .postlifebar').css('-webkit-animation-name', 'postlifeanim_e');
+              var postlifebar_css = postbarlife.css('-webkit-animation-name', 'postlifeanim_e');
               
-              var postlifebar_css = angular.element(element).parent().find('div div .postlifebar').css('animation-name', 'postlifeanim_e');
+              var postlifebar_css = postbarlife.css('animation-name', 'postlifeanim_e');
             }
             else if (scope.postlifepercentage <= 0.6 && scope.postlifepercentage > 0.5){
               /* Chrome, Safari, Opera */
-              var postlifebar_css = angular.element(element).parent().find('div div .postlifebar').css('-webkit-animation-name', 'postlifeanim_f');
+              var postlifebar_css = postbarlife.css('-webkit-animation-name', 'postlifeanim_f');
               
-              var postlifebar_css = angular.element(element).parent().find('div div .postlifebar').css('animation-name', 'postlifeanim_f');
+              var postlifebar_css = postbarlife.css('animation-name', 'postlifeanim_f');
             }
             else if (scope.postlifepercentage <= 0.5 && scope.postlifepercentage > 0.3){
               /* Chrome, Safari, Opera */
-              var postlifebar_css = angular.element(element).parent().find('div div .postlifebar').css('-webkit-animation-name', 'postlifeanim_g');
+              var postlifebar_css = postbarlife.css('-webkit-animation-name', 'postlifeanim_g');
               
-              var postlifebar_css = angular.element(element).parent().find('div div .postlifebar').css('animation-name', 'postlifeanim_g');
+              var postlifebar_css = postbarlife.css('animation-name', 'postlifeanim_g');
             }
             else if (scope.postlifepercentage <= 0.3 && scope.postlifepercentage > 0.2){
               /* Chrome, Safari, Opera */
-              var postlifebar_css = angular.element(element).parent().find('div div .postlifebar').css('-webkit-animation-name', 'postlifeanim_h');
+              var postlifebar_css = postbarlife.css('-webkit-animation-name', 'postlifeanim_h');
               
-              var postlifebar_css = angular.element(element).parent().find('div div .postlifebar').css('animation-name', 'postlifeanim_h');
+              var postlifebar_css = postbarlife.css('animation-name', 'postlifeanim_h');
             }
             else if (scope.postlifepercentage <= 0.2 && scope.postlifepercentage > 0.1){
               /* Chrome, Safari, Opera */
-              var postlifebar_css = angular.element(element).parent().find('div div .postlifebar').css('-webkit-animation-name', 'postlifeanim_i');
+              var postlifebar_css = postbarlife.css('-webkit-animation-name', 'postlifeanim_i');
               
-              var postlifebar_css = angular.element(element).parent().find('div div .postlifebar').css('animation-name', 'postlifeanim_i');
+              var postlifebar_css = postbarlife.css('animation-name', 'postlifeanim_i');
             }
             else{
               /* Chrome, Safari, Opera */
-              var postlifebar_css = angular.element(element).parent().find('div div .postlifebar').css('-webkit-animation-name', 'postlifeanim_j');
+              var postlifebar_css = postbarlife.css('-webkit-animation-name', 'postlifeanim_j');
               
-              var postlifebar_css = angular.element(element).parent().find('div div .postlifebar').css('animation-name', 'postlifeanim_j');
+              var postlifebar_css = postbarlife.css('animation-name', 'postlifeanim_j');
             }
         }
 
