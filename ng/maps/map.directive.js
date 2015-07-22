@@ -492,8 +492,8 @@ angular.module('app')
         //------------------------------------------------------------------------------------
         function setUISearchLocationToggle()
         {
-            var timeSlider = (document.getElementById('map-search-toggle'));
-            map.controls[google.maps.ControlPosition.TOP_LEFT].push(timeSlider);
+            var mapSearchToggle = (document.getElementById('map-search-toggle'));
+            map.controls[google.maps.ControlPosition.TOP_LEFT].push(mapSearchToggle);
         }
 
         function setUIMoveToCurrLocBtn()

@@ -41,17 +41,6 @@ angular.module('app')
 		lon: 0.0
 	};
 
-	/*
-	// TODO : log out (session remove from server)
-	document.onbeforeunload = function(){
-		SessionSvc.remove($scope.guid);
-	};
-
-	window.onbeforeunload = function(){
-		SessionSvc.remove($scope.guid);
-	};
-	*/
-
 	$scope.toggleSearchLocation = false;
 	$scope.toggleTimeSlider = false;
 

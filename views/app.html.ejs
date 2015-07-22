@@ -73,18 +73,23 @@
 
 	<!-- global map -->
 	<div> <!-- this is for multiple page setup later <div ng-if='currentPageId == pageId.post'>-->
+		<!-- Map -->
 		<div app-map=""></div>
 
+		<!-- Search Location Toggle -->
 		<div class="nav-burger" id="map-search-toggle">
 		  <div class="line"></div>
 		  <div class="text">Find</div>
 		  <div class="line"></div>
 		</div>
 
+		<!-- Search Location -->
 		<input ng-show="toggleSearchLocation == true" id="pac-input" class="controls" type="text" placeholder="Search Location">
 
+		<!-- Move to current location -->
       	<button ng-click= 'moveToCurrentLocation()' class="btn btn-info" id='map-btn-curr'> Me </button>
 
+      	<!-- Posting -->
       	<form ng-controller='PostsCtrl' onSubmit="return false;" ng-submit='addPost()' name='postForm' id='map-posting-form' novalidate>
       		<input  type='text' 
       				ng-model='content' 
@@ -99,7 +104,7 @@
   			</button>	
       	</form>
 
-
+      	<!-- Time Slider -->
       	<div ng-show="toggleTimeSlider == true" id='map-time-slider'>
 			<slider floor="5000" ceiling="300000" step="20" precision="2" ng-model="timevalue"></slider>
 		</div>
