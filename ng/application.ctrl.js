@@ -52,15 +52,37 @@ angular.module('app')
 	};
 	*/
 
-	// enables enter key to submit post form
+	$scope.toggleSearchLocation = false;
+	$scope.toggleTimeSlider = false;
+
+	// event hander for map UIs
 	$timeout(function(){
-		document.getElementById('posting').onkeypress = function(event){
+		// enables enter key to submit post form
+		document.getElementById('map-posting').onkeypress = function(event){
 			//console.log("Inside keypress",event.which);
 			if (event.which == '13'){
 				//console.log("enter pressed");
-				$('form#posting-form').submit();
+				$('form#map-posting-form').submit();
 			}
 		}
+
+		document.getElementById('map-posting').onfocus = function(event){
+			console.log("on focus");
+			$scope.toggleTimeSlider = true;
+		}
+
+		document.getElementById('map-posting').onblur = function(event){
+			console.log("on blur");
+			$scope.toggleTimeSlider = false;
+		}
+
+		$('.nav-burger').click(function() {
+		  $('.nav-burger').toggleClass('active');
+		  //$('.controls').toggleClass('active');
+		  $scope.toggleSearchLocation = !$scope.toggleSearchLocation;
+		  $scope.$apply();
+		});
+
 	});
 
     //------------------------------------------------------------------------------------

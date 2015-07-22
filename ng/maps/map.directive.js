@@ -490,27 +490,33 @@ angular.module('app')
         //------------------------------------------------------------------------------------
         // UI
         //------------------------------------------------------------------------------------
+        function setUISearchLocationToggle()
+        {
+            var timeSlider = (document.getElementById('map-search-toggle'));
+            map.controls[google.maps.ControlPosition.TOP_LEFT].push(timeSlider);
+        }
+
         function setUIMoveToCurrLocBtn()
         {
-            var currLocBtn = (document.getElementById('btn-curr')); 
+            var currLocBtn = (document.getElementById('map-btn-curr')); 
             map.controls[google.maps.ControlPosition.TOP_RIGHT].push(currLocBtn);
         }
 
         function setUIPostForm()
         {
-            var postForm = (document.getElementById('posting')); 
+            var postForm = (document.getElementById('map-posting')); 
             map.controls[google.maps.ControlPosition.BOTTOM_CENTER].push(postForm);
         }
 
         function setUIPostBtn()
         {
-            var postBtn = (document.getElementById('btn-submit'));
+            var postBtn = (document.getElementById('map-btn-submit'));
             map.controls[google.maps.ControlPosition.BOTTOM_CENTER].push(postBtn);
         }
 
         function setUITimeSlider()
         {
-            var timeSlider = (document.getElementById('timeSlider'));
+            var timeSlider = (document.getElementById('map-time-slider'));
             map.controls[google.maps.ControlPosition.BOTTOM_CENTER].push(timeSlider);
         }
 
@@ -742,6 +748,7 @@ angular.module('app')
             scope.$emit('set:map', map);
 
             // add UI elements to map
+            setUISearchLocationToggle();
             setUISearchBox();
             setUIMoveToCurrLocBtn();
             setUIPostForm();

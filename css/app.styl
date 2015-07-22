@@ -1,49 +1,13 @@
 
-// for jquery click binding selector
-
-/* title */
+/* --------------------------------------------------------------------------------------------------------
+NAVIGATION BAR TITLE
+-------------------------------------------------------------------------------------------------------- */ 
 .navbar-default .navbar-brand {
     color: #666699;
     font-family: Roboto; 
     font-size: 16px;
     font-weight: 300;
 }
-
-/* just to be selected in jquery for 'enter' key to submit */
-#posting-form {
-    
-}
-
-#timeSlider {
-    font-family: Roboto; 
-    font-size: 14px;
-    font-weight: 300;
-
-    min-width: 450px;
-    max-width: 450px;
-
-    height: 32px;
-
-    margin-bottom:105px;
-    margin-right:0px;
-    margin-left: -445px;
-
-    padding: 0 11px 0 13px;
-    text-overflow: ellipsis;
-
-    outline: none;
-}
-/* mobile phone */
-@media all and (max-width: 768px) {
-    #timeSlider  {
-        min-width: 290px;
-        max-width: 290px;
-        margin-bottom:75px;
-        margin-left: -293px;
-        height: 45px;
-    }
-}
-
 // gotta get the rounded edges for nav-inverse!
 .navbar-noround {
     border-radius: 0%;
@@ -63,15 +27,40 @@
     font-family: Roboto;
     font-weight: 300;  
 }
-
-// google style-ed font/weight
-#google{
-    font-family: Roboto;
+/* --------------------------------------------------------------------------------------------------------
+MAP
+-------------------------------------------------------------------------------------------------------- */ 
+#map-time-slider {
+    font-family: Roboto; 
+    font-size: 14px;
     font-weight: 300;
+
+    min-width: 450px;
+    max-width: 450px;
+
+    height: 32px;
+
+    margin-bottom:105px;
+    margin-left:-440px
+
+    padding: 0 11px 0 13px;
+    text-overflow: ellipsis;
+
+    outline: none;
+}
+/* mobile phone */
+@media all and (max-width: 768px) {
+    #map-time-slider {
+        min-width: 290px;
+        max-width: 290px;
+        margin-bottom:75px;
+        margin-left:-290px
+        height: 45px;
+    }
 }
 
 // moving to current location button
-#btn-curr {
+#map-btn-curr {
     font-family: Roboto;
     font-size: 13px;
     font-weight: 300;
@@ -86,11 +75,10 @@
     border: 1px solid transparent;
     border-radius: 2px 0 0 2px;
     outline: none;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
 }
 /* mobile phone */
 @media all and (max-width: 768px) {
-    #btn-curr  {
+    #map-btn-curr   {
         margin-right:20px;
         margin-top:15px;
         width:40px;
@@ -99,7 +87,7 @@
 }
 
 // moving to current location button
-#btn-submit {
+#map-btn-submit {
     font-family: Roboto;
     font-size: 13px;
     font-weight: 300;
@@ -111,18 +99,18 @@
     border: 1px solid transparent;
     border-radius: 2px 0 0 2px;
     outline: none;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
 }
+
 /* mobile phone */
 @media all and (max-width: 768px) {
-    #btn-submit  {
+    #map-btn-submit  {
         width:60px;
         height: 45px;
         margin-bottom:28px;
     }
 }
 
-#posting {
+#map-posting {
     font-family: Roboto; 
     font-size: 15px;
     font-weight: 300;
@@ -142,11 +130,10 @@
     border: 1px solid transparent;
     border-radius: 2px 0 0 2px;
     outline: none;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
 }
 /* mobile phone */
 @media all and (max-width: 768px) {
-    #posting  {
+    #map-posting  {
         min-width: 230px;
         max-width: 330px;
         margin-bottom:28px;
@@ -154,36 +141,8 @@
     }
 }
 
-#sexplace {
- 	font-family: Roboto;
-    font-size: 15px;
-    font-weight: 300;
-
-	min-width:300px;
-	margin-top:10px;
-	margin-bottom:10px;
-	margin-right:10px;
-	padding: 0 11px 0 13px;
-    text-overflow: ellipsis;
-
-    display: inline;
-}
-
-#sexsubmit {
-	height: 40px;
- 	font-family: Roboto;
-    font-size: 15px;
-    font-weight: 300;
-
-	//width:50%;
-	min-width:300px;
-	margin-top:5px;
-	margin-bottom:5px;
-	margin-right:10px;
-	padding: 0 11px 0 13px;
-    text-overflow: ellipsis;
-
-    display: inline;
+#map-posting-form {
+   /* just to be selected in jquery for 'enter' key to submit */
 }
 
 #map-canvas {
@@ -195,37 +154,6 @@
     width: 100%; 
     height: 93%; 
     position: absolute;
-}
-
-.controls {
-    margin-top: 16px;
-    border: 1px solid transparent;
-    border-radius: 2px 0 0 2px;
-    box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    height: 32px;
-    outline: none;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-}
-
-#pac-input {
-    background-color: #fff;
-    font-family: Roboto;
-    font-size: 15px;
-    font-weight: 300;
-    margin-left: 12px;
-    padding: 0 11px 0 13px;
-    text-overflow: ellipsis;
-    width:30%;
-    min-width: 150px;
-}
-
-/* mobile phone */
-@media all and (max-width: 768px) {
-    #pac-input {
-        font-size: 12px;
-        width:55%;
-    }
 }
 
 #pac-input:focus {
@@ -250,4 +178,117 @@
     font-family: Roboto;
     font-size: 13px;
     font-weight: 300;
+}
+
+.controls {
+    margin-top: 16px;
+    border: 1px solid transparent;
+    border-radius: 2px 0 0 2px;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    height: 32px;
+    outline: none;
+}
+
+#pac-input {
+    background-color: #fff;
+    font-family: Roboto;
+    font-size: 15px;
+    font-weight: 300;
+    margin-left: 5px;
+    padding: 0 11px 0 13px;
+    text-overflow: ellipsis;
+    width:30%;
+    min-width: 150px;
+}
+
+/* mobile phone */
+@media all and (max-width: 768px) {
+    #pac-input {
+        font-size: 12px;
+        width:55%;
+    }
+}
+
+#pac-input.ng-hide-add, #pac-input.ng-hide-remove {
+  transition: 0.5s linear all;
+}
+#pac-input.ng-hide-add { opacity:1; }
+#pac-input.ng-hide-add.ng-hide-add-active { opacity:0; }
+#pac-input.ng-hide-remove { opacity:0; }
+#pac-input.ng-hide-remove.ng-hide-remove-active { opacity:1; }
+
+#map-time-slider.ng-hide{
+  /* this is just another form of hiding an element */
+  display: inline!important;
+  position: static;
+  opacity: 0;
+}
+
+#map-time-slider.ng-hide-add, #map-time-slider.ng-hide-remove {
+  transition: 0.5s linear all;
+}
+#map-time-slider.ng-hide-add { opacity:1; }
+#map-time-slider.ng-hide-add.ng-hide-add-active { opacity:0; }
+#map-time-slider.ng-hide-remove { opacity:0; }
+#map-time-slider.ng-hide-remove.ng-hide-remove-active { opacity:1; }
+
+/* --------------------------------------------------------------------------------------------------------
+MAP - SEARCHBOX TOGGLE
+-------------------------------------------------------------------------------------------------------- */ 
+#map-search-toggle{
+    /* to be selected by google map to put it up there */
+    margin-top : 15px;
+
+    margin-top:15px;
+    margin-left:20px;
+}
+
+.nav-burger {
+  margin: 0 auto;
+/* End Example */
+  opacity: 0.7;
+  width: 3.25em;
+  cursor: pointer;
+  position: relative;
+  transition: all .35s;
+  color: #6897bb;
+  .line {
+    height: 0.65em;
+    border-radius: .15em;
+    width: 3.25em;
+    background-color: #6897bb;
+    transition: all .35s;
+    position: relative;
+  }
+  .text {
+    margin: .65em 0;
+    text-align: center;
+    text-transform: uppercase;
+    font-family: 'Montserrat', sans-serif;
+    line-height: .4em;
+    font-size: 1.2em;
+    font-weight: 700;
+    transition: all .35s;
+  }
+}
+
+.nav-burger.active {
+  .line {
+    position: relative;
+    &:first-child {
+      transform: rotate(45deg) translate(0.513em, -0.25em);
+      right: 0.913em;
+      top: 1.25em;
+    }
+    &:last-child {
+      transform: rotate(-45deg) translate(0.569em, 0.25em);
+      top: .5em;
+      right: 0.969em;
+    }
+  }
+  .text {
+    opacity: 0;
+    font-size: .25em;
+  }
 }

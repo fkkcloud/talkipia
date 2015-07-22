@@ -16,6 +16,10 @@
 	<!-- angular-route -->
     <script src="angular-route.min.js"></script>
 
+    <!-- angular-animate -->
+	<script src="angular-animate.min.js"></script>
+
+
     <!-- angular-slider -->
     <script src="slider.js"></script> 
 	<link rel="stylesheet" type="text/css" href="slider.css">
@@ -32,9 +36,6 @@
    <!-- google maps API -->
    <script type="text/javascript"
       src="https://maps.googleapis.com/maps/api/js?v=3.20&libraries=places&key=AIzaSyCORDb-KW_Im-kDVydg-JHv8ikamWkFIMw">
-   </script>
-   <script type="text/javascript" 
-   	  src="http://google-maps-utility-library-v3.googlecode.com/svn/trunk/infobox/src/infobox.js">
    </script>
 
 	<!-- express static use -->
@@ -66,41 +67,44 @@
 	                  	</a>
 	                </li>
 				</ul>
-				<!-- let's distract user by hiding username like hiding clock at casino!
-				<p ng-if='currentUser' class="navbar-text navbar-right" id='google'>
-	               Signed in as {{currentUser.userName}}
-	       		</p>
-	       		-->
 			</div>
 		</div>
 	</nav>
 
 	<!-- global map -->
 	<div> <!-- this is for multiple page setup later <div ng-if='currentPageId == pageId.post'>-->
-		<input id="pac-input" class="controls" type="text" placeholder="Search Location">
+		<div app-map=""></div>
 
-      	<button ng-click= 'moveToCurrentLocation()' class="btn btn-info" id='btn-curr'> Me </button>
+		<div class="nav-burger" id="map-search-toggle">
+		  <div class="line"></div>
+		  <div class="text">Find</div>
+		  <div class="line"></div>
+		</div>
 
-      	<form ng-controller='PostsCtrl' onSubmit="return false;" ng-submit='addPost()' name='postForm' id='posting-form' novalidate>
+		<input ng-show="toggleSearchLocation == true" id="pac-input" class="controls" type="text" placeholder="Search Location">
+
+      	<button ng-click= 'moveToCurrentLocation()' class="btn btn-info" id='map-btn-curr'> Me </button>
+
+      	<form ng-controller='PostsCtrl' onSubmit="return false;" ng-submit='addPost()' name='postForm' id='map-posting-form' novalidate>
       		<input  type='text' 
       				ng-model='content' 
       				ng-focus='moveToPostLocation()'
       				maxlength='30' 
-      				id='posting' 
+      				id='map-posting' 
       				placeholder='what will happen today?' required>
       		<button ng-disabled='postForm.$invalid' 
   				ng-click='addPost()' 
   				class="btn btn-danger btn-lg btn-block" 
-  				id='btn-submit'> {{ timevalue | date:"mm : ss" }} 
+  				id='map-btn-submit'> {{ timevalue | date:"mm : ss" }} 
   			</button>	
       	</form>
 
 
-      	<div id='timeSlider'>
+      	<div ng-show="toggleTimeSlider == true" id='map-time-slider'>
 			<slider floor="5000" ceiling="300000" step="20" precision="2" ng-model="timevalue"></slider>
 		</div>
 
-		<div app-map=""></div>
+		
 	</div>
 
 	<!-- pages ngview temp filter for iPhone-->
