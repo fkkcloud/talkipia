@@ -22,20 +22,21 @@
 	}
 
 	#postmsg {
+		display: inline-block;
 	    font-family: Roboto;
 	    font-size: 15px;
 	    font-weight: 300;
 	    text-overflow: ellipsis;
 	    margin:5px;
-	    padding:6px;
+	    padding:2px;
 	    text-align: center;
 	}
 
-	#postlocal {
-		max-width: none !important;
-		float: right;
-		margin: 0px 0px 0px 0px;
-		z-index: 1;
+	.posticon {
+	  display: inline;
+	  width: 21px;
+	  height: 21px;
+	  margin-left: -4px;
 	}
 
 	.coupling {
@@ -149,10 +150,14 @@
 	  from { width: 10% }
 	  to   { width: 0%   }
 	}
+
 </style>
 
 <div id="iw-container">
 	<div ng-class="get_coupling(postcouplestatus)"> </div>
 	<div class="postlifebar"></div>
     <div id="postmsg">{{msg}}</div>
+    <span ng-show="postlocalstatus == true">
+		<img class="posticon" ng-src="earth.png" alt="localStatus" title="">
+	</span>
 </div>

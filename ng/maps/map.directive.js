@@ -20,28 +20,32 @@ angular.module('app')
         var isGuidtgtChanged;
 
         var imagePost = {
-            url: 'https://catchme.ifyoucan.com/images/pictures/IYC_Icons/IYC_Location_Icon_Small.png',
+            //url: 'https://catchme.ifyoucan.com/images/pictures/IYC_Icons/IYC_Location_Icon_Small.png',
+            url: 'Default_Marker.png',
             size: new google.maps.Size(100, 100),
             origin: new google.maps.Point(0, 0),
             anchor: new google.maps.Point(17, 34),
             scaledSize: new google.maps.Size(1, 1)
         };
         var imageTarget = {
-            url: 'http://www.clker.com/cliparts/U/P/j/M/I/i/x-mark-yellow-md.png',
+            //url: 'http://www.clker.com/cliparts/U/P/j/M/I/i/x-mark-yellow-md.png',
+            url: 'X_Marker.png',
             size: new google.maps.Size(100, 100),
             origin: new google.maps.Point(0, 0),
             anchor: new google.maps.Point(17, 34),
             scaledSize: new google.maps.Size(25, 25)
         };
         var imageUserLogin = {
-            url: 'http://www.clker.com/cliparts/q/o/2/K/g/V/location-symbol-map-md.png',
+            //url: 'http://www.clker.com/cliparts/q/o/2/K/g/V/location-symbol-map-md.png',
+            url: 'Current_Location_Marker.png',
             size: new google.maps.Size(100, 100),
             origin: new google.maps.Point(0, 0),
             anchor: new google.maps.Point(17, 34),
             scaledSize: new google.maps.Size(20, 33)
         };
         var imageListener = {
-            url: 'http://2.bp.blogspot.com/-djMa_n5nAEM/T1Gvx_-7-zI/AAAAAAAAAQ4/-1N6lleQvZc/s1600/blinking_dot.gif',
+            //url: 'http://2.bp.blogspot.com/-djMa_n5nAEM/T1Gvx_-7-zI/AAAAAAAAAQ4/-1N6lleQvZc/s1600/blinking_dot.gif',
+            url: 'Blink.gif',
             size: new google.maps.Size(100, 100),
             origin: new google.maps.Point(0, 0),
             anchor: new google.maps.Point(10, 10),
@@ -321,7 +325,15 @@ angular.module('app')
                                             PostsSvc.remove(post);
                                             swal("Deleted!", "Your imaginary file has been deleted.", "success");
                                         } else {
-                                            infoWindow.open(map , marker);
+                                            var currentDate      = new Date();
+                                            var currentTimeMilli = currentDate.getTime();
+                                            var postlife         = ((post.lifeend - currentTimeMilli) >= 0) ? (post.lifeend - currentTimeMilli) : 0;
+                                            var lifepercentage = (postlife / post.lifespan).toFixed(2)
+
+                                            if (lifepercentage > 0){
+                                                child_scope.postlifepercentage = lifepercentage;
+                                                infoWindow.open(map , marker);
+                                            }
                                         }
                                         
                                     }); 
