@@ -28,7 +28,7 @@ NAVIGATION BAR TITLE
     font-weight: 300;  
 }
 /* --------------------------------------------------------------------------------------------------------
-MAP
+MAP - TIME SLIDER
 -------------------------------------------------------------------------------------------------------- */ 
 #map-time-slider {
     font-family: Roboto; 
@@ -59,7 +59,28 @@ MAP
     }
 }
 
-// moving to current location button
+/* overriding original ng-hide to layout google maps UI position 
+    original ng-hide will push the position to -9999, -9999 and this is
+    making problem with google maps' BOTTOM_CENTER element place.
+*/
+#map-time-slider.ng-hide{
+  /* this is just another form of hiding an element */
+  display: inline!important;
+  position: static;
+  opacity: 0;
+}
+
+#map-time-slider.ng-hide-add, #map-time-slider.ng-hide-remove {
+  transition: 0.5s linear all;
+}
+#map-time-slider.ng-hide-add { opacity:1; }
+#map-time-slider.ng-hide-add.ng-hide-add-active { opacity:0; }
+#map-time-slider.ng-hide-remove { opacity:0; }
+#map-time-slider.ng-hide-remove.ng-hide-remove-active { opacity:1; }
+
+/* --------------------------------------------------------------------------------------------------------
+MAP - MOVE TO CURR LOCATION
+-------------------------------------------------------------------------------------------------------- */ 
 #map-btn-curr {
     font-family: Roboto;
     font-size: 13px;
@@ -86,7 +107,9 @@ MAP
     }
 }
 
-// moving to current location button
+/* --------------------------------------------------------------------------------------------------------
+MAP - BUTTONN TO SUBMIT POST
+-------------------------------------------------------------------------------------------------------- */ 
 #map-btn-submit {
     font-family: Roboto;
     font-size: 13px;
@@ -110,6 +133,9 @@ MAP
     }
 }
 
+/* --------------------------------------------------------------------------------------------------------
+MAP - ACTUAL FORM TO WRITE
+-------------------------------------------------------------------------------------------------------- */ 
 #map-posting {
     font-family: Roboto; 
     font-size: 15px;
@@ -145,6 +171,9 @@ MAP
    /* just to be selected in jquery for 'enter' key to submit */
 }
 
+/* --------------------------------------------------------------------------------------------------------
+MAP - CANVAS
+-------------------------------------------------------------------------------------------------------- */ 
 #map-canvas {
 
     /* Remove any browser-default margins. */
@@ -156,6 +185,9 @@ MAP
     position: absolute;
 }
 
+/* --------------------------------------------------------------------------------------------------------
+MAP - SEARCH LOCATION
+-------------------------------------------------------------------------------------------------------- */ 
 #pac-input:focus {
     border-color: #4d90fe;
 }
@@ -218,21 +250,6 @@ MAP
 #pac-input.ng-hide-remove { opacity:0; }
 #pac-input.ng-hide-remove.ng-hide-remove-active { opacity:1; }
 
-#map-time-slider.ng-hide{
-  /* this is just another form of hiding an element */
-  display: inline!important;
-  position: static;
-  opacity: 0;
-}
-
-#map-time-slider.ng-hide-add, #map-time-slider.ng-hide-remove {
-  transition: 0.5s linear all;
-}
-#map-time-slider.ng-hide-add { opacity:1; }
-#map-time-slider.ng-hide-add.ng-hide-add-active { opacity:0; }
-#map-time-slider.ng-hide-remove { opacity:0; }
-#map-time-slider.ng-hide-remove.ng-hide-remove-active { opacity:1; }
-
 /* --------------------------------------------------------------------------------------------------------
 MAP - SEARCHBOX TOGGLE
 -------------------------------------------------------------------------------------------------------- */ 
@@ -277,11 +294,19 @@ MAP - SEARCHBOX TOGGLE
   .line {
     position: relative;
     &:first-child {
+      -ms-transform: rotate(45deg) translate(0.513em, -0.25em);
+      -webkit-transform: rotate(45deg) translate(0.513em, -0.25em);
+      -moz-transform: rotate(45deg) translate(0.513em, -0.25em);
+      -o-transform: rotate(45deg) translate(0.513em, -0.25em);
       transform: rotate(45deg) translate(0.513em, -0.25em);
       right: 0.913em;
       top: 1.25em;
     }
     &:last-child {
+      -ms-transform: rotate(-45deg) translate(0.569em, 0.25em);
+      -webkit-transform: rotate(-45deg) translate(0.569em, 0.25em);
+      -moz-transform: rotate(-45deg) translate(0.569em, 0.25em);
+      -o-transform: rotate(-45deg) translate(0.569em, 0.25em);
       transform: rotate(-45deg) translate(0.569em, 0.25em);
       top: .5em;
       right: 0.969em;
