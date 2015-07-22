@@ -52,6 +52,17 @@ angular.module('app')
 	};
 	*/
 
+	// enables enter key to submit post form
+	$timeout(function(){
+		document.getElementById('posting').onkeypress = function(event){
+			//console.log("Inside keypress",event.which);
+			if (event.which == '13'){
+				//console.log("enter pressed");
+				$('form#posting-form').submit();
+			}
+		}
+	});
+
     //------------------------------------------------------------------------------------
     // SOCKET
     //------------------------------------------------------------------------------------

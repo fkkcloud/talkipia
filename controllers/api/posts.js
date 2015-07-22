@@ -109,7 +109,7 @@ router.post('/update_guidtgt', function(req, res, next){
     	Post.find(query, function(err, post){
     		if (err) return res.send(500, { error: err });
 
-    		console.log('POST - /update_guidtgt log :', doc);
+    		//console.log('POST - /update_guidtgt log :', doc);
 
     		return res.status(201).json(post);
     	});
@@ -121,7 +121,7 @@ router.post('/posts_delete', function(req, res, next){
 	Post.remove({ _id: req.body._id }, function(err, doc){
 		if (err) { return next(err); }
 
-		console.log('POST - /posts_delete log:', doc);
+		//console.log('POST - /posts_delete log:', doc);
 		
 		websockets.broadcast('remove_post', req.body._id);
 		res.status(201);

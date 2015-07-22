@@ -40,12 +40,6 @@
 	<!-- express static use -->
 	<script src='/app.js'></script> 
 
-	<script type="text/javascript" language="text/javascript"> 
-		function handleBrowserCloseButton(event) { 
-	    	alert("REALLY? MAN!");  
-		} 
-	</script>
-
 </head>
 <body ng-app='app' ng-controller='ApplicationCtrl' onpagehide="handleBrowserCloseButton(event);">
 	<!-- navigation bar -->
@@ -87,18 +81,20 @@
 
       	<button ng-click= 'moveToCurrentLocation()' class="btn btn-info" id='btn-curr'> Me </button>
 
-      	<form ng-controller='PostsCtrl' name='postForm' novalidate>
+      	<form ng-controller='PostsCtrl' onSubmit="return false;" ng-submit='addPost()' name='postForm' id='posting-form' novalidate>
       		<input  type='text' 
       				ng-model='content' 
       				ng-focus='moveToPostLocation()'
-      				maxlength='20' 
+      				maxlength='30' 
       				id='posting' 
       				placeholder='what will happen today?' required>
       		<button ng-disabled='postForm.$invalid' 
-      				ng-click='addPost()' 
-      				class="btn btn-danger btn-lg btn-block" 
-      				id='btn-submit'> {{ timevalue | date:"mm : ss" }} </button>
+  				ng-click='addPost()' 
+  				class="btn btn-danger btn-lg btn-block" 
+  				id='btn-submit'> {{ timevalue | date:"mm : ss" }} 
+  			</button>	
       	</form>
+
 
       	<div id='timeSlider'>
 			<slider floor="5000" ceiling="300000" step="20" precision="2" ng-model="timevalue"></slider>
