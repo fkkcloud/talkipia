@@ -3,8 +3,9 @@ var SessionHistory = require('../../models/sessionhistory');
 var router = require('express').Router();
 var db = require('../../db.js');
 var websockets = require('../../web_socket/websockets.js');
+var cors = require('cors');
 
-router.get('/', function(req, res, next){
+router.get('/', cors(), function(req, res, next){
 	Session.find()
 	.sort('-date')
 	.exec(function(err, sessions){
@@ -13,7 +14,7 @@ router.get('/', function(req, res, next){
 	});
 });
 
-router.post('/', function(req, res, next){
+router.post('/', cors(), function(req, res, next){
 	//console.log('location:', req.body.location);
 	//console.log('watchloc:', req.body.watchloc);
 	//console.log('guid:   ', req.body.guid);
@@ -78,7 +79,7 @@ router.post('/', function(req, res, next){
 });
 
 // for manual remove
-router.put('/', function(req, res, next){
+router.put('/', cors(), function(req, res, next){
 	//console.log("session remove request for :", req.body.guid);
 	var query = { 'guid': req.body.guid };
 	Session.findOneAndRemove(query, function(err){
@@ -90,7 +91,7 @@ router.put('/', function(req, res, next){
 });
 
 // for updating watch location constantly
-router.post('/update_session', function(req, res, next){
+router.post('/update_session', cors(), function(req, res, next){
 	var query       = {'guid':req.body.guid};
 	var newWatchLoc = {'watchloc':req.body.watchloc};
 	var options     = {upsert:false};
@@ -105,7 +106,7 @@ router.post('/update_session', function(req, res, next){
 });
 
 // for updating watch location constantly
-router.post('/update_coupling', function(req, res, next){
+router.post('/update_coupling', cors(), function(req, res, next){
 
 	var query      = {'guid'    :req.body.guid};
 	var newGuidtgt = {'guidtgt' :req.body.guidtgt};

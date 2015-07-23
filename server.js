@@ -3,13 +3,14 @@ var bodyParser = require('body-parser');
 var logger = require('morgan');
 var socket = require('./web_socket/websockets');
 var favicon = require('serve-favicon');
-
-
+var cors = require('cors');
 
 var app = express();
+
 app.use(favicon(__dirname + '/resources/favicon.ico'));
 app.use(bodyParser.json());
 app.use(logger('dev'));
+app.use(cors());
 
 app.use('/', require('./controllers')); // get router from controller's index.js
 
@@ -19,4 +20,3 @@ var server = app.listen(process.env.PORT || 5000, function(){
 });
 
 socket.connect(server); // web socket server가 된다.
-

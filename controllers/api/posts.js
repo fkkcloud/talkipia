@@ -3,8 +3,9 @@ var History = require('../../models/history');
 var router = require('express').Router();
 var db = require('../../db.js');
 var websockets = require('../../web_socket/websockets.js');
+var cors = require('cors');
 
-router.get('/', function(req, res, next){
+router.get('/', cors(), function(req, res, next){
 	Post.find()
 	.sort('-date')
 	.exec(function(err, posts){
@@ -17,7 +18,7 @@ router.get('/', function(req, res, next){
 	http://localhost:3000/api/posts/page?perpage=page
 	http://localhost:3000/api/posts/1?perpage=2
 */
-router.get('/:page', function(req, res, next){
+router.get('/:page', cors(), function(req, res, next){
 	var perPage = req.query.perpage;
 	var page    = req.params.page;
 
@@ -31,7 +32,7 @@ router.get('/:page', function(req, res, next){
     })
 });
 
-router.post('/', function(req, res, next){
+router.post('/', cors(), function(req, res, next){
 	/*
 	console.log('body:    ', req.body.body);
 	console.log('place:   ', req.body.place);
@@ -98,7 +99,7 @@ router.post('/', function(req, res, next){
 	});
 });
 
-router.post('/update_guidtgt', function(req, res, next){
+router.post('/update_guidtgt', cors(), function(req, res, next){
 	var query       = {'guid'    :req.body.guid};
 	var newGuidtgt  = {'guidtgt' :req.body.guidtgt} ;
 	var options     = {multi:true};
@@ -117,7 +118,7 @@ router.post('/update_guidtgt', function(req, res, next){
 });
 
 // for manual remove
-router.post('/posts_delete', function(req, res, next){
+router.post('/posts_delete', cors(), function(req, res, next){
 	Post.remove({ _id: req.body._id }, function(err, doc){
 		if (err) { return next(err); }
 
