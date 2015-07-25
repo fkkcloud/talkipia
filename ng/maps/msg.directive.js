@@ -1,7 +1,14 @@
 angular.module('app')
 .directive('mapMsg', function ($timeout, SessionSvc, PostsSvc) {
 
-    var link = function(scope, element, attrs) {        
+    var link = function(scope, element, attrs) {   
+
+        scope.get_localstatus = function(local_status){
+          if (local_status)
+            return "local-text";
+          else
+            return "non-local-text";
+        };     
 
         //------------------------------------------------------------------------------------
         // COUPLING CLASS

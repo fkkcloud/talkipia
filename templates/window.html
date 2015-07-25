@@ -68,6 +68,14 @@
 		margin-bottom: 0px;
 	}
 
+	.local-text {
+		color: #444;
+	}
+
+	.non-local-text {
+		color: #999;
+	}
+
 	/* Chrome, Safari, Opera */
 	@-webkit-keyframes postlifeanim_a {
 	  from { width: 100% }
@@ -156,8 +164,5 @@
 <div id="iw-container">
 	<div ng-class="get_coupling(postcouplestatus)"> </div>
 	<div class="postlifebar"></div>
-    <div id="postmsg">{{msg}}</div>
-    <span ng-show="postlocalstatus == false">
-		<img class="posticon" ng-src="earth.png" alt="localStatus" title="">
-	</span>
+    <div ng-class="get_localstatus(postlocalstatus)" id="postmsg">{{msg}}</div>
 </div>
