@@ -43,14 +43,6 @@ angular.module('app')
             anchor: new google.maps.Point(17, 34),
             scaledSize: new google.maps.Size(20, 33)
         };
-        var imageListener = {
-            //url: 'http://2.bp.blogspot.com/-djMa_n5nAEM/T1Gvx_-7-zI/AAAAAAAAAQ4/-1N6lleQvZc/s1600/blinking_dot.gif',
-            url: 'Blink.gif',
-            size: new google.maps.Size(100, 100),
-            origin: new google.maps.Point(0, 0),
-            anchor: new google.maps.Point(10, 10),
-            scaledSize: new google.maps.Size(17, 17)
-        };
 
         //------------------------------------------------------------------------------------
         // EVENT HANDLERS - UPDATE
@@ -158,28 +150,41 @@ angular.module('app')
                     }
                    
                     var googleLoc = new google.maps.LatLng(watch_location.center_lat, watch_location.center_lon);
+                    
+                    var randomSize = Math.random() * 40 + 40; 
+                    var urlName    = 'Blink.gif';
 
-                    // marker option setting
-                    var markerOptions = {
-                        position: googleLoc,
-                        map: map,
-                        //animation: google.maps.Animation.BOUNCE,
-                        title: "UserPin",
-                        icon: imageListener,
-                        optimized: false
+                    var imageListener = {
+                        url: urlName,
+                        size: new google.maps.Size(100, 100),
+                        origin: new google.maps.Point(0, 0),
+                        anchor: new google.maps.Point(10, 10),
+                        scaledSize: new google.maps.Size(randomSize, randomSize)
                     };
 
-                    var marker = new google.maps.Marker(markerOptions);
+                    (function(imageListener){
+                        var markerOptions = {
+                            position: googleLoc,
+                            map: map,
+                            title: "Receiver",
+                            icon: imageListener,
+                            optimized: false
+                        };
 
-                    var user_location_marker_lifespan = 1800;
+                        var marker = new google.maps.Marker(markerOptions);
+                        var receiver_marker_lifespan = 1200;
 
-                    $timeout(
-                        (function(old_marker){
-                            return function(){
-                                old_marker.setMap(null);
-                            };
-                        }(marker)), 
-                    user_location_marker_lifespan);
+                        $timeout(
+                            (function(old_marker){
+                                return function(){
+                                    old_marker.setMap(null);
+                                    old_marker = null;
+                                };
+                            }(marker)), 
+                        receiver_marker_lifespan);
+
+                    }(imageListener))
+                    
                 }
             });
         }
