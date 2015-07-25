@@ -183,7 +183,7 @@ angular.module('app')
                             }(marker)), 
                         receiver_marker_lifespan);
 
-                    }(imageListener))
+                    }(imageListener));
                     
                 }
             });
