@@ -6,6 +6,91 @@ angular.module('app')
     // INITIAL
     //------------------------------------------------------------------------------------
 
+    window.onbeforeunload = function(e) {
+    	SessionSvc.remove($scope.guid);
+	  	return 'You are the exiting exciting session.';
+	};
+
+	$scope.initSession = function(){
+		function getCurrLocSuccess(pos) {	
+			////////////////// PHYSICAL LOCATION
+			// 맨처음에는 유저의 실제 위치(앱에 입장했을때의 위치)와 센터 포지션을 같이 보내고,
+			// 센터 포지션은 계속 업데이트 되어야 한다.
+	        var crd = pos.coords;
+
+	        var googleLoc = new google.maps.LatLng(crd.latitude, crd.longitude);
+
+	        // save the user location into application scope variable
+	        $scope.userLocation = {
+	        	lat: crd.latitude,
+	        	lon: crd.longitude
+	        };
+
+	        var location = {
+	    		lat:googleLoc.lat(),
+	    		lon:googleLoc.lng()
+	    	};
+	    	var locationJSON = JSON.stringify(location);
+	    	//console.log("setting location", locationJSON);
+
+	    	////////////////// WATCH LOCATION
+	    	var bounds = $scope.map.getBounds();
+	        var ne = bounds.getNorthEast(); // LatLng of the north-east corner
+	        var sw = bounds.getSouthWest(); // LatLng of the south-west corder
+	        //You get north-west and south-east corners from the two above:
+
+	        var current_map_nw = { 
+	            lat: ne.lat(), 
+	            lon: sw.lng()
+	        };
+	        var current_map_se = {
+	            lat: sw.lat(), 
+	            lon: ne.lng()
+	        };
+
+	        var current_map_center = {
+	        	lat:window.localStorage.latitude,
+	        	lon:window.localStorage.longitude
+	    	};
+
+	        var watchloc = {
+	            nw_lat    : current_map_nw.lat,
+	            nw_lon    : current_map_nw.lon,
+	            se_lat    : current_map_se.lat,
+	            se_lon	  : current_map_se.lon,
+	            center_lat: current_map_center.lat,
+	            center_lon: current_map_center.lon
+	        }
+
+        	var watchlocJSON = JSON.stringify(watchloc);
+        	//console.log("setting watchloc", watchlocJSON);
+            
+            ////////////////// LOCATION UPDATE WITH SESSION ENTER
+            //여기서 비동기적으로 유저의 로케이션을 얻고 세션을 보낼수 있다.
+			var session = {
+				guidtgt : $scope.guidtgt,
+				guid    : $scope.guid,
+				location: locationJSON,
+				watchloc: watchlocJSON
+			};
+			SessionSvc.enter(session); // 서버에서 유저가 들어옴을 알린다.
+	    }
+
+	    function getCurrLocError(err) {
+        	swal("", "Need to turn on location service for proper use.");
+            console.warn('ERROR(' + err.code + '): ' + err.message);
+        }
+
+        // init map and place some markers, so everything start with this function.
+        var options = {
+		  enableHighAccuracy: false,
+		  timeout: 5000,
+		  maximumAge: 0
+		};
+	    navigator.geolocation.getCurrentPosition(getCurrLocSuccess, getCurrLocError, options);
+		swal({   title: "",   text: "Retreiving currnet location..",   timer: 3500,   showConfirmButton: false });
+	};
+
     // load and set latest guid
 	if (window.localStorage.guid == 'undefined' || 
 		window.localStorage.guid == 'null' ||
@@ -33,7 +118,6 @@ angular.module('app')
 	// value from time slider in UI
 	// default is max instant life span
     $scope.timevalue = ConfigSvc.maxInstantLifeSpan;
-
 
 	// user's current location storage
 	$scope.userLocation = {
@@ -87,7 +171,8 @@ angular.module('app')
 		url = ConfigSvc.web_socket + ConfigSvc.local_ip + ':' + ConfigSvc.port; // developmet on socket locally 
 	}
 	else {
-		url = ConfigSvc.web_socket_secure + ConfigSvc.deploy_dns; // production deploy version - still debug mode
+		url = ConfigSvc.web_socket + ConfigSvc.deploy_dns; // production deploy version - still debug mode
+		//url = ConfigSvc.web_socket_secure + ConfigSvc.deploy_dns; // production deploy version - still debug mode
 	}
 
 	/* 개발과정이 끝나고 배포시에는 위부분을 지우고 아래 코드만 남겨도 된다.
@@ -100,80 +185,6 @@ angular.module('app')
 
 			// send guid to server for ws identification
 			connection.send($scope.guid);
-
-			function getCurrLocSuccess(pos) {
-				
-				////////////////// PHYSICAL LOCATION
-				// 맨처음에는 유저의 실제 위치(앱에 입장했을때의 위치)와 센터 포지션을 같이 보내고,
-				// 센터 포지션은 계속 업데이트 되어야 한다.
-	            var crd = pos.coords;
-
-	            var googleLoc = new google.maps.LatLng(crd.latitude, crd.longitude);
-
-	            // save the user location into application scope variable
-	            $scope.userLocation = {
-	            	lat: crd.latitude,
-	            	lon: crd.longitude
-	            };
-
-	            var location = {
-	        		lat:googleLoc.lat(),
-	        		lon:googleLoc.lng()
-	        	};
-	        	var locationJSON = JSON.stringify(location);
-	        	//console.log("setting location", locationJSON);
-
-	        	////////////////// WATCH LOCATION
-	        	var bounds = $scope.map.getBounds();
-	            var ne = bounds.getNorthEast(); // LatLng of the north-east corner
-	            var sw = bounds.getSouthWest(); // LatLng of the south-west corder
-	            //You get north-west and south-east corners from the two above:
-
-	            var current_map_nw = { 
-	                lat: ne.lat(), 
-	                lon: sw.lng()
-	            };
-	            var current_map_se = {
-	                lat: sw.lat(), 
-	                lon: ne.lng()
-	            };
-
-	            var current_map_center = {
-	            	lat:window.localStorage.latitude,
-	            	lon:window.localStorage.longitude
-	        	};
-
-	            var watchloc = {
-		            nw_lat    : current_map_nw.lat,
-		            nw_lon    : current_map_nw.lon,
-		            se_lat    : current_map_se.lat,
-		            se_lon	  : current_map_se.lon,
-		            center_lat: current_map_center.lat,
-		            center_lon: current_map_center.lon
-		        }
-
-	        	var watchlocJSON = JSON.stringify(watchloc);
-	        	//console.log("setting watchloc", watchlocJSON);
-	            
-	            ////////////////// LOCATION UPDATE WITH SESSION ENTER
-	            //여기서 비동기적으로 유저의 로케이션을 얻고 세션을 보낼수 있다.
-				var session = {
-					guidtgt : $scope.guidtgt,
-					guid    : $scope.guid,
-					location: locationJSON,
-					watchloc: watchlocJSON
-				};
-				SessionSvc.enter(session); // 서버에서 유저가 들어옴을 알린다.
-	        }
-
-	        function getCurrLocError(err) {
-	        	swal("", "Need to turn on location service for proper use.");
-	            console.warn('ERROR(' + err.code + '): ' + err.message);
-	        }
-
-	        /* init map and place some markers, so everything start with this function. */
-	        navigator.geolocation.getCurrentPosition(getCurrLocSuccess, getCurrLocError);
-
 			console.log('WebSocket connected');
 		};
 
@@ -288,8 +299,13 @@ angular.module('app')
             console.warn('ERROR(' + err.code + '): ' + err.message);
         }
 
-        /* init map and place some markers, so everything start with this function. */
-        navigator.geolocation.getCurrentPosition(getCurrLocSuccess, getCurrLocError);
+        // init map and place some markers, so everything start with this function.
+        var options = {
+		  enableHighAccuracy: true,
+		  timeout: 8000,
+		  maximumAge: 0
+		};
+        navigator.geolocation.getCurrentPosition(getCurrLocSuccess, getCurrLocError, options);
 
         swal({   title: "",   text: "Moving to current location..",   timer: 1500,   showConfirmButton: false });
 	};

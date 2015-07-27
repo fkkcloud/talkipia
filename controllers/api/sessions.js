@@ -34,9 +34,7 @@ router.post('/', cors(), function(req, res, next){
 		guidtgt  : req.body.guidtgt,
 	});
 */
-
 	var query = {'guid': req.body.guid};
-	
 	var update_session = {
 		location : req.body.location,
 		watchloc : req.body.watchloc,
@@ -44,13 +42,12 @@ router.post('/', cors(), function(req, res, next){
 		guidtgt  : req.body.guidtgt,
 	};
 	
-
-	Session.findOneAndUpdate(query, update_session, {upsert:true}, function(err, doc){
+	Session.findOneAndUpdate(query, update_session, {upsert:true, 'new':true}, function(err, doc){
 	    if (err) return res.send(500, { error: err });
 
 	    console.log('POST - / for session upsert log :', doc);
 
-	    SessionHistory.findOneAndUpdate(query, update_session, {upsert:true}, function(err, doc){
+	    SessionHistory.findOneAndUpdate(query, update_session, {upsert:true, 'new':true}, function(err, doc){
 	    	console.log("session history saved");
 	    });
 
@@ -85,7 +82,7 @@ router.put('/', cors(), function(req, res, next){
 	Session.findOneAndRemove(query, function(err){
 		if (err) { return next(err); }
 		
-		//console.log("session removed successfully");
+		console.log("session removed successfully:", req.body.guid);
 		res.status(200);
 	});
 });

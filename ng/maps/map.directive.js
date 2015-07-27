@@ -793,6 +793,7 @@ angular.module('app')
         // EXECUTE
         //------------------------------------------------------------------------------------
         initMap();
+        scope.initSession(); // this have to run always after the map is initialized.
     };
     
     return {
