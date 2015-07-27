@@ -158,7 +158,7 @@ angular.module('app')
                         url: urlName,
                         size: new google.maps.Size(100, 100),
                         origin: new google.maps.Point(0, 0),
-                        anchor: new google.maps.Point(10, 10),
+                        anchor: new google.maps.Point(randomSize * 0.5 + 5, randomSize * 0.5 + 14),
                         scaledSize: new google.maps.Size(randomSize, randomSize)
                     };
 
