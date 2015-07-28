@@ -76,6 +76,18 @@ router.post('/', cors(), function(req, res, next){
 	*/
 });
 
+// for manual find
+router.get('/find', cors(), function(req, res, next){
+	//console.log("session remove request for :", req.body.guid);
+	var query = { 'guid': req.body.guid };
+	Session.findOne(query, function(err, session){
+		if (err) { return next(err); }
+		
+		console.log("session found one successfully:", req.body.guid);
+		res.status(200).json(session);
+	});
+});
+
 // for manual remove
 router.put('/', cors(), function(req, res, next){
 	//console.log("session remove request for :", req.body.guid);
