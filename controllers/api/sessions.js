@@ -36,12 +36,13 @@ router.post('/', cors(), function(req, res, next){
 */
 	var query = {'guid': req.body.guid};
 	var update_session = {
-		location : req.body.location,
-		watchloc : req.body.watchloc,
-		guid     : req.body.guid,
-		guidtgt  : req.body.guidtgt,
+		location 	: req.body.location,
+		watchloc 	: req.body.watchloc,
+		guid     	: req.body.guid,
+		guidtgt  	: req.body.guidtgt,
+		devicetoken : req.body.devicetoken,
 	};
-	
+
 	Session.findOneAndUpdate(query, update_session, {upsert:true, 'new':true}, function(err, doc){
 	    if (err) return res.send(500, { error: err });
 

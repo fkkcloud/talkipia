@@ -5,6 +5,7 @@ angular.module('app')
 	};
 
 	this.enter = function(session){
+		session.devicetoken = '0'; // for web, there is no devicetoken
 		return $http.post('/api/sessions', session);
 	};
 

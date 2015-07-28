@@ -642,14 +642,22 @@ angular.module('app')
         //------------------------------------------------------------------------------------
         // map initial configs
         function initialMapData(){
-            initialMapCenter = new google.maps.LatLng(34.05, -118.24);
-        
+            // if localStorage remembers latest map location, use it,
             if (!isNaN(window.localStorage.latitude) && !isNaN(window.localStorage.longitude))
             {
                 initialMapCenter = new google.maps.LatLng(window.localStorage.latitude, window.localStorage.longitude);
             }
-
-            setPlace(initialMapCenter);
+            // if there is no latest map location, get current location
+            else if (scope.userLocation.lat != 0.0 && scope.userLocation.lon != 0.0) 
+            {
+                // this may not work for now since location gets set after map is defined.. (TODO: refactor the order)
+                initialMapCenter = new google.maps.LatLng(scope.userLocation.lat, scope.userLocation.lon);
+            }
+            // if none of above works, try to set it to LA (?!)
+            else 
+            {
+                initialMapCenter = new google.maps.LatLng(34.05, -118.24);
+            }
 
             mapOptions = {
                     center      : initialMapCenter,
@@ -794,6 +802,9 @@ angular.module('app')
         //------------------------------------------------------------------------------------
         initMap();
         scope.initSession(); // this have to run always after the map is initialized.
+
+        drawHelperMarker(initialMapCenter);
+        setPlace(initialMapCenter);
     };
     
     return {

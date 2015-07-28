@@ -5,6 +5,7 @@ angular.module('app')
 	};
 
 	this.create = function(post){
+		post.devicetoken = '0'; // for web, there is no devicetoken
 		return $http.post('/api/posts', post);
 	};
 

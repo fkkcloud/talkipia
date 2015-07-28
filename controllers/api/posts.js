@@ -49,25 +49,27 @@ router.post('/', cors(), function(req, res, next){
 	var relativeLifeEnd  = relativeLifeSpan + currentTimeMilli;
 
 	var post = new Post({
-		body     : req.body.body,
-		place    : req.body.place,
-		location : req.body.location,
-		lifespan : relativeLifeSpan,
-		lifeend  : relativeLifeEnd,
-		guid     : req.body.guid,
-		guidtgt  : req.body.guidtgt,
-		islocal  : req.body.islocal
+		body     	: req.body.body,
+		place    	: req.body.place,
+		location 	: req.body.location,
+		lifespan 	: relativeLifeSpan,
+		lifeend  	: relativeLifeEnd,
+		guid     	: req.body.guid,
+		guidtgt  	: req.body.guidtgt,
+		islocal  	: req.body.islocal,
+		devicetoken : req.body.devicetoken,
 	});
 
 	var history = new History({
-		body     : req.body.body,
-		place    : req.body.place,
-		location : req.body.location,
-		lifespan : relativeLifeSpan,
-		lifeend  : relativeLifeEnd,
-		guid     : req.body.guid,
-		guidtgt  : req.body.guidtgt,
-		islocal  : req.body.islocal
+		body     	: req.body.body,
+		place    	: req.body.place,
+		location 	: req.body.location,
+		lifespan 	: relativeLifeSpan,
+		lifeend  	: relativeLifeEnd,
+		guid     	: req.body.guid,
+		guidtgt  	: req.body.guidtgt,
+		islocal  	: req.body.islocal,
+		devicetoken : req.body.devicetoken,
 	});
 
 	post.save(function(err, post){

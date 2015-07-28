@@ -331,7 +331,9 @@ angular.module('app')
 	        }
 		}
 
-		var googleLoc = new google.maps.LatLng($scope.postLocation.lat + latDelta, $scope.postLocation.lon);
+		var centerLoc = $scope.map.getCenter();
+
+		var googleLoc = new google.maps.LatLng($scope.postLocation.lat + latDelta, centerLoc.lng());
 		$scope.map.panTo(googleLoc);
 	};
 
