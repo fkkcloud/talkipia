@@ -8,10 +8,45 @@ angular.module('app')
 
     window.onbeforeunload = function(e) {
     	SessionSvc.remove($scope.guid);
-	  	return 'You are the exiting exciting session.';
 	};
 
+	window.onpageshow = function(e) {
+		$scope.initSession();
+		if ($scope.map)
+	  		$scope.map.updateAndDrawPosts();
+	};
+
+	window.onpagehide = function(e) {
+    	SessionSvc.remove($scope.guid);
+	};
+
+
+
+	document.addEventListener("visibilitychange", function() {
+	  if (document.visibilityState == 'visible' || 
+	  	document.visibilityState == 'mozVisible' || 
+	  	document.visibilityState == 'msVisible' ||
+	  	document.visibilityState == 'webkitVisible')
+	  {
+	  	$scope.initSession();
+	  	if ($scope.map)
+	  		$scope.map.updateAndDrawPosts();
+	  	console.log("its back");
+	  } 
+	  else if (document.visibilityState == 'hidden' || 
+	  	document.visibilityState == 'mozHidden' || 
+	  	document.visibilityState == 'msHidden' ||
+	  	document.visibilityState == 'webkitHidden')
+	  {
+	  	SessionSvc.remove($scope.guid);
+	  	console.log("going to background");
+	  }
+	});
+
 	$scope.initSession = function(){
+		if ($scope.map == 'undefined' || $scope.map == 'null' || !$scope.map)
+			return;
+
 		function getCurrLocSuccess(pos) {	
 			////////////////// PHYSICAL LOCATION
 			// 맨처음에는 유저의 실제 위치(앱에 입장했을때의 위치)와 센터 포지션을 같이 보내고,
