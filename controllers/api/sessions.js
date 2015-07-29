@@ -77,7 +77,7 @@ router.post('/', cors(), function(req, res, next){
 });
 
 // for manual find
-router.get('/find', cors(), function(req, res, next){
+router.post('/find', cors(), function(req, res, next){
 	//console.log("session remove request for :", req.body.guid);
 	var query = { 'guid': req.body.guid };
 
