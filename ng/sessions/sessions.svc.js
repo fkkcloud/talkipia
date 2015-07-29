@@ -13,7 +13,7 @@ angular.module('app')
 		//console.log("deleting session");
 		//console.log('session.guid:', guid);
 		var session = {guid: guid};
-		return $http.put('/api/sessions', session);
+		return $http.post('/api/sessions/delete', session);
 	};
 
 	this.updateWatchLocation = function(current_map_nw, current_map_se, current_map_center, guid){

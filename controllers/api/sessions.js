@@ -96,7 +96,7 @@ router.post('/find', cors(), function(req, res, next){
 });
 
 // for manual remove
-router.put('/', cors(), function(req, res, next){
+router.post('/delete', cors(), function(req, res, next){
 	//console.log("session remove request for :", req.body.guid);
 	var query = { 'guid': req.body.guid };
 	Session.findOneAndRemove(query, function(err){
