@@ -97,10 +97,14 @@ router.post('/find', cors(), function(req, res, next){
 
 // for manual remove
 router.post('/delete', cors(), function(req, res, next){
-	//console.log("session remove request for :", req.body.guid);
+	console.log("session remove request for :", req.body.guid);
 	var query = { 'guid': req.body.guid };
+
 	Session.findOneAndRemove(query, function(err){
-		if (err) { return next(err); }
+		if (err) { 
+			console.log('session delete error:', err);
+			return next(err); 
+		}
 		
 		console.log("session removed successfully:", req.body.guid);
 		res.status(200);
