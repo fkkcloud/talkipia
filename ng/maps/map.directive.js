@@ -189,7 +189,22 @@ angular.module('app')
             });
         }
 
+        // check if the post is completly dead and remove that post
+        function cleanup() {
+             for (var j = 0, marker; marker = markersOnMap[j]; j++){
+                var currentDate      = new Date();
+                var currentTimeMilli = currentDate.getTime();
+                var life = marker.post.lifeend - currentTimeMilli;
+
+                if (life <= 0){
+                    console.log('cleaning up..', marker.post._id);
+                    unDrawPost(marker.post._id);
+                }
+            }
+        }
+
         function updateAndDrawPosts(){
+            cleanup();
             
             // for checking local posts - isPointingYou
             isGuidtgtChanged = prevGuidtgt != scope.guidtgt; // see if my guidtgt has changed;
