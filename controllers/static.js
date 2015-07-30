@@ -17,4 +17,8 @@ router.get('/', cors(), function(req, res){
 	res.render('app.html.ejs');
 });
 
+router.get('/privacy', cors(), function(req, res){
+	res.render('privacy.html.ejs');
+});
+
 module.exports = router;

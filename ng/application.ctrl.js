@@ -43,6 +43,22 @@ angular.module('app')
 	  }
 	});
 
+	document.addEventListener("webkitvisibilitychange", function() {
+		alert("WEBKIT!");
+	  if (document.webkitVisible)
+	  {
+	  	$scope.initSession();
+	  	if ($scope.map)
+	  		$scope.map.updateAndDrawPosts();
+	  	alert("its back");
+	  } 
+	  else if (document.webkitHidden)
+	  {
+	  	SessionSvc.remove($scope.guid);
+	  	alert("going to background");
+	  }
+	}, false);
+
 	$scope.initSession = function(){
 		if ($scope.map == 'undefined' || $scope.map == 'null' || !$scope.map)
 			return;
