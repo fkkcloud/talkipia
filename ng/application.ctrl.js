@@ -20,8 +20,6 @@ angular.module('app')
     	SessionSvc.remove($scope.guid);
 	};
 
-
-
 	document.addEventListener("visibilitychange", function() {
 	  if (document.visibilityState == 'visible' || 
 	  	document.visibilityState == 'mozVisible' || 
@@ -44,7 +42,7 @@ angular.module('app')
 	});
 
 	document.addEventListener("webkitvisibilitychange", function() {
-		alert("WEBKIT!");
+		//alert("WEBKIT!");
 	  if (document.webkitVisible)
 	  {
 	  	$scope.initSession();
