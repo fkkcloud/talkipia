@@ -20,6 +20,7 @@ angular.module('app')
     	SessionSvc.remove($scope.guid);
 	};
 
+	// session in and out events
 	document.addEventListener("visibilitychange", function() {
 	  if (document.visibilityState == 'visible' || 
 	  	document.visibilityState == 'mozVisible' || 
@@ -29,7 +30,6 @@ angular.module('app')
 	  	$scope.initSession();
 	  	if ($scope.map)
 	  		$scope.map.updateAndDrawPosts();
-	  	console.log("its back");
 	  } 
 	  else if (document.visibilityState == 'hidden' || 
 	  	document.visibilityState == 'mozHidden' || 
@@ -37,23 +37,20 @@ angular.module('app')
 	  	document.visibilityState == 'webkitHidden')
 	  {
 	  	SessionSvc.remove($scope.guid);
-	  	console.log("going to background");
 	  }
 	});
 
+	// webkit session in and out events
 	document.addEventListener("webkitvisibilitychange", function() {
-		//alert("WEBKIT!");
 	  if (document.webkitVisible)
 	  {
 	  	$scope.initSession();
 	  	if ($scope.map)
 	  		$scope.map.updateAndDrawPosts();
-	  	alert("its back");
 	  } 
 	  else if (document.webkitHidden)
 	  {
 	  	SessionSvc.remove($scope.guid);
-	  	alert("going to background");
 	  }
 	}, false);
 
