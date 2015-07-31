@@ -197,7 +197,7 @@ angular.module('app')
                 var life = marker.post.lifeend - currentTimeMilli;
 
                 if (life <= 0){
-                    console.log('cleaning up..', marker.post._id);
+                    //console.log('cleaning up..', marker.post._id);
                     unDrawPost(marker.post._id);
                 }
             }
@@ -476,7 +476,7 @@ angular.module('app')
                     scope.$emit('set:place', results[1].formatted_address); 
                 }
                 catch(err) {
-                    console.log(err);
+                    //console.log(err);
                     swal("","Location does not exists");
                     scope.$emit('set:place', "Location does not exists");
                 }

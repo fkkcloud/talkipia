@@ -34,7 +34,7 @@ angular.module('app')
         };
 
         // update watchloc when center changed.
-        console.log("updating watch location");
+        //console.log("updating watch location");
 
 		//console.log("updatedsession:", updatedsession);
 		return $http.post('/api/sessions/update_session', updatedsession);
@@ -48,7 +48,7 @@ angular.module('app')
 		};
 
 		// update watchloc when center changed.
-        console.log("updating coupling");
+        //console.log("updating coupling");
 
 		return $http.post('/api/sessions/update_coupling', updatedguidtgt)
 	};

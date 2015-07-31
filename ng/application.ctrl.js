@@ -124,7 +124,7 @@ angular.module('app')
 
 	    function getCurrLocError(err) {
         	swal("", "Need to turn on location service for proper use.");
-            console.warn('ERROR(' + err.code + '): ' + err.message);
+            //console.warn('ERROR(' + err.code + '): ' + err.message);
         }
 
         // init map and place some markers, so everything start with this function.
@@ -186,12 +186,12 @@ angular.module('app')
 		}
 
 		document.getElementById('map-posting').onfocus = function(event){
-			console.log("on focus");
+			//console.log("on focus");
 			$scope.toggleTimeSlider = true;
 		}
 
 		document.getElementById('map-posting').onblur = function(event){
-			console.log("on blur");
+			//console.log("on blur");
 			$scope.toggleTimeSlider = false;
 		}
 
@@ -231,12 +231,12 @@ angular.module('app')
 
 			// send guid to server for ws identification
 			connection.send($scope.guid);
-			console.log('WebSocket connected');
+			//console.log('WebSocket connected');
 		};
 
 		connection.onclose = function(){
 
-			console.log('WebSocket closed. Reconecting...');
+			//console.log('WebSocket closed. Reconecting...');
 			$timeout(connect, 2000);
 		};
 
@@ -250,7 +250,7 @@ angular.module('app')
 				ws:remove_post - 포스트가 시간이 다 되어서 사라질때!
 				매우중요! 
 			*/
-			console.log('ws:' + payload.type);
+			//console.log('ws:' + payload.type);
 			$rootScope.$broadcast('ws:' + payload.type, payload.data);
 		};
 	};
@@ -342,7 +342,7 @@ angular.module('app')
 
         function getCurrLocError(err) {
         	swal("", "Need to turn on location service for proper use.");
-            console.warn('ERROR(' + err.code + '): ' + err.message);
+            //console.warn('ERROR(' + err.code + '): ' + err.message);
         }
 
         // init map and place some markers, so everything start with this function.
