@@ -123,67 +123,91 @@ angular.module('app')
 
             var postbarlife = element.children().children(".postlifebar");
 
-            var postlifebar_css = postbarlife.css('-webkit-animation-duration', duration);
+            postbarlife.css('-o-animation-duration', duration);
+            postbarlife.css('-moz-animation-duration', duration);
+            postbarlife.css('-ms-animation-duration', duration);
+            postbarlife.css('-webkit-animation-duration', duration);
+            postbarlife.css('animation-duration', duration);
 
             if (scope.postlifepercentage > 0.95){
               /* Chrome, Safari, Opera */
-              var postlifebar_css = postbarlife.css('-webkit-animation-name', 'postlifeanim_a');
-              
-              var postlifebar_css = postbarlife.css('animation-name', 'postlifeanim_a');
+              postbarlife.css('-o-animation-name', 'postlifeanim_a');
+              postbarlife.css('-moz-animation-name', 'postlifeanim_a');
+              postbarlife.css('-ms-animation-name', 'postlifeanim_a');
+              postbarlife.css('-webkit-animation-name', 'postlifeanim_a');
+              postbarlife.css('animation-name', 'postlifeanim_a');
             }
             else if (scope.postlifepercentage <= 0.95 && scope.postlifepercentage > 0.9){
               /* Chrome, Safari, Opera */
-              var postlifebar_css = postbarlife.css('-webkit-animation-name', 'postlifeanim_b');
-              
-              var postlifebar_css = postbarlife.css('animation-name', 'postlifeanim_b');
+              postbarlife.css('-o-animation-name', 'postlifeanim_b');
+              postbarlife.css('-moz-animation-name', 'postlifeanim_b');
+              postbarlife.css('-ms-animation-name', 'postlifeanim_b');
+              postbarlife.css('-webkit-animation-name', 'postlifeanim_b');
+              postbarlife.css('animation-name', 'postlifeanim_b');
             }
             else if (scope.postlifepercentage <= 0.9 && scope.postlifepercentage > 0.85){
               /* Chrome, Safari, Opera */
-              var postlifebar_css = postbarlife.css('-webkit-animation-name', 'postlifeanim_c');
-              
-              var postlifebar_css = postbarlife.css('animation-name', 'postlifeanim_c');
+              postbarlife.css('-o-animation-name', 'postlifeanim_c');
+              postbarlife.css('-moz-animation-name', 'postlifeanim_c');
+              postbarlife.css('-ms-animation-name', 'postlifeanim_c');
+              postlifebar_css = postbarlife.css('-webkit-animation-name', 'postlifeanim_c');
+              postlifebar_css = postbarlife.css('animation-name', 'postlifeanim_c');
             }
             else if (scope.postlifepercentage <= 0.85 && scope.postlifepercentage > 0.75){
               /* Chrome, Safari, Opera */
-              var postlifebar_css = postbarlife.css('-webkit-animation-name', 'postlifeanim_d');
-              
-              var postlifebar_css = postbarlife.css('animation-name', 'postlifeanim_d');
+              postbarlife.css('-o-animation-name', 'postlifeanim_d');
+              postbarlife.css('-moz-animation-name', 'postlifeanim_d');
+              postbarlife.css('-ms-animation-name', 'postlifeanim_d');
+              postbarlife.css('-webkit-animation-name', 'postlifeanim_d');
+              postbarlife.css('animation-name', 'postlifeanim_d');
             }
             else if (scope.postlifepercentage <= 0.75 && scope.postlifepercentage > 0.6){
               /* Chrome, Safari, Opera */
-              var postlifebar_css = postbarlife.css('-webkit-animation-name', 'postlifeanim_e');
-              
-              var postlifebar_css = postbarlife.css('animation-name', 'postlifeanim_e');
+              postbarlife.css('-o-animation-name', 'postlifeanim_e');
+              postbarlife.css('-moz-animation-name', 'postlifeanim_e');
+              postbarlife.css('-ms-animation-name', 'postlifeanim_e');
+              postbarlife.css('-webkit-animation-name', 'postlifeanim_e');
+              postbarlife.css('animation-name', 'postlifeanim_e');
             }
             else if (scope.postlifepercentage <= 0.6 && scope.postlifepercentage > 0.5){
               /* Chrome, Safari, Opera */
-              var postlifebar_css = postbarlife.css('-webkit-animation-name', 'postlifeanim_f');
-              
-              var postlifebar_css = postbarlife.css('animation-name', 'postlifeanim_f');
+              postbarlife.css('-o-animation-name', 'postlifeanim_f');
+              postbarlife.css('-moz-animation-name', 'postlifeanim_f');
+              postbarlife.css('-ms-animation-name', 'postlifeanim_f');
+              postbarlife.css('-webkit-animation-name', 'postlifeanim_f');
+              postbarlife.css('animation-name', 'postlifeanim_f');
             }
             else if (scope.postlifepercentage <= 0.5 && scope.postlifepercentage > 0.3){
               /* Chrome, Safari, Opera */
-              var postlifebar_css = postbarlife.css('-webkit-animation-name', 'postlifeanim_g');
-              
-              var postlifebar_css = postbarlife.css('animation-name', 'postlifeanim_g');
+              postbarlife.css('-o-animation-name', 'postlifeanim_g');
+              postbarlife.css('-moz-animation-name', 'postlifeanim_g');
+              postbarlife.css('-ms-animation-name', 'postlifeanim_g');
+              postbarlife.css('-webkit-animation-name', 'postlifeanim_g');
+              postbarlife.css('animation-name', 'postlifeanim_g');
             }
             else if (scope.postlifepercentage <= 0.3 && scope.postlifepercentage > 0.2){
               /* Chrome, Safari, Opera */
-              var postlifebar_css = postbarlife.css('-webkit-animation-name', 'postlifeanim_h');
-              
-              var postlifebar_css = postbarlife.css('animation-name', 'postlifeanim_h');
+              postbarlife.css('-o-animation-name', 'postlifeanim_h');
+              postbarlife.css('-moz-animation-name', 'postlifeanim_h');
+              postbarlife.css('-ms-animation-name', 'postlifeanim_h');
+              postbarlife.css('-webkit-animation-name', 'postlifeanim_h');
+              postbarlife.css('animation-name', 'postlifeanim_h');
             }
             else if (scope.postlifepercentage <= 0.2 && scope.postlifepercentage > 0.1){
               /* Chrome, Safari, Opera */
-              var postlifebar_css = postbarlife.css('-webkit-animation-name', 'postlifeanim_i');
-              
-              var postlifebar_css = postbarlife.css('animation-name', 'postlifeanim_i');
+              postbarlife.css('-o-animation-name', 'postlifeanim_i');
+              postbarlife.css('-moz-animation-name', 'postlifeanim_i');
+              postbarlife.css('-ms-animation-name', 'postlifeanim_i');
+              postbarlife.css('-webkit-animation-name', 'postlifeanim_i');
+              postbarlife.css('animation-name', 'postlifeanim_i');
             }
             else{
               /* Chrome, Safari, Opera */
-              var postlifebar_css = postbarlife.css('-webkit-animation-name', 'postlifeanim_j');
-              
-              var postlifebar_css = postbarlife.css('animation-name', 'postlifeanim_j');
+              postbarlife.css('-o-animation-name', 'postlifeanim_j');
+              postbarlife.css('-moz-animation-name', 'postlifeanim_j');
+              postbarlife.css('-ms-animation-name', 'postlifeanim_j');
+              postbarlife.css('-webkit-animation-name', 'postlifeanim_j');
+              postbarlife.css('animation-name', 'postlifeanim_j');
             }
         }
 
