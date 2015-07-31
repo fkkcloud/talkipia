@@ -33,15 +33,6 @@ router.get('/:page', cors(), function(req, res, next){
 });
 
 router.post('/', cors(), function(req, res, next){
-	/*
-	console.log('body:    ', req.body.body);
-	console.log('place:   ', req.body.place);
-	console.log('location:', req.body.location);
-	console.log('guiid:   ', req.body.guid);
-	console.log('lifespan:', req.body.lifespan);
-	console.log('islocal :', req.body.islocal);
-	*/
-
 	var relativeLifeSpan = req.body.lifespan;
 
 	var currentDate = new Date();
@@ -111,9 +102,6 @@ router.post('/update_guidtgt', cors(), function(req, res, next){
 
     	Post.find(query, function(err, post){
     		if (err) return res.send(500, { error: err });
-
-    		//console.log('POST - /update_guidtgt log :', doc);
-
     		return res.status(201).json(post);
     	});
 	});
@@ -122,10 +110,7 @@ router.post('/update_guidtgt', cors(), function(req, res, next){
 // for manual remove
 router.post('/posts_delete', cors(), function(req, res, next){
 	Post.remove({ _id: req.body._id }, function(err, doc){
-		if (err) { return next(err); }
-
-		//console.log('POST - /posts_delete log:', doc);
-		
+		if (err) { return next(err); }		
 		websockets.broadcast('remove_post', req.body._id);
 		res.status(201);
 	});

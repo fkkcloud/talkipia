@@ -82,9 +82,6 @@ router.post('/update_session', cors(), function(req, res, next){
 
 	Session.findOneAndUpdate(query, newWatchLoc, options, function(err, session){
     	if (err) return res.send(500, { error: err });
-
-    	//console.log('POST - /update_session log :', doc);
-
     	return res.status(201).json(session);
 	});
 });
@@ -105,8 +102,6 @@ router.post('/update_coupling', cors(), function(req, res, next){
     		if (err) return res.send(500, { error: err });
 
     		console.log('POST - /update_coupling log :', doc);
-
-    		// broadcast to all clients about the new message coming in!
 			websockets.broadcast('update_guidtgt', session);
 
     		return res.status(201).json(session);

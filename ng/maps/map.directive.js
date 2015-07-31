@@ -123,8 +123,6 @@ angular.module('app')
                         continue;
 
                      // session's watch location will be bounced!
-                    //console.log('session watch location:', session.watchloc);
-                    //console.log('post location:', post.location);
                     var watch_location = angular.fromJson(session.watchloc);
                     var post_location  = angular.fromJson(post.location);
                     
@@ -210,9 +208,7 @@ angular.module('app')
             isGuidtgtChanged = prevGuidtgt != scope.guidtgt; // see if my guidtgt has changed;
             prevGuidtgt = scope.guidtgt; // update previous guidtgt
 
-            //var guidObj = {guid: scope.guid} // for socket fetch optimization TODO
-            PostsSvc.fetch()
-            .success(function(posts){
+            function drawPosts(posts){
 
                 for (var i = 0; i < posts.length; i++)
                 {
@@ -372,7 +368,15 @@ angular.module('app')
                     ////////////////////// END - DRAWING POST ///////////////////////////////
 
                 } // end of for-loop
-            }); // end of post fetch success
+            }
+
+            PostsSvc.fetch()
+            .success(drawPosts) 
+            .catch(function(err){
+                // handle error
+            });
+
+            // end of post fetch success
         }
 
         function drawDropDown(location)

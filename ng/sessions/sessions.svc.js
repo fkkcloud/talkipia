@@ -10,8 +10,6 @@ angular.module('app')
 	};
 
 	this.remove = function(guid){
-		//console.log("deleting session");
-		//console.log('session.guid:', guid);
 		var session = {guid: guid};
 		return $http.post('/api/sessions/delete', session);
 	};

@@ -7,7 +7,13 @@ angular.module('app')
     //------------------------------------------------------------------------------------
 
     window.onbeforeunload = function(e) {
-    	SessionSvc.remove($scope.guid);
+    	SessionSvc.remove($scope.guid)
+    	.success(function(res){
+    		// handle success
+    	})
+    	.catch(function(err){
+    		// handle error
+    	});
 	};
 
 	window.onpageshow = function(e) {
@@ -17,7 +23,13 @@ angular.module('app')
 	};
 
 	window.onpagehide = function(e) {
-    	SessionSvc.remove($scope.guid);
+    	SessionSvc.remove($scope.guid)
+    	.success(function(res){
+    		// handle success
+    	})
+    	.catch(function(err){
+    		// handle error
+    	});
 	};
 
 	// session in and out events
@@ -36,7 +48,13 @@ angular.module('app')
 	  	document.visibilityState == 'msHidden' ||
 	  	document.visibilityState == 'webkitHidden')
 	  {
-	  	SessionSvc.remove($scope.guid);
+	  	SessionSvc.remove($scope.guid)
+	  	.success(function(res){
+    		// handle success
+    	})
+    	.catch(function(err){
+    		// handle error
+    	});
 	  }
 	});
 
@@ -50,7 +68,13 @@ angular.module('app')
 	  } 
 	  else if (document.webkitHidden)
 	  {
-	  	SessionSvc.remove($scope.guid);
+	  	SessionSvc.remove($scope.guid)
+	  	.success(function(res){
+    		// handle success
+    	})
+    	.catch(function(err){
+    		// handle error
+    	});
 	  }
 	}, false);
 
@@ -119,7 +143,13 @@ angular.module('app')
 				location: locationJSON,
 				watchloc: watchlocJSON
 			};
-			SessionSvc.enter(session); // 서버에서 유저가 들어옴을 알린다.
+			SessionSvc.enter(session)
+			.success(function(res){
+    		// handle success
+	    	})
+	    	.catch(function(err){
+	    		// handle error
+	    	}); // 서버에서 유저가 들어옴을 알린다.
 	    }
 
 	    function getCurrLocError(err) {
@@ -250,7 +280,6 @@ angular.module('app')
 				ws:remove_post - 포스트가 시간이 다 되어서 사라질때!
 				매우중요! 
 			*/
-			//console.log('ws:' + payload.type);
 			$rootScope.$broadcast('ws:' + payload.type, payload.data);
 		};
 	};
@@ -267,7 +296,6 @@ angular.module('app')
 		// show responsive users only to the user who wrote this post
 		if (post.guid == $scope.guid)
 		{
-			//console.log('start drawing responses..');
 			$scope.map.drawResponses(post);
 		}
 	});
