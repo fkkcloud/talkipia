@@ -160,11 +160,11 @@ angular.module('app')
         // init map and place some markers, so everything start with this function.
         var options = {
 		  enableHighAccuracy: false,
-		  timeout: 5000,
-		  maximumAge: 0
+		  timeout: 10000,
+		  maximumAge: 30000,
 		};
 	    navigator.geolocation.getCurrentPosition(getCurrLocSuccess, getCurrLocError, options);
-		swal({   title: "",   text: "Retreiving currnet location..",   timer: 3500,   showConfirmButton: false });
+		swal({   title: "",   text: "Retreiving currnet location..",   timer: 1200,   showConfirmButton: false });
 	};
 
     // load and set latest guid
@@ -376,12 +376,12 @@ angular.module('app')
         // init map and place some markers, so everything start with this function.
         var options = {
 		  enableHighAccuracy: true,
-		  timeout: 8000,
-		  maximumAge: 0
+		  timeout: 10000,
+		  maximumAge: 30000,
 		};
         navigator.geolocation.getCurrentPosition(getCurrLocSuccess, getCurrLocError, options);
 
-        swal({   title: "",   text: "Moving to current location..",   timer: 1500,   showConfirmButton: false });
+        swal({   title: "",   text: "Moving to current location..",   timer: 1000,   showConfirmButton: false });
 	};
 
 	$scope.moveToPostLocation = function(){
