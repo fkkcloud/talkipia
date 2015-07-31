@@ -17,6 +17,7 @@ router.get('/', cors(), function(req, res){
 	res.render('app.html.ejs');
 });
 
+// privacy policy
 router.get('/privacy', cors(), function(req, res){
 	res.render('privacy.html.ejs');
 });
