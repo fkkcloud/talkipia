@@ -112,8 +112,7 @@ angular.module('app')
         function drawResponses(post){
             //console.log('reference post:', post);
 
-            SessionSvc.fetch()
-            .success(function(sessions){
+            function drawBlinks(sessions){
 
                 for (var i = 0; i < sessions.length; i++){
                     var session = sessions[i];
@@ -184,6 +183,12 @@ angular.module('app')
                     }(imageListener));
                     
                 }
+            }
+
+            SessionSvc.fetch()
+            .success(drawBlinks)
+            .catch(function(err){
+                //handle errors
             });
         }
 
@@ -338,7 +343,14 @@ angular.module('app')
                                     }, 
                                     function(isConfirm){
                                         if (isConfirm){
-                                            PostsSvc.remove(post);
+                                            PostsSvc.remove(post)
+                                            .success(function(res){
+                                                // handle success
+                                            })
+                                            .catch(function(err){
+                                                // handle error
+                                            });
+
                                             swal("Deleted!", "Your imaginary file has been deleted.", "success");
                                         } else {
                                             var currentDate      = new Date();
