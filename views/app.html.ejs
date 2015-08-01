@@ -100,13 +100,13 @@
       		<button ng-disabled='postForm.$invalid' 
   				ng-click='addPost()' 
   				class="btn btn-danger btn-lg btn-block" 
-  				id='map-btn-submit'> {{ timevalue | date:"mm : ss" }} 
+  				id='map-btn-submit'> {{ isInstant(timevalue) && 'Instant' || (timevalue | date:"mm : ss") }}
   			</button>	
       	</form>
 
       	<!-- Time Slider -->
       	<div ng-show="toggleTimeSlider == true" id='map-time-slider'>
-			<slider floor="5000" ceiling="300000" step="20" precision="2" ng-model="timevalue"></slider>
+			<slider floor="5000" ceiling="2400000" step="20" precision="2" ng-model="timevalue"></slider>
 		</div>
 
 		

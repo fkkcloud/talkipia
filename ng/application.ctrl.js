@@ -193,7 +193,7 @@ angular.module('app')
 
 	// value from time slider in UI
 	// default is max instant life span
-    $scope.timevalue = ConfigSvc.maxInstantLifeSpan;
+    $scope.timevalue = 30000; //ConfigSvc.maxInstantLifeSpan;
 
 	// user's current location storage
 	$scope.userLocation = {
@@ -321,6 +321,14 @@ angular.module('app')
 	//------------------------------------------------------------------------------------
     // APPLICATION LEVEL FUNCTIONS
     //------------------------------------------------------------------------------------
+    // see if its instant
+    $scope.isInstant = function(timevalue){
+    	if (timevalue <= ConfigSvc.maxInstantLifeSpan)
+    		return true;
+    	return false;
+    };
+
+
 	// see if its mobile phone
 	$scope.isMobile = function(){
 		if( navigator.userAgent.match(/Android/i)
