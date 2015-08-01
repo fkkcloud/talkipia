@@ -193,7 +193,7 @@ angular.module('app')
 
 	// value from time slider in UI
 	// default is max instant life span
-    $scope.timevalue = 30000; //ConfigSvc.maxInstantLifeSpan;
+    $scope.timevalue = ConfigSvc.maxInstantLifeSpan;
 
 	// user's current location storage
 	$scope.userLocation = {
