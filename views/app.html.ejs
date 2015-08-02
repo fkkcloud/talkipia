@@ -19,6 +19,8 @@
     <!-- angular-animate -->
 	<script src="angular-animate.min.js"></script>
 
+	<!-- angular-socialshare -->
+	<script src="angular-socialshare.js"></script>
 
     <!-- angular-slider -->
     <script src="slider.js"></script> 
@@ -53,22 +55,56 @@
 	   				<span class='icon-bar'></span>
 	   				<span class='icon-bar'></span>
 	   			</button>
-	            <a class="navbar-brand" id="google" href="/#/">Talkipia</a>
+	            <a class="navbar-brand" href="/#/">
+	            	<img ng-src="logo_letter.png" width="90" height="34" />
+	            </a>
 			</div>
 			<!-- 
 				*To collapse correctly, we need ng-class/ng-click/ng-init*
 				http://stackoverflow.com/questions/16268606/responsive-dropdown-navbar-with-angular-ui-bootstrap-done-in-the-correct-angula 
 			-->
 			<div ng-class="{'in':!navCollapsed}" class="navbar-collapse collapse" collapse="navCollapsed">
-				<ul class='nav navbar-nav'  id='google'>
+				<ul class='nav navbar-nav'>
 					<li ng-if='!currentUser'>
-	                  	<a ng-href="/#/aboutus" ng-click="collapse()">
-	                  		About Us
+	                  	<a ng-href="/privacy" ng-click="collapse()">
+	                  		
 	                  	</a>
 	                </li>
 				</ul>
+
+				<p class='navbar-text navbar-right share-button '>
+					<a href="#"
+					socialshare
+					socialshare-provider="google+"
+					socialshare-text="#Talkipia #anonymous #realtime #map"
+					socialshare-url="http://talkipia.com">
+					<img ng-src="share_g.png" width="40" height="40"/>
+					</a>
+				</p>
+				<p class='navbar-text navbar-right share-button '>
+					<a href="#"
+					socialshare
+					socialshare-provider="twitter"
+					socialshare-text="#Talkipia #anonymous #realtime #map"
+					socialshare-url="http://talkipia.com">
+					<img ng-src="share_twitter.png" width="40" height="40"/>
+					</a>
+				</p>
+				<p class='navbar-text navbar-right share-button '>
+					<a href="#"
+					socialshare
+					socialshare-provider="facebook"
+					socialshare-text="#Talkipia #anonymous #realtime #map"
+					socialshare-url="http://talkipia.com">
+					<img ng-src="share_fb.png" width="40" height="40"/>
+					</a>
+				</p>
+				
 			</div>
 		</div>
+
+		
+
 	</nav>
 
 	<!-- global map -->
@@ -87,7 +123,7 @@
 		<input ng-show="toggleSearchLocation == true" id="pac-input" class="controls" type="text" placeholder="Search Location">
 
 		<!-- Move to current location -->
-      	<button ng-click= 'moveToCurrentLocation()' class="btn btn-info" id='map-btn-curr'> Me </button>
+      	<button ng-click= 'moveToCurrentLocation()' class="btn" id='map-btn-curr'> Me </button>
 
       	<!-- Posting -->
       	<form ng-controller='PostsCtrl' onSubmit="return false;" ng-submit='addPost()' name='postForm' id='map-posting-form' novalidate>
@@ -100,7 +136,8 @@
       		<button ng-disabled='postForm.$invalid' 
   				ng-click='addPost()' 
   				class="btn btn-danger btn-lg btn-block" 
-  				id='map-btn-submit'> {{ isInstant(timevalue) && 'Instant' || (timevalue | date:"mm : ss") }}
+  				id='map-btn-submit'> 
+  				{{ isInstant(timevalue) && 'Instant' || (timevalue | date:"mm : ss") }}
   			</button>	
       	</form>
 

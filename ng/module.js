@@ -2,5 +2,6 @@
 angular.module('app', [
 	'ngRoute',
 	'ngAnimate',
-	'ui.slider'
+	'ui.slider',
+	'720kb.socialshare',
 ]);

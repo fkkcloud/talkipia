@@ -328,7 +328,6 @@ angular.module('app')
     	return false;
     };
 
-
 	// see if its mobile phone
 	$scope.isMobile = function(){
 		if( navigator.userAgent.match(/Android/i)
