@@ -123,7 +123,7 @@
 		<input ng-show="toggleSearchLocation == true" id="pac-input" class="controls" type="text" placeholder="Search Location">
 
 		<!-- Move to current location -->
-      	<button ng-click= 'moveToCurrentLocation()' class="btn" id='map-btn-curr'> Me </button>
+      	<button ng-click= 'moveToCurrentLocation()' class="btn btn-warning" id='map-btn-curr'> Me </button>
 
       	<!-- Posting -->
       	<form ng-controller='PostsCtrl' onSubmit="return false;" ng-submit='addPost()' name='postForm' id='map-posting-form' novalidate>
