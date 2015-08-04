@@ -371,8 +371,8 @@ angular.module('app')
 	        var googleLoc = new google.maps.LatLng(location.lat, location.lon);
 
 	        // move to the location and zoom into right amount
-            $scope.map.panTo(googleLoc)
-            $scope.map.setZoom(15);
+            $scope.map.panTo(googleLoc);
+            $scope.map.updateAndDrawPosts();
         }
 
         function getCurrLocError(err) {
@@ -416,6 +416,7 @@ angular.module('app')
 
 		var googleLoc = new google.maps.LatLng($scope.postLocation.lat + latDelta, centerLoc.lng());
 		$scope.map.panTo(googleLoc);
+		$scope.map.updateAndDrawPosts();
 	};
 
 	$scope.collapse = function(){
@@ -427,6 +428,7 @@ angular.module('app')
     //------------------------------------------------------------------------------------
     $scope.$on('set:map', function(_, map){
 		$scope.map = map;
+		$scope.initSession();
 	});
 
     $scope.$on('set:guidtgt', function(_, guidtgt){

@@ -805,9 +805,6 @@ angular.module('app')
                 setStyleForMap();
             }
 
-            // broadcast to send map to application ctrl
-            scope.$emit('set:map', map);
-
             // add UI elements to map
             setUISearchLocationToggle();
             setUISearchBox();
@@ -824,20 +821,14 @@ angular.module('app')
             setEventZoomChanged();
             setEventBoundsChanged();
 
-            // update very first time for app
-            $timeout(function(){
-                updateDefaultLocation();
-                updateBounds();
-                updateWatchLocation();
-                updateAndDrawPosts();
-            }, 800);
+            // broadcast to send map to application ctrl
+            scope.$emit('set:map', map);
         } 
 
         //------------------------------------------------------------------------------------
         // EXECUTE
         //------------------------------------------------------------------------------------
         initMap();
-        scope.initSession(); // this have to run always after the map is initialized.
 
         drawHelperMarker(initialMapCenter);
         setPlace(initialMapCenter);
