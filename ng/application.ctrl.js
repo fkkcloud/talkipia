@@ -18,8 +18,12 @@ angular.module('app')
 
 	window.onpageshow = function(e) {
 		$scope.initSession();
-		if ($scope.map)
-	  		$scope.map.updateAndDrawPosts();
+		if ($scope.map) {
+			$timeout(function(){
+				$scope.map.updateAndDrawPosts();
+			})
+	  		
+		}
 	};
 
 	window.onpagehide = function(e) {
@@ -428,7 +432,11 @@ angular.module('app')
     //------------------------------------------------------------------------------------
     $scope.$on('set:map', function(_, map){
 		$scope.map = map;
-		$scope.initSession();
+
+		$timeout(function(){
+			$scope.initSession();
+		});
+		
 	});
 
     $scope.$on('set:guidtgt', function(_, guidtgt){
