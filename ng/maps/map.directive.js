@@ -14,6 +14,7 @@ angular.module('app')
         var initialMapCenter;
         var CLOUD_MAP_ID = 'custom_style'; // map style
         var helperMarkers = [];
+        var userMarkers = [];
         var markersOnMap = [];
 
         var prevGuidtgt = '0';
@@ -43,6 +44,13 @@ angular.module('app')
             anchor: new google.maps.Point(17, 34),
             scaledSize: new google.maps.Size(20, 33)
         };
+         var imageUserLocation = {
+             url: 'curr_marker.png',
+             size: new google.maps.Size(100, 100),
+             origin: new google.maps.Point(0, 0),
+             anchor: new google.maps.Point(17, 34),
+             scaledSize: new google.maps.Size(20, 33)
+         };
 
         //------------------------------------------------------------------------------------
         // EVENT HANDLERS - UPDATE
@@ -103,6 +111,20 @@ angular.module('app')
                 };
             }
             SessionSvc.updateWatchLocation(current_map_nw, current_map_se, current_map_center, scope.guid);
+        }
+
+        // draw map with helper markers
+        function drawUserMarker(location){
+            for (var i = 0, marker; marker = userMarkers[i]; i++) {
+                marker.setMap(null);
+            }
+            userMarkers = [];
+            var marker = new google.maps.Marker({
+                position: location, 
+                map: map,
+                icon: imageUserLocation
+            });
+            userMarkers.push(marker);
         }
 
         //------------------------------------------------------------------------------------
@@ -723,6 +745,12 @@ angular.module('app')
             }
             CloudMap.prototype.drawXMarker = handleDrawXMarker;
 
+            // draw current user location marker
+            function handleDrawUserLocationMarker(location){
+                google.maps.event.trigger(this, 'drawUserLocationMarker', location);
+            }
+            CloudMap.prototype.drawUserLocationMarker = handleDrawUserLocationMarker;
+
             // draw current location marker
             function handleDrawCurrLocationMarker(location){
                 google.maps.event.trigger(this, 'drawCurrLocationMarker', location);
@@ -752,6 +780,10 @@ angular.module('app')
 
             google.maps.event.addListener(map, 'drawXMarker', function(location){
                 drawAndSetPlace(location);
+            });
+
+            google.maps.event.addListener(map, 'drawUserLocationMarker', function(location){
+                drawUserMarker(location);
             });
 
             google.maps.event.addListener(map, 'drawCurrLocationMarker', function(location){

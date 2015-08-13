@@ -82,6 +82,19 @@ angular.module('app')
 	  }
 	}, false);
 
+	$scope.setWatchLocation = function(){
+    	navigator.geolocation.watchPosition(onSuccess);
+    };
+
+	// onSuccess Geolocation
+	function onSuccess(pos) {
+        var crd = pos.coords;
+
+        var googleLoc = new google.maps.LatLng(crd.latitude, crd.longitude);
+
+        $scope.map.drawUserLocationMarker(googleLoc);
+    };
+
 	$scope.initSession = function(){
 		if ($scope.map == 'undefined' || $scope.map == 'null' || !$scope.map)
 			return;
@@ -306,9 +319,10 @@ angular.module('app')
 
 	// as server socket send 'ws:new_post' , we can update the map!
 	$scope.$on('ws:new_session', function(_, session){
-		var location = angular.fromJson(session.location);
-		$scope.map.drawCurrLocationMarker(location);
-
+		if (session.guid != $scope.guid) {
+			var location = angular.fromJson(session.location);
+			$scope.map.drawCurrLocationMarker(location);
+		}
 	});
 
 	// when server remove the post after time for longer ones, 
@@ -432,9 +446,9 @@ angular.module('app')
     //------------------------------------------------------------------------------------
     $scope.$on('set:map', function(_, map){
 		$scope.map = map;
-
 		$timeout(function(){
 			$scope.initSession();
+			$scope.setWatchLocation();
 		});
 		
 	});
