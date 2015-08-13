@@ -380,9 +380,6 @@ angular.module('app')
             	lon: crd.longitude
             };
 
-            // draw drop down user position
-           	$scope.map.drawCurrLocationMarker(location);
-
            	// draw x marker
 	        $scope.map.drawXMarker(location);
 

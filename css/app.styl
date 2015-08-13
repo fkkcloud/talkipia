@@ -109,14 +109,13 @@ MAP - MOVE TO CURR LOCATION
     padding:6px;
     text-align: center;
     border: 1px solid transparent;
-    //background-color: #1E90FF;
-    //color: #fff;
+    background-color: #FFEE00;
 
-    -ms-border-radius: 0px;
-    -webkit-border-radius: 0px;
-    -moz-border-radius: 0px;
-    -o-border-radius: 0px;
-    border-radius: 0px;
+    -ms-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    -o-border-radius: 3px;
+    border-radius: 3px;
     outline: none;
 }
 /* mobile phone */
@@ -143,11 +142,11 @@ MAP - BUTTONN TO SUBMIT POST
     text-align: center;
     border: 1px solid transparent;
 
-    -ms-border-radius: 0px;
-    -webkit-border-radius: 0px;
-    -moz-border-radius: 0px;
-    -o-border-radius: 0px;
-    border-radius: 0px;
+    -ms-border-radius: 0 3px 3px 0;
+    -webkit-border-radius: 0 3px 3px 0;
+    -moz-border-radius: 0 3px 3px 0;
+    -o-border-radius: 0 3px 3px 0;
+    border-radius: 0 3px 3px 0;
     outline: none;
 }
 
@@ -182,12 +181,14 @@ MAP - POST FORM TO WRITE
 
     border: 1px solid transparent;
 
-    -ms-border-radius: 2px 0 0 2px;
-    -webkit-border-radius: 2px 0 0 2px;
-    -moz-border-radius: 2px 0 0 2px;
-    -o-border-radius: 2px 0 0 2px;
-    border-radius: 2px 0 0 2px;
+    -ms-border-radius: 3px 0 0 3px;
+    -webkit-border-radius: 3px 0 0 3px;
+    -moz-border-radius: 3px 0 0 3px;
+    -o-border-radius: 3px 0 0 3px;
+    border-radius: 3px 0 0 3px;
     outline: none;
+
+    opacity : 0.86;
 }
 /* mobile phone */
 @media all and (max-width: 768px) {
@@ -201,6 +202,13 @@ MAP - POST FORM TO WRITE
 
 #map-posting-form {
    /* just to be selected in jquery for 'enter' key to submit */
+}
+
+#map-post-center {
+    font-family: Roboto;
+    font-size: 13px;
+    font-weight: 300;
+    text-overflow: ellipsis;
 }
 /* --------------------------------------------------------------------------------------------------------
 MAP - CANVAS
@@ -303,7 +311,7 @@ MAP - SEARCHBOX TOGGLE
 .nav-burger {
   z-input: 9999;
   margin: 0 auto;
-  opacity: 0.7;
+  opacity: 0.9;
   width: 3.25em;
   cursor: pointer;
   position: relative;
@@ -312,12 +320,12 @@ MAP - SEARCHBOX TOGGLE
   -moz-transition: all .35s;
   -o-transition: all .35s;
   transition: all .35s;
-  color: #1E90FF;
+  color: #ff4e50;
   .line {
     height: 0.65em;
     border-radius: .15em;
     width: 3.25em;
-    background-color: #1E90FF;
+    background-color: #ff4e50;
 
     -ms-transition: all .35s;
     -webkit-transition: all .35s;

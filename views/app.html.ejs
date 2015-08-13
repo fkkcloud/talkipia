@@ -56,7 +56,7 @@
 	   				<span class='icon-bar'></span>
 	   			</button>
 	            <a class="navbar-brand" href="/#/">
-	            	<img ng-src="logo_letter.png" width="90" height="34" />
+	            	<!--<img ng-src="logo_letter.png" width="90" height="34" />-->
 	            </a>
 			</div>
 			<!-- 
@@ -67,7 +67,6 @@
 				<ul class='nav navbar-nav'>
 					<li ng-if='!currentUser'>
 	                  	<a ng-href="/privacy" ng-click="collapse()">
-	                  		
 	                  	</a>
 	                </li>
 				</ul>
@@ -123,22 +122,33 @@
 		<input ng-show="toggleSearchLocation == true" id="pac-input" class="controls" type="text" placeholder="Search Location">
 
 		<!-- Move to current location -->
-      	<button ng-click= 'moveToCurrentLocation()' class="btn btn-warning" id='map-btn-curr'> Me </button>
+      	<button ng-click= 'moveToCurrentLocation()' id='map-btn-curr'>
+      		<img ng-src="paper-airplane.png" width="22" height="22"/>
+      	</button>
 
+      	<!-- Posting on map 
+      	<div id='map-post-center'>
+      		{{content}}
+      	</div>
+		-->
+		
       	<!-- Posting -->
       	<form ng-controller='PostsCtrl' onSubmit="return false;" ng-submit='addPost()' name='postForm' id='map-posting-form' novalidate>
+
       		<input  type='text' 
       				ng-model='content' 
       				ng-focus='moveToPostLocation()'
-      				maxlength='30' 
+      				maxlength='50' 
       				id='map-posting' 
-      				placeholder='what will happen today?' required>
+      				placeholder='Shout out to people around you!' required>
+
       		<button ng-disabled='postForm.$invalid' 
   				ng-click='addPost()' 
   				class="btn btn-danger btn-lg btn-block" 
   				id='map-btn-submit'> 
   				{{ isInstant(timevalue) && 'Instant' || (timevalue | date:"mm : ss") }}
   			</button>	
+
       	</form>
 
       	<!-- Time Slider -->

@@ -578,6 +578,12 @@ angular.module('app')
             map.controls[google.maps.ControlPosition.BOTTOM_CENTER].push(postForm);
         }
 
+        function setUIPostOnMap()
+        {
+            //var postOnMap = (document.getElementById('map-post-center'));
+            //map.controls[google.maps.ControlPosition.TOP_CENTER].push(postOnMap);
+        }
+
         function setUIPostBtn()
         {
             var postBtn = (document.getElementById('map-btn-submit'));
@@ -813,11 +819,14 @@ angular.module('app')
             var currentTime = new Date(); // for now
             var currentHour = currentTime.getHours();
             var featureOpts;
+            /*
             if (currentHour < 4 || currentHour > 19){
                 featureOpts = featureOpts_night;
             } else {
                 featureOpts = featureOpts_day;
             }
+            */
+            featureOpts = featureOpts_day; // temp
 
             var styledMapOptions = {
                 name: 'Custom Style'
@@ -844,6 +853,7 @@ angular.module('app')
             setUIPostForm();
             setUIPostBtn();
             setUITimeSlider();
+            setUIPostOnMap();
 
             // add origin native Event handlers to map
             setEventClick();
