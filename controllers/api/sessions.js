@@ -54,6 +54,7 @@ router.post('/find', cors(), function(req, res, next){
 		}
 		
 		console.log("session found one successfully:", req.body.guid);
+
 		res.status(200).json(session);
 	});
 });
@@ -82,6 +83,10 @@ router.post('/update_session', cors(), function(req, res, next){
 
 	Session.findOneAndUpdate(query, newWatchLoc, options, function(err, session){
     	if (err) return res.send(500, { error: err });
+
+    	// let the front-end app know that we updated user location
+    	websockets.broadcast('update_users_location', session);
+
     	return res.status(201).json(session);
 	});
 });
