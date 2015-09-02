@@ -90,6 +90,12 @@ angular.module('app')
 
             var current_map_center ;
 
+            current_map_center = {
+                    lat: map.getCenter().lat(),
+                    lon: map.getCenter().lng()
+                };
+
+            /*
             // see if the latest x marker or post location is within user's view
             if (!(scope.postLocation.lat < current_map_nw.lat) ||
                 !(scope.postLocation.lat > current_map_se.lat) ||
@@ -110,6 +116,8 @@ angular.module('app')
                     lon: scope.postLocation.lon
                 };
             }
+            */
+
             SessionSvc.updateWatchLocation(current_map_nw, current_map_se, current_map_center, scope.guid);
         }
 
