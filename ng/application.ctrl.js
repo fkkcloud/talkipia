@@ -21,6 +21,8 @@ angular.module('app')
 		if ($scope.map) {
 			$timeout(function(){
 				$scope.map.updateAndDrawPosts();
+				// draw other users locations
+				$scope.map.updateAndDrawOtherUsers();
 			})
 	  		
 		}
@@ -45,7 +47,12 @@ angular.module('app')
 	  {
 	  	$scope.initSession();
 	  	if ($scope.map)
+	  	{
 	  		$scope.map.updateAndDrawPosts();
+
+	  		// draw other users locations
+			$scope.map.updateAndDrawOtherUsers();
+		}
 	  } 
 	  else if (document.visibilityState == 'hidden' || 
 	  	document.visibilityState == 'mozHidden' || 
@@ -68,7 +75,12 @@ angular.module('app')
 	  {
 	  	$scope.initSession();
 	  	if ($scope.map)
+	  	{
 	  		$scope.map.updateAndDrawPosts();
+
+	  		// draw other users locations
+			$scope.map.updateAndDrawOtherUsers();
+		}
 	  } 
 	  else if (document.webkitHidden)
 	  {
@@ -93,6 +105,8 @@ angular.module('app')
         var googleLoc = new google.maps.LatLng(crd.latitude, crd.longitude);
 
         $scope.map.drawUserLocationMarker(googleLoc);
+
+       	SessionSvc.updateCurrentLocation(crd.latitude, ccrd.longitude, $scope.guid);
     };
 
 	$scope.initSession = function(){

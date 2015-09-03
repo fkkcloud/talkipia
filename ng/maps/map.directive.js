@@ -149,6 +149,7 @@ angular.module('app')
 
         // update position of interest of other users
         function updateAndDrawOtherUsers(){
+
             //console.log('reference post:', post);
             SessionSvc.fetch()
             .success(function(sessions){
@@ -751,6 +752,9 @@ angular.module('app')
 
                 // update watchloc when center changed.
                 updateWatchLocation();
+
+                // update other users location
+                updateAndDrawOtherUsers();
             });
         }
 
