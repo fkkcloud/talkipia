@@ -16,6 +16,7 @@ angular.module('app')
         var helperMarkers = [];
         var userMarkers = [];
         var markersOnMap = [];
+        var otherUsersMarkers = [];
 
         var prevGuidtgt = '0';
         var isGuidtgtChanged;
@@ -138,6 +139,77 @@ angular.module('app')
         //------------------------------------------------------------------------------------
         // EVENT HANDLERS - DRAW
         //------------------------------------------------------------------------------------
+        
+        function cleanupUsers() {
+            for (var j = 0, marker; marker = otherUsersMarkers[j]; j++){
+                marker.setMap(null);
+                otherUsersMarkers.splice(j, 1);
+            }
+        }
+
+        // update position of interest of other users
+        function updateAndDrawOtherUsers(){
+            //console.log('reference post:', post);
+            SessionSvc.fetch()
+            .success(function(sessions){
+
+                cleanupUsers();
+                for (var i = 0; i < sessions.length; i++){
+                    var session = sessions[i];
+
+                    // skip my session - no need to draw 내 자신의 세션은 그릴필요가 없다.
+                    if (session.guid == scope.guid)
+                        continue;
+
+                     // session's watch location will be bounced!
+                    //console.log('session watch location:', session.watchloc);
+                    //console.log('post location:', post.location);
+                    var watch_location = angular.fromJson(session.watchloc);
+                    
+                    // 유저가 보고 있는 바운더리 안에 그 session(다른유저) 체킁
+                    
+                    //console.log(current_map_se, current_map_nw);
+                    // 다른사람이 보고 있는 센터(나 X마커의 위치)가 내 맵상에 안에 있는지 확인.
+                    updateBounds();
+                    if (!(watch_location.center_lat < current_map_nw.lat) ||
+                        !(watch_location.center_lat > current_map_se.lat) ||
+                        !(watch_location.center_lon < current_map_se.lon) ||
+                        !(watch_location.center_lon > current_map_nw.lon) )
+                    {
+                        continue;
+                    }
+                    
+                    var googleLoc = new google.maps.LatLng(watch_location.center_lat, watch_location.center_lon);
+
+                    var imageListener = {
+                        url: 'User_Position.png',
+                        size: new google.maps.Size(100, 100),
+                        origin: new google.maps.Point(0, 0),
+                        anchor: new google.maps.Point(0, 0),
+                        scaledSize: new google.maps.Size(20, 20)
+                    };
+
+                    (function(imageListener){
+                        var markerOptions = {
+                            position: googleLoc,
+                            map: map,
+                            title: "User_Positions",
+                            icon: imageListener,
+                        };
+
+                        var marker = new google.maps.Marker(markerOptions);
+
+                        otherUsersMarkers.push(marker);
+
+                    }(imageListener));
+                }
+            })
+            .catch(function(err){
+                // error
+            });
+        }
+
+
         // update responses such as visualization of listeners
         function drawResponses(post){
             //console.log('reference post:', post);
@@ -777,6 +849,12 @@ angular.module('app')
             }
             CloudMap.prototype.updateAndDrawPosts = handleUpdateAndDrawPosts;
 
+            // draw other users
+            function handleUpdateAndDrawOtherUsers(){
+                google.maps.event.trigger(this, 'updateAndDrawOtherUsers');
+            }
+            CloudMap.prototype.updateAndDrawOtherUsers = handleUpdateAndDrawOtherUsers;
+
             // draw responses
             function handleDrawResponses(post){
                 google.maps.event.trigger(this, 'drawResponses', post);
@@ -812,6 +890,10 @@ angular.module('app')
                 drawResponses(post);
             });
 
+            google.maps.event.addListener(map, 'updateAndDrawOtherUsers', function(){
+                updateAndDrawOtherUsers();
+            });
+
             google.maps.event.addListener(map, 'unDrawPost', function(postid){
                 unDrawPost(postid);
             });
@@ -834,7 +916,7 @@ angular.module('app')
                 featureOpts = featureOpts_day;
             }
             */
-            featureOpts = featureOpts_day; // temp
+            featureOpts = [{"featureType":"administrative","elementType":"all","stylers":[{"visibility":"on"}]},{"featureType":"administrative","elementType":"labels.text.fill","stylers":[{"color":"#439aa5"}]},{"featureType":"administrative.locality","elementType":"all","stylers":[{"color":"#32485c"},{"visibility":"simplified"}]},{"featureType":"administrative.neighborhood","elementType":"all","stylers":[{"visibility":"on"}]},{"featureType":"landscape.natural","elementType":"all","stylers":[{"color":"#e9dddb"}]},{"featureType":"landscape.natural.terrain","elementType":"geometry","stylers":[{"visibility":"off"}]},{"featureType":"poi","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"poi.park","elementType":"all","stylers":[{"visibility":"on"}]},{"featureType":"poi.park","elementType":"geometry.fill","stylers":[{"color":"#c4e661"}]},{"featureType":"poi.park","elementType":"labels","stylers":[{"visibility":"off"}]},{"featureType":"road.highway","elementType":"geometry.fill","stylers":[{"color":"#e9dddb"}]},{"featureType":"road.highway","elementType":"geometry.stroke","stylers":[{"color":"#32485c"},{"weight":"0.7"}]},{"featureType":"road.arterial","elementType":"all","stylers":[{"visibility":"on"}]},{"featureType":"road.arterial","elementType":"geometry.fill","stylers":[{"color":"#e9dddb"}]},{"featureType":"road.arterial","elementType":"geometry.stroke","stylers":[{"color":"#32485c"},{"weight":"0.25"}]},{"featureType":"road.arterial","elementType":"labels.icon","stylers":[{"visibility":"off"}]},{"featureType":"road.local","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"road.local","elementType":"geometry.fill","stylers":[{"color":"#e9dddb"}]},{"featureType":"road.local","elementType":"geometry.stroke","stylers":[{"color":"#ef798e"},{"weight":"0.5"},{"visibility":"off"}]},{"featureType":"transit","elementType":"all","stylers":[{"visibility":"on"}]},{"featureType":"transit.line","elementType":"geometry","stylers":[{"color":"#ef798e"}]},{"featureType":"transit.line","elementType":"geometry.fill","stylers":[{"weight":"2.06"}]},{"featureType":"transit.line","elementType":"geometry.stroke","stylers":[{"weight":"10.00"}]},{"featureType":"transit.line","elementType":"labels.text.stroke","stylers":[{"weight":"0.01"}]},{"featureType":"water","elementType":"geometry.fill","stylers":[{"visibility":"on"},{"weight":"10.00"},{"color":"#439aa5"}]},{"featureType":"water","elementType":"labels","stylers":[{"visibility":"on"},{"color":"#32485c"},{"weight":"0.85"}]}];
 
             var styledMapOptions = {
                 name: 'Custom Style'

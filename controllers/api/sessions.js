@@ -76,12 +76,28 @@ router.post('/delete', cors(), function(req, res, next){
 });
 
 // for updating watch location constantly
-router.post('/update_session', cors(), function(req, res, next){
-	var query       = {'guid':req.body.guid};
+router.post('/update_watch_loc', cors(), function(req, res, next){
+	var query       = {'guid'    :req.body.guid};
 	var newWatchLoc = {'watchloc':req.body.watchloc};
 	var options     = {upsert:false};
 
 	Session.findOneAndUpdate(query, newWatchLoc, options, function(err, session){
+    	if (err) return res.send(500, { error: err });
+
+    	// let the front-end app know that we updated user location
+    	websockets.broadcast('update_users_location', session);
+
+    	return res.status(201).json(session);
+	});
+});
+
+// for updating current location constantly
+router.post('/update_curr_loc', cors(), function(req, res, next){
+	var query       = {'guid'    :req.body.guid};
+	var newCurrLoc  = {'location':req.body.currloc};
+	var options     = {upsert:false};
+
+	Session.findOneAndUpdate(query, newCurrLoc, options, function(err, session){
     	if (err) return res.send(500, { error: err });
 
     	// let the front-end app know that we updated user location

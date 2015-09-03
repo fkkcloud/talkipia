@@ -323,7 +323,19 @@ angular.module('app')
 			var location = angular.fromJson(session.location);
 			$scope.map.drawCurrLocationMarker(location);
 		}
+
+		// draw other users locations
+		$scope.map.updateAndDrawOtherUsers();
 	});
+
+	// update other users location changes
+	$scope.$on('ws:update_users_location', function(_, session){
+
+		console.log("updated user location");
+
+		// draw other users locations
+		$scope.map.updateAndDrawOtherUsers();
+	})
 
 	// when server remove the post after time for longer ones, 
 	// update map with coresponding info
@@ -446,8 +458,10 @@ angular.module('app')
 		$timeout(function(){
 			$scope.initSession();
 			$scope.setWatchLocation();
+
+			// draw other users locations
+			$scope.map.updateAndDrawOtherUsers();
 		});
-		
 	});
 
     $scope.$on('set:guidtgt', function(_, guidtgt){

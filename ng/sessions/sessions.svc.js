@@ -35,7 +35,26 @@ angular.module('app')
         //console.log("updating watch location");
 
 		//console.log("updatedsession:", updatedsession);
-		return $http.post('/api/sessions/update_session', updatedsession);
+		return $http.post('/api/sessions/update_watch_loc', updatedsession);
+	};
+
+	this.updateCurrentLocation = function(current_loc_lat, current_loc_lon, guid){
+		var currloc = {
+			lat : current_loc_lat,
+			lon : current_loc_lon
+		}
+
+		var currlocJSON = JSON.stringify(currloc);
+
+		var updatedsession = {
+			currloc: currlocJSON,
+			guid   : guid
+		}
+
+		console.log("updating curr location");
+
+		console.log("updatedsession:", updatedsession);
+		return $http.post('/api/sessions/update_curr_loc', updatedsession);
 	};
 
 	this.updateCoupling = function(guid, guidtgt){
