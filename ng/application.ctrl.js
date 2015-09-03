@@ -106,7 +106,7 @@ angular.module('app')
 
         $scope.map.drawUserLocationMarker(googleLoc);
 
-       	SessionSvc.updateCurrentLocation(crd.latitude, ccrd.longitude, $scope.guid);
+       	SessionSvc.updateCurrentLocation(crd.latitude, crd.longitude, $scope.guid);
     };
 
 	$scope.initSession = function(){

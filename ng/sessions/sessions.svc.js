@@ -51,9 +51,6 @@ angular.module('app')
 			guid   : guid
 		}
 
-		console.log("updating curr location");
-
-		console.log("updatedsession:", updatedsession);
 		return $http.post('/api/sessions/update_curr_loc', updatedsession);
 	};
 

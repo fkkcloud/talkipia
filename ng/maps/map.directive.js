@@ -149,8 +149,8 @@ angular.module('app')
 
         // update position of interest of other users
         function updateAndDrawOtherUsers(){
+            updateBounds();
 
-            //console.log('reference post:', post);
             SessionSvc.fetch()
             .success(function(sessions){
 
@@ -167,11 +167,8 @@ angular.module('app')
                     //console.log('post location:', post.location);
                     var watch_location = angular.fromJson(session.watchloc);
                     
-                    // 유저가 보고 있는 바운더리 안에 그 session(다른유저) 체킁
-                    
                     //console.log(current_map_se, current_map_nw);
-                    // 다른사람이 보고 있는 센터(나 X마커의 위치)가 내 맵상에 안에 있는지 확인.
-                    updateBounds();
+                    // 다른사람이 보고 있는 센터가 내 맵상에 안에 있는지 확인.
                     if (!(watch_location.center_lat < current_map_nw.lat) ||
                         !(watch_location.center_lat > current_map_se.lat) ||
                         !(watch_location.center_lon < current_map_se.lon) ||
@@ -180,6 +177,7 @@ angular.module('app')
                         continue;
                     }
                     
+
                     var googleLoc = new google.maps.LatLng(watch_location.center_lat, watch_location.center_lon);
 
                     var imageListener = {
@@ -215,6 +213,7 @@ angular.module('app')
         function drawResponses(post){
             //console.log('reference post:', post);
 
+            updateBounds();
             function drawBlinks(sessions){
 
                 for (var i = 0; i < sessions.length; i++){
@@ -231,7 +230,6 @@ angular.module('app')
                     // 유저가 보고 있는 바운더리 안에 그 session(다른유저) 체킁
 
                     //console.log(current_map_se, current_map_nw);
-                    updateBounds();
                     if (!(watch_location.center_lat < current_map_nw.lat()) ||
                         !(watch_location.center_lat > current_map_se.lat()) ||
                         !(watch_location.center_lon < current_map_se.lng()) ||
