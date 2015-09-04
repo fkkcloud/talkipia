@@ -76,6 +76,22 @@ router.post('/delete', cors(), function(req, res, next){
 });
 
 // for updating watch location constantly
+router.post('/update_onlinestat', cors(), function(req, res, next){
+	var query         = {'guid'       :req.body.guid};
+	var newOnlinestat = {'onlinestat' :req.body.onlinestat};
+	var options       = {upsert:false};
+
+	Session.findOneAndUpdate(query, newOnlinestat, options, function(err, session){
+    	if (err) return res.send(500, { error: err });
+
+    	// let the front-end app know that we updated user location since its updating POI
+    	websockets.broadcast('update_POI', session);
+
+    	return res.status(201).json(session);
+	});
+});
+
+// for updating watch location constantly
 router.post('/update_watch_loc', cors(), function(req, res, next){
 	var query       = {'guid'    :req.body.guid};
 	var newWatchLoc = {'watchloc':req.body.watchloc};
