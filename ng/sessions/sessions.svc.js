@@ -14,6 +14,15 @@ angular.module('app')
 		return $http.post('/api/sessions/delete', session);
 	};
 
+	this.updateOnlinestat = function(onlinestat, guid){
+		var updatedsession = {
+			onlinestat: onlinestat,
+			guid      : guid
+		};
+
+		return $http.post(SERVER.url + '/api/sessions/update_onlinestat', updatedsession);
+	}
+
 	this.updateWatchLocation = function(current_map_nw, current_map_se, current_map_center, guid){
 		var watchloc = {
             nw_lat     : current_map_nw.lat,

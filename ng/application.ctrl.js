@@ -7,7 +7,8 @@ angular.module('app')
     //------------------------------------------------------------------------------------
 
     window.onbeforeunload = function(e) {
-    	SessionSvc.remove($scope.guid)
+    	SessionSvc.updateOnlinestat(false, $scope.guid)
+    	//SessionSvc.remove($scope.guid)
     	.success(function(res){
     		// handle success
     	})
@@ -18,6 +19,9 @@ angular.module('app')
 
 	window.onpageshow = function(e) {
 		$scope.initSession();
+
+		SessionSvc.updateOnlinestat(true, $scope.guid);
+
 		if ($scope.map) {
 			$timeout(function(){
 				$scope.map.updateAndDrawPosts();
@@ -26,7 +30,8 @@ angular.module('app')
 	};
 
 	window.onpagehide = function(e) {
-    	SessionSvc.remove($scope.guid)
+		SessionSvc.updateOnlinestat(false, $scope.guid)
+    	//SessionSvc.remove($scope.guid)
     	.success(function(res){
     		// handle success
     	})
@@ -42,6 +47,7 @@ angular.module('app')
 	  	document.visibilityState == 'msVisible' ||
 	  	document.visibilityState == 'webkitVisible')
 	  {
+	  	SessionSvc.updateOnlinestat(true, $scope.guid);
 	  	$scope.initSession();
 	  	if ($scope.map)
 	  	{
@@ -53,7 +59,8 @@ angular.module('app')
 	  	document.visibilityState == 'msHidden' ||
 	  	document.visibilityState == 'webkitHidden')
 	  {
-	  	SessionSvc.remove($scope.guid)
+	  	SessionSvc.updateOnlinestat(false, $scope.guid)
+	  	//SessionSvc.remove($scope.guid)
 	  	.success(function(res){
     		// handle success
     	})
@@ -67,6 +74,7 @@ angular.module('app')
 	document.addEventListener("webkitvisibilitychange", function() {
 	  if (document.webkitVisible)
 	  {
+	  	SessionSvc.updateOnlinestat(true, $scope.guid);
 	  	$scope.initSession();
 	  	if ($scope.map)
 	  	{
@@ -75,7 +83,8 @@ angular.module('app')
 	  } 
 	  else if (document.webkitHidden)
 	  {
-	  	SessionSvc.remove($scope.guid)
+	  	SessionSvc.updateOnlinestat(false, $scope.guid)
+	  	//SessionSvc.remove($scope.guid)
 	  	.success(function(res){
     		// handle success
     	})
@@ -168,6 +177,7 @@ angular.module('app')
 			SessionSvc.enter(session)
 			.success(function(res){
     		// handle success
+    			SessionSvc.updateOnlinestat(true, $scope.guid);
 	    	})
 	    	.catch(function(err){
 	    		// handle error
