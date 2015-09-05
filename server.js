@@ -51,7 +51,7 @@ setInterval(function() {
 				    	if (err) return res.send(500, { error: err });
 
 				    	// let the front-end app know that we updated user location since its updating POI
-				    	websockets.broadcast('update_POI', session);
+				    	socket.broadcast('update_POI', session);
 
 				    	return res.status(201).json(session);
 					});
