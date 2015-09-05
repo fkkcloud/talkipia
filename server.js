@@ -52,8 +52,6 @@ setInterval(function() {
 
 				    	// let the front-end app know that we updated user location since its updating POI
 				    	socket.broadcast('update_POI', session);
-
-				    	return res.status(201).json(session);
 					});
 				}
 			}
