@@ -7,7 +7,9 @@ var SessionHistory = db.model('SessionHistory', {
 	guidtgt 	:    { type: String, required: true },
 	date    	:  	 { type: Date,   required: true,  default: Date.now },
 	devicetoken : 	 { type: String, required: false, default: '0' },
-	onlinestat  :    { type: Boolean, required:true,  default: false }
+	onlinestat  :    { type: Boolean, required:true,  default: false },
+	lastupdate  :    { type: Date,   required: true,  default: Date.now }
+
 });
 
 module.exports = SessionHistory;
