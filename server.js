@@ -37,7 +37,7 @@ setInterval(function() {
 				// get time between 2 date
 				var t1 = session.lastupdate;
 				var t2 = new Date();
-				var dif = t1 - t2.getMilliseconds();
+				var dif = t1 - t2.getTime();
 
 				var Seconds_from_T1_to_T2 = dif / 1000;
 				var Seconds_Between_Dates = Math.abs(Seconds_from_T1_to_T2);

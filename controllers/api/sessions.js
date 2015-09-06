@@ -77,8 +77,10 @@ router.post('/delete', cors(), function(req, res, next){
 
 // for updating watch location constantly
 router.post('/update_lastupdate', cors(), function(req, res, next){
+	var lastupdate = new Date();
+
 	var query         = {'guid'       :req.body.guid};
-	var newLastupdate = {'lastupdate' :req.body.lastupdate};
+	var newLastupdate = {'lastupdate' :lastupdate.getTime();};
 	var options       = {upsert:false};
 
 	Session.findOneAndUpdate(query, newLastupdate, options, function(err, session){
