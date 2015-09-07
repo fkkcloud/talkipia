@@ -32,6 +32,21 @@ router.get('/:page', cors(), function(req, res, next){
     })
 });
 
+// get pagination - histories
+router.get('/history/:page', cors(), function(req, res, next){
+	var perPage = req.query.perpage;
+	var page    = req.params.page;
+
+	/* Post use instead of History for test*/
+	History.find()
+	.sort('-date')
+    .limit(perPage)
+	.skip(perPage * page)  	
+	.exec(function(err, posts) {
+     	return res.json(posts);
+    })
+});
+
 router.post('/', cors(), function(req, res, next){
 	var relativeLifeSpan = req.body.lifespan;
 
