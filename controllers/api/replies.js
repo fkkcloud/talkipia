@@ -20,7 +20,7 @@ router.get('/', cors(), function(req, res, next){
 router.post('/find', cors(), function(req, res, next){
 	var query = { 'roomid': req.body.roomid };
 
-	if (debug) console.log('requested replies for roomid:', req.body.roomid);
+	if (debug) console.log('requested replies for roomid:', roomid);
 
 	Reply.find(query)
 	.sort('-date')
@@ -30,15 +30,15 @@ router.post('/find', cors(), function(req, res, next){
 			return next(err); 
 		}
 		
-		if (debug) console.log("replies found successfully:", req.body.roomid);
+		if (debug) console.log("replies found successfully:", roomid);
 
 		res.status(200).json(replies);
 	});
 });
 
 /* pagination
-	http://localhost:3000/api/replies/page?perpage=page
-	http://localhost:3000/api/replies/1?perpage=2
+	http://localhost:3000/api/replies/roomid?page=page?perpage=perpage
+	http://localhost:3000/api/replies/dskf3423?page=1?perpage=2
 */
 router.get('/:roomid', cors(), function(req, res, next){
 	var roomid  = req.params.roomid;

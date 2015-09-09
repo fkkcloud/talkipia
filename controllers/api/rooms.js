@@ -33,6 +33,36 @@ router.post('/find', cors(), function(req, res, next){
 	});
 });
 
+/* pagination
+	http://localhost:3000/api/rooms/postid?page=page?perpage=perpage
+	http://localhost:3000/api/rooms/dsafjkldsa323?page=1?perpage=2
+*/
+router.get('/:postid', cors(), function(req, res, next){
+	var postid  = req.params.postid;
+	var perPage = req.query.perpage;
+	var page    = req.query.page;
+
+	var query = { 'postid': postid };
+
+	if (debug) console.log('requested replies for postid:', postid);
+
+	/* Post use instead of History for test*/
+	Room.find(query)
+	.sort('-date')
+    .limit(perPage)
+	.skip(perPage * page)  	
+	.exec(function(err, rooms) {
+		if (err) { 
+			console.log('rooms find error:', err);
+			return next(err); 
+		}
+
+		if (debug) console.log("rooms found successfully:", postid);
+
+     	res.status(200).json(rooms);
+    })
+});
+
 router.post('/', cors(), function(req, res, next){
 	var room = new Room({
 		postid     	: req.body.postid,
