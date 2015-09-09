@@ -8,8 +8,8 @@ var SessionHistory = db.model('SessionHistory', {
 	date    	:  	 { type: Date,   required: true,  default: Date.now },
 	devicetoken : 	 { type: String, required: false, default: '0' },
 	onlinestat  :    { type: Boolean, required:true,  default: false },
-	lastupdate  :    { type: Date,   required: true,  default: Date.now }
-
+	lastupdate  :    { type: Date,   required: true,  default: Date.now },
+	follow      :    { type: String, required: false },
 });
 
 module.exports = SessionHistory;

@@ -5,12 +5,13 @@ var db = require('../../db.js');
 var websockets = require('../../web_socket/websockets.js');
 var cors = require('cors');
 
+// get all the posts
 router.get('/', cors(), function(req, res, next){
 	Post.find()
 	.sort('-date')
 	.exec(function(err, posts){
 		if (err) { return next(err); }
-		res.json(posts);
+		res.status(200).json(posts);
 	});
 });
 
@@ -28,7 +29,7 @@ router.get('/:page', cors(), function(req, res, next){
     .limit(perPage)
 	.skip(perPage * page)  	
 	.exec(function(err, posts) {
-     	return res.json(posts);
+     	res.status(200).json(posts);
     })
 });
 
@@ -43,14 +44,14 @@ router.get('/history/:page', cors(), function(req, res, next){
     .limit(perPage)
 	.skip(perPage * page)  	
 	.exec(function(err, posts) {
-     	return res.json(posts);
+     	res.status(200).json(posts);
     })
 });
 
+// create post
 router.post('/', cors(), function(req, res, next){
 	var relativeLifeSpan = req.body.lifespan;
-
-	var currentDate = new Date();
+	var currentDate      = new Date();
 	var currentTimeMilli = currentDate.getTime();
 	var relativeLifeEnd  = relativeLifeSpan + currentTimeMilli;
 
@@ -117,15 +118,18 @@ router.post('/update_guidtgt', cors(), function(req, res, next){
 
     	Post.find(query, function(err, post){
     		if (err) return res.send(500, { error: err });
-    		return res.status(201).json(post);
+    		res.status(201).json(post);
     	});
 	});
 });
 
 // for manual remove
 router.post('/posts_delete', cors(), function(req, res, next){
-	Post.remove({ _id: req.body._id }, function(err, doc){
-		if (err) { return next(err); }		
+	var query = { _id: req.body._id };
+
+	Post.remove(query, function(err, doc){
+		if (err) { return next(err); }	
+
 		websockets.broadcast('remove_post', req.body._id);
 		res.status(201);
 	});

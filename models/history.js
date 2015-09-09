@@ -9,6 +9,7 @@ var History = db.model('History', {
 	guid    :    { type: String,  required: true },
 	guidtgt :    { type: String,  required: true },
 	islocal :    { type: Boolean, required: true },
+	roomid  :    { type: String,  required: false },
 	date    :  	 { type: Date,    required: true, default: Date.now },
 	devicetoken : 	 { type: String, required: false, default: '0' }
 });
