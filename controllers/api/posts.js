@@ -124,7 +124,7 @@ router.post('/update_guidtgt', cors(), function(req, res, next){
 });
 
 // for manual remove
-router.post('/posts_delete', cors(), function(req, res, next){
+router.post('/delete', cors(), function(req, res, next){
 	var query = { _id: req.body._id };
 
 	Post.remove(query, function(err, doc){
