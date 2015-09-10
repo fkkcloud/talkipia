@@ -38,7 +38,7 @@ router.post('/find', cors(), function(req, res, next){
 	http://localhost:3000/api/rooms/dsafjkldsa323?page=1?perpage=2
 */
 router.get('/:guid', cors(), function(req, res, next){
-	var guid  = req.params.guid;
+	var guid    = req.params.guid;
 	var perPage = req.query.perpage;
 	var page    = req.query.page;
 
