@@ -1,4 +1,4 @@
-var Room = require('../../models/reply');
+var Reply = require('../../models/reply');
 var router = require('express').Router();
 var db = require('../../db.js');
 var websockets = require('../../web_socket/websockets.js');
