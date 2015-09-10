@@ -44,7 +44,7 @@ router.get('/:guid', cors(), function(req, res, next){
 
 	var query = { 'guid': guid };
 	
-	if (debug) console.log('requested replies for guid:', guid);
+	if (debug) console.log('requested rooms for guid:', guid);
 	
 	/* Post use instead of History for test*/
 	Room.find(query)
@@ -57,7 +57,7 @@ router.get('/:guid', cors(), function(req, res, next){
 			return next(err); 
 		}
 		
-		if (debug) console.log("rooms found successfully:", guid);
+		if (debug) console.log("rooms found successfully:", rooms.length);
 		
      	res.status(200).json(rooms);
     })
