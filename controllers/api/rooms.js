@@ -37,15 +37,15 @@ router.post('/find', cors(), function(req, res, next){
 	http://localhost:3000/api/rooms/postid?page=page?perpage=perpage
 	http://localhost:3000/api/rooms/dsafjkldsa323?page=1?perpage=2
 */
-router.get('/:postid', cors(), function(req, res, next){
-	var postid  = req.params.postid;
+router.get('/:guid', cors(), function(req, res, next){
+	var guid  = req.params.guid;
 	var perPage = req.query.perpage;
 	var page    = req.query.page;
 
-	var query = { 'postid': postid };
-
-	if (debug) console.log('requested replies for postid:', postid);
-
+	var query = { 'guid': guid };
+	
+	if (debug) console.log('requested replies for guid:', guid);
+	
 	/* Post use instead of History for test*/
 	Room.find(query)
 	.sort('-date')
@@ -56,9 +56,9 @@ router.get('/:postid', cors(), function(req, res, next){
 			console.log('rooms find error:', err);
 			return next(err); 
 		}
-
-		if (debug) console.log("rooms found successfully:", postid);
-
+		
+		if (debug) console.log("rooms found successfully:", guid);
+		
      	res.status(200).json(rooms);
     })
 });
