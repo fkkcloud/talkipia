@@ -9,7 +9,7 @@ var debug = true;
 // find all replies
 router.get('/', cors(), function(req, res, next){
 	Reply.find()
-	.sort('-date')
+	.sort('date')
 	.exec(function(err, replies){
 		if (err) { return next(err); }
 		res.status(200).json(replies);
@@ -23,7 +23,7 @@ router.post('/find', cors(), function(req, res, next){
 	if (debug) console.log('requested replies for roomid:', roomid);
 
 	Reply.find(query)
-	.sort('-date')
+	.sort('date')
 	.exec(function(err, replies){
 		if (err) { 
 			console.log('replies find error:', err);
@@ -51,7 +51,7 @@ router.get('/:roomid', cors(), function(req, res, next){
 
 	/* Post use instead of History for test*/
 	Reply.find(query)
-	.sort('-date')
+	.sort('date')
     .limit(perPage)
 	.skip(perPage * page)  	
 	.exec(function(err, replies) {
