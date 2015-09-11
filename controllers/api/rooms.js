@@ -33,7 +33,7 @@ router.post('/find', cors(), function(req, res, next){
 	});
 });
 
-router.get('/', cors(), function(req, res, next){
+router.get('/feed', cors(), function(req, res, next){
 	var perPage = req.query.perpage;
 	var page    = req.query.page;
 
