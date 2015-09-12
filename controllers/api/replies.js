@@ -54,7 +54,6 @@ router.get('/:roomid', cors(), function(req, res, next){
 	.sort('-date')
     .limit(perPage)
 	.skip(perPage * page)  
-	.sort('-')	
 	.exec(function(err, replies) {
 		if (err) { 
 			console.log('replies find error:', err);
