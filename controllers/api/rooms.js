@@ -126,9 +126,9 @@ router.post('/update_like', cors(), function(req, res, next){
 	var likestat;
 
 	if (req.body.isAdding)
-		viewstat = { $inc : { 'view' : 1 } };
+		likestat = { $inc : { 'view' : 1 } };
 	else
-		viewstat = { $inc : { 'view' : -1 } };
+		likestat = { $inc : { 'view' : -1 } };
 
 	Room.update(query, likestat, function(err, doc){
     	if (err) return res.send(500, { error: err });
