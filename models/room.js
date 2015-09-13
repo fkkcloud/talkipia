@@ -8,6 +8,7 @@ var Room = db.model('Room', {
 	date    :    { type: Date,    required: true,  default: Date.now },
 	devicetoken: { type: String,  required: false, default: '0' },
 	like    :    { type: Number,  required: true,  default: 0 },
+	view    :    { type: Number,  required: true,  default: 0 },
 	followers:    { type: String,  required: false},
 });
 

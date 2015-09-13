@@ -123,7 +123,13 @@ router.post('/delete', cors(), function(req, res, next){
 // update like
 router.post('/update_like', cors(), function(req, res, next){
 	var query       = {'roomid' :req.body.roomid};
-	var likestat    = {'like'   :req.body.like};
+	var likestat;
+
+	if (req.body.isAdding)
+		viewstat = { $inc : { 'view' : 1 } };
+	else
+		viewstat = { $inc : { 'view' : -1 } };
+	    = {'like'   :req.body.like};
 
 	Room.update(query, likestat, function(err, doc){
     	if (err) return res.send(500, { error: err });
@@ -142,7 +148,12 @@ router.post('/update_like', cors(), function(req, res, next){
 // update viewing
 router.post('/update_view', cors(), function(req, res, next){
 	var query       = {'roomid' :req.body.roomid};
-	var viewstat    = {'view'   :req.body.view};
+	var viewstat;
+
+	if (req.body.isAdding)
+		viewstat = { $inc : { 'view' : 1 } };
+	else
+		viewstat = { $inc : { 'view' : -1 } };
 
 	Room.update(query, viewstat, function(err, doc){
     	if (err) return res.send(500, { error: err });
