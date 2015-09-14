@@ -91,6 +91,7 @@ router.post('/', cors(), function(req, res, next){
 		postid     	: req.body.postid,
 		body    	: req.body.body,
 		location 	: req.body.location,
+		place       : req.body.place,
 		guid     	: req.body.guid,
 		islocal  	: req.body.islocal,
 		devicetoken : req.body.devicetoken,
@@ -136,6 +137,7 @@ router.post('/update_like', cors(), function(req, res, next){
     	Room.find(query, function(err, room){
     		if (err) return res.send(500, { error: err });
     		
+    		websockets.broadcast('update_room_like', room);
     		res.status(200).json(room);
     	});
 
@@ -157,7 +159,8 @@ router.post('/update_view', cors(), function(req, res, next){
 
     	Room.find(query, function(err, room){
     		if (err) return res.send(500, { error: err });
-    		
+
+    		websockets.broadcast('update_update_view', room);
     		res.status(200).json(room);
     	});
 

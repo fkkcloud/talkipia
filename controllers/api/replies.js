@@ -60,7 +60,7 @@ router.get('/:roomid', cors(), function(req, res, next){
 			return next(err); 
 		}
 
-		if (debug) console.log("replies found successfully:", req.body.roomid);
+		if (debug) console.log("replies found successfully:", req.params.roomid);
 
      	res.status(200).json(replies);
     })

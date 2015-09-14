@@ -4,6 +4,7 @@ var Room = db.model('Room', {
 	postid  :    { type: String,  required: true },
 	body    :    { type: String,  required: true  },
 	location:    { type: String,  required: true  },
+	place   :    { type: String,  required: true  },
 	guid    :    { type: String,  required: true  },
 	date    :    { type: Date,    required: true,  default: Date.now },
 	devicetoken: { type: String,  required: false, default: '0' },
