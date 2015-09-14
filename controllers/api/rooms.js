@@ -160,7 +160,7 @@ router.post('/update_view', cors(), function(req, res, next){
     	Room.find(query, function(err, room){
     		if (err) return res.send(500, { error: err });
 
-    		websockets.broadcast('update_update_view', room);
+    		websockets.broadcast('update_room_view', room);
     		res.status(200).json(room);
     	});
 
