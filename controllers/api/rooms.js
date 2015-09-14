@@ -111,7 +111,7 @@ router.post('/', cors(), function(req, res, next){
 
 // for manual remove
 router.post('/delete', cors(), function(req, res, next){
-	var query = { _id: req.body._id };
+	var query = { _id: req.body.roomid };
 
 	Room.remove(query, function(err, doc){
 		if (err) { return next(err); }
@@ -159,6 +159,8 @@ router.post('/update_view', cors(), function(req, res, next){
 
     	Room.find(query, function(err, room){
     		if (err) return res.send(500, { error: err });
+
+    		console.log(room);
 
     		websockets.broadcast('update_room_view', room);
     		res.status(200).json(room);
