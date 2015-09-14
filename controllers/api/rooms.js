@@ -111,7 +111,7 @@ router.post('/', cors(), function(req, res, next){
 
 // for manual remove
 router.post('/delete', cors(), function(req, res, next){
-	var query = { _id: req.body.postid };
+	var query = { _id: req.body._id };
 
 	Room.remove(query, function(err, doc){
 		if (err) { return next(err); }
@@ -123,7 +123,7 @@ router.post('/delete', cors(), function(req, res, next){
 
 // update like
 router.post('/update_like', cors(), function(req, res, next){
-	var query       = {'roomid' :req.body.roomid};
+	var query       = {'_id' :req.body.roomid};
 	var likestat;
 
 	if (req.body.isAdding)
@@ -146,7 +146,7 @@ router.post('/update_like', cors(), function(req, res, next){
 
 // update viewing
 router.post('/update_view', cors(), function(req, res, next){
-	var query       = {'roomid' :req.body.roomid};
+	var query       = {'_id' :req.body.roomid};
 	var viewstat;
 
 	if (req.body.isAdding)
