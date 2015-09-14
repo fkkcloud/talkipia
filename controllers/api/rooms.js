@@ -162,7 +162,7 @@ router.post('/update_view', cors(), function(req, res, next){
 
     		console.log(room);
 
-    		websockets.broadcast('update_room_view', room);
+    		websockets.broadcast('update_room_view', room[0]);
     		res.status(200).json(room);
     	});
 
