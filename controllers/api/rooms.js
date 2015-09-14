@@ -133,14 +133,12 @@ router.post('/update_like', cors(), function(req, res, next){
 	Room.update(query, likestat, function(err, doc){
     	if (err) return res.send(500, { error: err });
 
-    	/*
     	Room.find(query, function(err, room){
     		if (err) return res.send(500, { error: err });
-    		return res.status(200).json(room);
+    		
+    		res.status(200).json(room);
     	});
-		*/
 
-		res.status(200);
 	});
 });
 
@@ -157,13 +155,12 @@ router.post('/update_view', cors(), function(req, res, next){
 	Room.update(query, viewstat, function(err, doc){
     	if (err) return res.send(500, { error: err });
 
-    	/*
     	Room.find(query, function(err, room){
     		if (err) return res.send(500, { error: err });
-    		return res.status(200).json(room);
-    	});*/
+    		
+    		res.status(200).json(room);
+    	});
 
-		res.status(200);
 	});
 });
 
