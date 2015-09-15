@@ -76,14 +76,16 @@ router.post('/', cors(), function(req, res, next){
 		devicetoken : req.body.devicetoken,
 	});
 
-	reply.save(function(err, replies){
+	reply.save(function(err, reply){
 		if (err) { return next(err); }
 
 		// broadcast to all clients about the new message coming in!
-		websockets.broadcast('new_reply', replies);
+		websockets.broadcast('new_reply', reply);
+
+		console.log('created reply:', reply);
 
 		// 201 - The request has been fulfilled and resulted in a new resource being created.
-		res.status(201).json(replies); 
+		res.status(201).json(reply); 
 	});
 });
 
