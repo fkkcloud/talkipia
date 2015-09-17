@@ -74,6 +74,7 @@ router.post('/', cors(), function(req, res, next){
 		location 	: req.body.location,
 		guid     	: req.body.guid,
 		devicetoken : req.body.devicetoken,
+		width       : req.body.width,
 	});
 
 	reply.save(function(err, reply){
@@ -81,8 +82,6 @@ router.post('/', cors(), function(req, res, next){
 
 		// broadcast to all clients about the new message coming in!
 		websockets.broadcast('new_reply', reply);
-
-		console.log('created reply:', reply);
 
 		// 201 - The request has been fulfilled and resulted in a new resource being created.
 		res.status(201).json(reply); 
