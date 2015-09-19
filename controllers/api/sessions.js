@@ -24,6 +24,7 @@ router.post('/', cors(), function(req, res, next){
 		guid     	: req.body.guid,
 		guidtgt  	: req.body.guidtgt,
 		devicetoken : req.body.devicetoken,
+		userid      : req.body.userid,
 	};
 	var options = {upsert:true, 'new':true};
 
@@ -76,6 +77,19 @@ router.post('/delete', cors(), function(req, res, next){
 		
 		if (debug) console.log("session removed successfully:", req.body.guid);
 		res.status(200);
+	});
+});
+
+// for updating watch location constantly
+router.post('/update_userid', cors(), function(req, res, next){
+	var query         = {'guid'   :req.body.guid};
+	var newUserId 	  = {'userid' :req.body.userid};
+	var options       = {upsert:false};
+
+	Session.findOneAndUpdate(query, newUserId, options, function(err, session){
+    	if (err) res.send(500, { error: err });
+
+    	res.status(200).json(session);
 	});
 });
 
