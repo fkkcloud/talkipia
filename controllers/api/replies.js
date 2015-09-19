@@ -4,7 +4,7 @@ var db = require('../../db.js');
 var websockets = require('../../web_socket/websockets.js');
 var cors = require('cors');
 
-var debug = true;
+var debug = false;
 
 // find all replies
 router.get('/', cors(), function(req, res, next){

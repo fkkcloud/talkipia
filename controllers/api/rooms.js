@@ -4,7 +4,7 @@ var db = require('../../db.js');
 var websockets = require('../../web_socket/websockets.js');
 var cors = require('cors');
 
-var debug = true;
+var debug = false;
 
 router.get('/', cors(), function(req, res, next){
 	Room.find()
@@ -19,7 +19,7 @@ router.get('/', cors(), function(req, res, next){
 router.post('/find', cors(), function(req, res, next){
 	var query = { 'postid': req.body.postid };
 
-	console.log("recieved payload: ",req.body.postid );
+	if (debug) console.log("recieved payload: ",req.body.postid );
 
 	if (debug) console.log('requested room for postid:', req.body.postid);
 
@@ -31,7 +31,7 @@ router.post('/find', cors(), function(req, res, next){
 		
 		if (debug) console.log("room found one successfully:", req.body.postid);
 
-		res.status(200).json(room);
+		res.status(200).json(room[0]);
 	});
 });
 
