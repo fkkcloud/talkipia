@@ -19,6 +19,8 @@ router.get('/', cors(), function(req, res, next){
 router.post('/find', cors(), function(req, res, next){
 	var query = { 'postid': req.body.postid };
 
+	console.log("recieved payload: ",req.body.postid );
+
 	if (debug) console.log('requested room for postid:', req.body.postid);
 
 	Room.findOne(query, function(err, room){
