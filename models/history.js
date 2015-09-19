@@ -1,6 +1,7 @@
 var db = require('../db');
 
 var History = db.model('History', {
+	_id     :    { type: String,  required: true },
 	body    :    { type: String,  required: true },
 	place   :  	 { type: String,  required: true },
 	location:    { type: String,  required: true },
