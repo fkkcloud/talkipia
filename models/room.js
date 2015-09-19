@@ -11,6 +11,7 @@ var Room = db.model('Room', {
 	like    :    { type: Number,  required: true,  default: 0 },
 	view    :    { type: Number,  required: true,  default: 0 },
 	followers:    { type: String,  required: false},
+	userid  :    { type: String,  required: true }
 });
 
 module.exports = Room;

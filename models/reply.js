@@ -9,7 +9,8 @@ var Reply = db.model('Reply', {
 	width   :    { type: Number,  required: true  },
 	date    :  	 { type: Date,    required: true,  default: Date.now },
 	devicetoken: { type: String,  required: false, default: '0' },
-	isOnline:    { type: String,  required: false, default: false}
+	isOnline:    { type: String,  required: false, default: false},
+	userid  :    { type: String,  required: true },
 });
 
 module.exports = Reply;
