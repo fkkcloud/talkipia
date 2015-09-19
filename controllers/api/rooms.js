@@ -31,6 +31,8 @@ router.post('/find', cors(), function(req, res, next){
 		
 		if (debug) console.log("room found one successfully:", req.body.postid);
 
+		console.log(room[0]);
+
 		res.status(200).json(room[0]);
 	});
 });
