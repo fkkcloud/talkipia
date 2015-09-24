@@ -66,7 +66,8 @@ router.post('/', cors(), function(req, res, next){
 		guidtgt  	: req.body.guidtgt,
 		islocal  	: req.body.islocal,
 		devicetoken : req.body.devicetoken,
-		userid      : req.body.userid
+		userid      : req.body.userid,
+		userplace   : req.body.userplace
 	});
 
 	var history = new History({
@@ -80,7 +81,8 @@ router.post('/', cors(), function(req, res, next){
 		guidtgt  	: req.body.guidtgt,
 		islocal  	: req.body.islocal,
 		devicetoken : req.body.devicetoken,
-		userid      : req.body.userid
+		userid      : req.body.userid,
+		userplace   : req.body.userplace
 	});
 
 	post.save(function(err, post){

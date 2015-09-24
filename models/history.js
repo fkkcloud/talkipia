@@ -14,6 +14,7 @@ var History = db.model('History', {
 	date    :  	 { type: Date,    required: true, default: Date.now },
 	devicetoken : 	 { type: String, required: false, default: '0' },
 	userid  :    { type: String,  required: true },
+	userplace:   { type: String,  required: true },
 });
 
 module.exports = History;

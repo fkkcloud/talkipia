@@ -75,7 +75,8 @@ router.post('/', cors(), function(req, res, next){
 		guid     	: req.body.guid,
 		devicetoken : req.body.devicetoken,
 		width       : req.body.width,
-		userid      : req.body.userid
+		userid      : req.body.userid,
+		userplace   : req.body.userplace
 	});
 
 	reply.save(function(err, reply){

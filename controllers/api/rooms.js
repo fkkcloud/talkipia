@@ -98,7 +98,8 @@ router.post('/', cors(), function(req, res, next){
 		islocal  	: req.body.islocal,
 		devicetoken : req.body.devicetoken,
 		followers   : req.body.followers,
-		userid      : req.body.userid
+		userid      : req.body.userid,
+		userplace   : req.body.userplace
 	});
 
 	room.save(function(err, room){

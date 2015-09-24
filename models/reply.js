@@ -11,6 +11,7 @@ var Reply = db.model('Reply', {
 	devicetoken: { type: String,  required: false, default: '0' },
 	isOnline:    { type: String,  required: false, default: false},
 	userid  :    { type: String,  required: true },
+	userplace:   { type: String,  required: true },
 });
 
 module.exports = Reply;
