@@ -203,7 +203,7 @@ router.post('/clear_blocklist', cors(), function(req, res, next){
     	if (err) res.send(500, { error: err });
 
     	// send socket to clear local blocklist on client side
-    	websockets.broadcast('clear_blocklist', block_id);
+    	websockets.broadcast('clear_blocklist');
 
     	res.status(200).json(session);
 	});
