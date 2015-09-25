@@ -170,6 +170,7 @@ router.post('/update_blocklist', cors(), function(req, res, next){
     	/* look for duplicates */
     	for (var val in current_blocklist)
     	{
+    		console.log(val, "  VS  ", block_id);
     		if (val == block_id)
     			res.status(200);
     	}
