@@ -197,10 +197,13 @@ router.post('/update_blocklist', cors(), function(req, res, next){
 // for updating current location constantly
 router.post('/clear_blocklist', cors(), function(req, res, next){
 	var query       = {'guid'     : req.body.guid};
-	var emptylist  	= {'blocklist': "[\"1234\"]"};
+	var emptylist  	= {'blocklist': "[\"1234\"]"b};
 
 	Session.findOneAndUpdate(query, emptylist, function(err, session){
     	if (err) res.send(500, { error: err });
+
+    	// send socket to clear local blocklist on client side
+    	websockets.broadcast('clear_blocklist', block_id);
 
     	res.status(200).json(session);
 	});
