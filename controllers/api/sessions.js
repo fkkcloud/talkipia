@@ -166,6 +166,7 @@ router.post('/update_blocklist', cors(), function(req, res, next){
     	if (err) res.send(500, { error: err });
 
     	var current_blocklist = JSON.parse(session.blocklist);
+    	console.log(current_blocklist);
     	current_blocklist.push(block_id);
     	var updated_blocklist = JSON.stringify(current_blocklist);
 

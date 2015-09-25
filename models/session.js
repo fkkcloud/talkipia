@@ -10,8 +10,8 @@ var Session = db.model('Session', {
 	devicetoken : 	 { type: String, required: false, default: '0' },
 	onlinestat  :    { type: Boolean, required:true,  default: false },
 	lastupdate  :    { type: Date,   required: true,  default: Date.now },
-	following   :    { type: String, required: false, default: JSON.stringify({})},
-	blocklist   :    { type: String, required: false, default: JSON.stringify({})},
+	following   :    { type: String, required: true, default: '[]'},
+	blocklist   :    { type: String, required: true, default: '[]'},
 });
 
 module.exports = Session;
