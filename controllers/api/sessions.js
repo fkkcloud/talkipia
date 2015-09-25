@@ -157,6 +157,43 @@ router.post('/update_curr_loc', cors(), function(req, res, next){
 	});
 });
 
+// for updating current location constantly
+router.post('/update_blocklist', cors(), function(req, res, next){
+	var query       = {'guid'    :req.body.guid};
+	var block_id    = {'location':req.body.block_id};
+
+	Session.findOne(query, function(err, session){
+    	if (err) res.send(500, { error: err });
+
+    	var current_blocklist = angular.fromJson(session.blocklist);
+    	current_blocklist.push(block_id);
+    	var updated_blocklist = JSON.stringify(current_blocklist);
+
+    	var updates = {'blocklist': updated_blocklist};
+
+    	Session.findOneAndUpdate(query, updates, function(err, session){
+	    	if (err) res.send(500, { error: err });
+
+	    	// send block id to client so they can remove reply or post at the same time
+    		websockets.broadcast('block_id', block_id);
+
+	    	res.status(200);
+		});
+	});
+});
+
+// for updating current location constantly
+router.post('/clear_blocklist', cors(), function(req, res, next){
+	var query       = {'guid'     : req.body.guid};
+	var emptylist  	= {'blocklist': JSON.stringify({})};
+
+	Session.findOneAndUpdate(query, emptylist, function(err, session){
+    	if (err) res.send(500, { error: err });
+
+    	res.status(200).json(session);
+	});
+});
+
 // for updating watch location constantly
 router.post('/update_coupling', cors(), function(req, res, next){
 

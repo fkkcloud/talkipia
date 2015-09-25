@@ -10,7 +10,8 @@ var SessionHistory = db.model('SessionHistory', {
 	devicetoken : 	 { type: String, required: false, default: '0' },
 	onlinestat  :    { type: Boolean, required:true,  default: false },
 	lastupdate  :    { type: Date,   required: true,  default: Date.now },
-	follow      :    { type: String, required: false },
+	following   :    { type: String, required: false },
+	blocklist   :    { type: String, required: false },
 });
 
 module.exports = SessionHistory;
