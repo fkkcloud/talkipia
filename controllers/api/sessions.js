@@ -160,13 +160,18 @@ router.post('/update_curr_loc', cors(), function(req, res, next){
 // for updating current location constantly
 router.post('/update_blocklist', cors(), function(req, res, next){
 	var query       = {'guid'    :req.body.guid};
-	var block_id    = {'location':req.body.block_id};
+	var block_id    = req.body.block_id;
 
 	Session.findOne(query, function(err, session){
     	if (err) res.send(500, { error: err });
 
     	var current_blocklist = JSON.parse(session.blocklist);
-    	console.log(current_blocklist);
+    	
+    	for (var val in current_blocklist)
+    	{
+    		if (val == block_id)
+    			res.status(200);
+    	}
     	current_blocklist.push(block_id);
     	var updated_blocklist = JSON.stringify(current_blocklist);
 
@@ -186,7 +191,7 @@ router.post('/update_blocklist', cors(), function(req, res, next){
 // for updating current location constantly
 router.post('/clear_blocklist', cors(), function(req, res, next){
 	var query       = {'guid'     : req.body.guid};
-	var emptylist  	= {'blocklist': JSON.stringify({})};
+	var emptylist  	= {'blocklist': '[]';
 
 	Session.findOneAndUpdate(query, emptylist, function(err, session){
     	if (err) res.send(500, { error: err });
