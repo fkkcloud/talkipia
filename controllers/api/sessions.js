@@ -168,6 +168,8 @@ router.post('/update_blocklist', cors(), function(req, res, next){
     	var current_blocklist = JSON.parse(session.blocklist);
     	
     	/* look for duplicates */
+    	console.log(current_blocklist);
+    	
     	for (var val in current_blocklist)
     	{
     		console.log(val, "  VS  ", block_id);
