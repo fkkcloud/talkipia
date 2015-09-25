@@ -174,7 +174,10 @@ router.post('/update_blocklist', cors(), function(req, res, next){
     	{
     		console.log(current_blocklist[val], "  VS  ", block_id);
     		if (current_blocklist[val] == block_id)
+    		{
     			res.status(200);
+    			return; // end process here
+    		}
     	}
 
     	current_blocklist.push(block_id);
