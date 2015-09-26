@@ -56,7 +56,7 @@ router.post('/', cors(), function(req, res, next){
 	var relativeLifeEnd  = relativeLifeSpan + currentTimeMilli;
 
 	var post = new Post({
-		_id	        : req.body._id,
+		/*_id	        : req.body._id,*/
 		body     	: req.body.body,
 		place    	: req.body.place,
 		location 	: req.body.location,
@@ -72,7 +72,7 @@ router.post('/', cors(), function(req, res, next){
 	});
 
 	var history = new History({
-		_id	        : req.body._id,
+		/*_id	        : req.body._id,*/
 		body     	: req.body.body,
 		place    	: req.body.place,
 		location 	: req.body.location,
