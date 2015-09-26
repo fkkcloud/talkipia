@@ -15,6 +15,7 @@ var History = db.model('History', {
 	devicetoken : 	 { type: String, required: false, default: '0' },
 	userid  :    { type: String,  required: true },
 	userplace:   { type: String,  required: true },
+	isPost  :    { type: Boolean, required: true }
 });
 
 module.exports = History;
