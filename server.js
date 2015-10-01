@@ -21,7 +21,6 @@ var server = app.listen(process.env.PORT || 5000, function(){
 });
 
 socket.connect(server); // web socket server가 된다.
-
 /*
 // send session check every 10s for offline and online sessions
 setInterval(function() {
