@@ -99,7 +99,8 @@ router.post('/', cors(), function(req, res, next){
 		devicetoken : req.body.devicetoken,
 		followers   : req.body.followers,
 		userid      : req.body.userid,
-		userplace   : req.body.userplace
+		userplace   : req.body.userplace,
+		bgimg       : req.body.bgimg,
 	});
 
 	room.save(function(err, room){

@@ -13,6 +13,7 @@ var Room = db.model('Room', {
 	followers:    { type: String,  required: false},
 	userid  :    { type: String,  required: true },
 	userplace:   { type: String,  required: true },
+	bgimg   :    { type: Boolean, required: true }
 });
 
 module.exports = Room;
