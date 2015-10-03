@@ -12,7 +12,8 @@ var Room = db.model('Room', {
 	view    :    { type: Number,  required: true,  default: 0 },
 	userid  :    { type: String,  required: true },
 	userplace:   { type: String,  required: true },
-	bgimg   :    { type: String, required: true }
+	bgimg   :    { type: String, required: true },
+	islocal :    { type: Boolean, required: true}
 });
 
 module.exports = Room;

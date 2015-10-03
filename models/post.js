@@ -8,7 +8,6 @@ var Post = db.model('Post', {
 	lifespan:    { type: Number,  required: true },
 	lifeend :    { type: Number,  required: true },
 	guid    :    { type: String,  required: true },
-	guidtgt :    { type: String,  required: true },
 	islocal :    { type: Boolean, required: true },
 	roomid  :    { type: String,  required: false },
 	date    :  	 { type: Date,    required: true, default: Date.now },

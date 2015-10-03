@@ -10,7 +10,6 @@ var SessionHistory = db.model('SessionHistory', {
 	pushid      : 	 { type: String, required: false, default: '0' },
 	onlinestat  :    { type: Boolean, required:true,  default: false },
 	lastupdate  :    { type: Date,   required: true,  default: Date.now },
-	following   :    { type: String, required: true, default:"[\"1234\"]" },
 	blocklist   :    { type: String, required: true, default:"[\"1234\"]" },
 });
 
