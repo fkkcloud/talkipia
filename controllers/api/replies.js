@@ -73,7 +73,7 @@ router.post('/', cors(), function(req, res, next){
 		body    	: req.body.body,
 		location 	: req.body.location,
 		guid     	: req.body.guid,
-		devicetoken : req.body.devicetoken,
+		pushid      : req.body.pushid,
 		width       : req.body.width,
 		userid      : req.body.userid,
 		userplace   : req.body.userplace

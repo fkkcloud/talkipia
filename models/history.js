@@ -12,7 +12,7 @@ var History = db.model('History', {
 	islocal :    { type: Boolean, required: true },
 	roomid  :    { type: String,  required: false },
 	date    :  	 { type: Date,    required: true, default: Date.now },
-	devicetoken : 	 { type: String, required: false, default: '0' },
+	pushid  : 	 { type: String, required: false, default: '0' },
 	userid  :    { type: String,  required: true },
 	userplace:   { type: String,  required: true },
 	isPost  :    { type: Boolean, required: true }

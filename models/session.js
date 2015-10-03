@@ -7,10 +7,9 @@ var Session = db.model('Session', {
 	guidtgt 	:    { type: String, required: true },
 	userid      :    { type: String, required: true },
 	date    	:  	 { type: Date,   required: true,  default: Date.now },
-	devicetoken : 	 { type: String, required: false, default: '0' },
+	pushid      : 	 { type: String, required: false, default: '0' },
 	onlinestat  :    { type: Boolean, required:true,  default: false },
 	lastupdate  :    { type: Date,   required: true,  default: Date.now },
-	following   :    { type: String, required: true, default: "[\"1234\"]"},
 	blocklist   :    { type: String, required: true, default: "[\"1234\"]"},
 });
 

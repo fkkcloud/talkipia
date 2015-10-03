@@ -23,7 +23,7 @@ router.post('/', cors(), function(req, res, next){
 		watchloc 	: req.body.watchloc,
 		guid     	: req.body.guid,
 		guidtgt  	: req.body.guidtgt,
-		devicetoken : req.body.devicetoken,
+		pushid      : req.body.pushid,
 		userid      : req.body.userid,
 	};
 	var options = {upsert:true, 'new':true};

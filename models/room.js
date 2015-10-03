@@ -7,10 +7,9 @@ var Room = db.model('Room', {
 	place   :    { type: String,  required: true  },
 	guid    :    { type: String,  required: true  },
 	date    :    { type: Date,    required: true,  default: Date.now },
-	devicetoken: { type: String,  required: false, default: '0' },
+	pushid  :    { type: String,  required: false, default: '0' },
 	like    :    { type: Number,  required: true,  default: 0 },
 	view    :    { type: Number,  required: true,  default: 0 },
-	followers:    { type: String,  required: false},
 	userid  :    { type: String,  required: true },
 	userplace:   { type: String,  required: true },
 	bgimg   :    { type: String, required: true }

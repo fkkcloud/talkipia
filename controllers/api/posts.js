@@ -65,7 +65,7 @@ router.post('/', cors(), function(req, res, next){
 		guid     	: req.body.guid,
 		guidtgt  	: req.body.guidtgt,
 		islocal  	: req.body.islocal,
-		devicetoken : req.body.devicetoken,
+		pushid      : req.body.pushid,
 		userid      : req.body.userid,
 		userplace   : req.body.userplace,
 		isPost      : req.body.isPost
@@ -81,7 +81,7 @@ router.post('/', cors(), function(req, res, next){
 		guid     	: req.body.guid,
 		guidtgt  	: req.body.guidtgt,
 		islocal  	: req.body.islocal,
-		devicetoken : req.body.devicetoken,
+		pushid      : req.body.pushid,
 		userid      : req.body.userid,
 		userplace   : req.body.userplace,
 		isPost      : req.body.isPost

@@ -8,7 +8,7 @@ var Reply = db.model('Reply', {
 	isLocal :    { type: Boolean, required: false },
 	width   :    { type: Number,  required: true  },
 	date    :  	 { type: Date,    required: true,  default: Date.now },
-	devicetoken: { type: String,  required: false, default: '0' },
+	pushid  :    { type: String,  required: false, default: '0' },
 	isOnline:    { type: String,  required: false, default: false},
 	userid  :    { type: String,  required: true },
 	userplace:   { type: String,  required: true },

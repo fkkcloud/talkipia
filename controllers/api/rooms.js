@@ -96,7 +96,7 @@ router.post('/', cors(), function(req, res, next){
 		place       : req.body.place,
 		guid     	: req.body.guid,
 		islocal  	: req.body.islocal,
-		devicetoken : req.body.devicetoken,
+		pushid      : req.body.pushid,
 		followers   : req.body.followers,
 		userid      : req.body.userid,
 		userplace   : req.body.userplace,
