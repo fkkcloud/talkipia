@@ -35,26 +35,6 @@ router.post('/find', cors(), function(req, res, next){
 	});
 });
 
-// for manual find by roomid
-router.post('/findByRoomId', cors(), function(req, res, next){
-	var query = { 'roomid': req.body.roomid };
-
-	if (debug) console.log("recieved payload: ",req.body.roomid );
-
-	if (debug) console.log('requested room for postid:', req.body.roomid);
-
-	Room.findOne(query, function(err, room){
-		if (err) { 
-			if (debug) console.log('room find error:', err);
-			return next(err); 
-		}
-		
-		if (debug) console.log("room found one successfully:", req.body.roomid);
-
-		res.status(200).json(room);
-	});
-});
-
 router.get('/feed', cors(), function(req, res, next){
 	var perPage = req.query.perpage;
 	var page    = req.query.page;
