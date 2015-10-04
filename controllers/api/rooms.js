@@ -36,7 +36,7 @@ router.post('/find', cors(), function(req, res, next){
 });
 
 // for manual find by roomid
-router.post('/fetchFindByRoomId', cors(), function(req, res, next){
+router.post('/findByRoomId', cors(), function(req, res, next){
 	var query = { 'roomid': req.body.roomid };
 
 	if (debug) console.log("recieved payload: ",req.body.roomid );
