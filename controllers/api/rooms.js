@@ -15,7 +15,7 @@ router.get('/', cors(), function(req, res, next){
 	});
 });
 
-// for manual find
+// for manual find by postid
 router.post('/find', cors(), function(req, res, next){
 	var query = { 'postid': req.body.postid };
 
@@ -30,6 +30,26 @@ router.post('/find', cors(), function(req, res, next){
 		}
 		
 		if (debug) console.log("room found one successfully:", req.body.postid);
+
+		res.status(200).json(room);
+	});
+});
+
+// for manual find by roomid
+router.post('/fetchFindByRoomId', cors(), function(req, res, next){
+	var query = { 'roomid': req.body.roomid };
+
+	if (debug) console.log("recieved payload: ",req.body.roomid );
+
+	if (debug) console.log('requested room for postid:', req.body.roomid);
+
+	Room.findOne(query, function(err, room){
+		if (err) { 
+			if (debug) console.log('room find error:', err);
+			return next(err); 
+		}
+		
+		if (debug) console.log("room found one successfully:", req.body.roomid);
 
 		res.status(200).json(room);
 	});
