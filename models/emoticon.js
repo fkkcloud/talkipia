@@ -1,6 +1,7 @@
 var db = require('../db');
 
 var Emoticon = db.model('Emoticon', {
+	_id     :    { type: String,  required: true },
 	location:    { type: String,  required: true },
 	lifespan:    { type: Number,  required: true },
 	lifeend :    { type: Number,  required: true },

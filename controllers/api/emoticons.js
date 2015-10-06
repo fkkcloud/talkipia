@@ -23,6 +23,7 @@ router.post('/', cors(), function(req, res, next){
 	var relativeLifeEnd  = relativeLifeSpan + currentTimeMilli;
 
 	var emoticon = new Emoticon({
+		_id         : req.body._id,
 		location 	: req.body.location,
 		lifespan 	: relativeLifeSpan,
 		lifeend  	: relativeLifeEnd,
@@ -31,6 +32,7 @@ router.post('/', cors(), function(req, res, next){
 	});
 
 	var emoticonhistory = new EmoticonHistory({
+		_id         : req.body._id,
 		location 	: req.body.location,
 		lifespan 	: relativeLifeSpan,
 		lifeend  	: relativeLifeEnd,
