@@ -9,4 +9,6 @@ router.use('/rooms', require('./rooms'));
 
 router.use('/replies', require('./replies'));
 
+router.use('/emoticons', require('./emoticons'));
+
 module.exports = router;
