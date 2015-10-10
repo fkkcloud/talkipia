@@ -103,7 +103,7 @@ router.post('/', cors(), function(req, res, next){
 			Post.findOneAndRemove({ _id: post._id }, function(err){
 				if (err) { return next(err); }
 				//console.log("post removed successfully");
-
+				//https://onesignal.com/api/v1/notifications // 노티보내주
 				websockets.broadcast('remove_post', post._id);
 			});
 		},  

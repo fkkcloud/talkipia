@@ -21,6 +21,28 @@ var server = app.listen(process.env.PORT || 5000, function(){
 });
 
 socket.connect(server); // web socket server가 된다.
+
+setInterval(function(){
+	Post.find()
+	.exec(function(err, posts){
+		if (err) { return next(err); }
+
+		for (int i = 0; i < posts.length; i++)
+		{
+			var post = posts[i];
+			var currentDate = new Date();
+			var currentDateMillSec = currentDate.getTime();
+			if (post.lifeend > currentDateMillSec)
+			{
+				Post.findOneAndRemove({ _id: post._id }, function(err){
+					if (err) { return next(err); }
+					websockets.broadcast('remove_post', post._id);
+				});
+			}
+		}
+	});
+			
+}, 4000);
 /*
 // send session check every 10s for offline and online sessions
 setInterval(function() {
