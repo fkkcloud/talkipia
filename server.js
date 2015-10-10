@@ -4,7 +4,11 @@ var logger = require('morgan');
 var socket = require('./web_socket/websockets');
 var favicon = require('serve-favicon');
 var cors = require('cors');
+
 var Session = require('./models/session');
+
+var websockets = require('../../web_socket/websockets.js');
+var Post = require('../../models/post');
 
 var app = express();
 
