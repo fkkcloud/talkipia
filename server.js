@@ -41,6 +41,20 @@ setInterval(function(){
 				Post.findOneAndRemove({ _id: post._id }, function(err){
 					if (err) { return next(err); }
 					websockets.broadcast('remove_post', post._id);
+
+					var content = "Your room is about to be disappear '" + post.body + "'";
+					var pushids = [];
+					pushids.push(post.pushid);
+
+					var notificationObj = { 
+						app_id              : "e1a8e08a-600e-11e5-a4f5-4b146350fa11",
+						contents			: {en: content},
+				        include_player_ids	: pushids,
+				    	data				: {'actiontype' : 0, 
+				    							'location'  : JSON.stringify(post.location), 
+				    							'postid'    : post._id}
+				    };
+					app.post('https://onesignal.com/api/v1/notifications', notificationObj);
 				});
 			}
 		}
