@@ -76,6 +76,7 @@ setInterval(function(){
 					if (post.isPost){
 						console.log("sengind notification to remove the stuff");
 
+						console.log('this is about to removed:', post.body);
 						var content = "Your room is about to be disappear '" + post.body + "'";
 						var pushids = [];
 						pushids.push(post.pushid);
