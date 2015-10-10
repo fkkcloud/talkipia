@@ -36,7 +36,7 @@ setInterval(function(){
 			var post = posts[i];
 			var currentDate = new Date();
 			var currentDateMillSec = currentDate.getTime();
-			if (post.lifeend > currentDateMillSec)
+			if (post.lifeend < currentDateMillSec)
 			{
 				Post.findOneAndRemove({ _id: post._id }, function(err){
 					if (err) { return next(err); }
