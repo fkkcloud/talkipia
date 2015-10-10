@@ -58,11 +58,13 @@ setInterval(function(){
 					    							'postid'    : post._id}
 					    };
 
-					    request.post({url:'https://onesignal.com/api/v1/notifications', formData: notificationObj}, function optionalCallback(err, httpResponse, body) {
-						  if (err) {
-						    return console.error('post failed:', err);
-						  }
-						});
+					    request.post('https://onesignal.com/api/v1/notifications', 
+					    	{ 'form': notificationObj}, 
+					    	function (err, httpResponse, body) {
+						  		if (err) {
+						    		return console.error('post failed:', err);
+						  		}
+							});
 					}
 					
 				});
