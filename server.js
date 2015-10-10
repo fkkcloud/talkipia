@@ -59,7 +59,10 @@ setInterval(function(){
 					    };
 						request.post(
 							'https://onesignal.com/api/v1/notifications', 
-							notificationObj);
+							notificationObj)
+						.on('error', function(err) {
+						    console.log(err)
+						  });
 					}
 					
 				});
