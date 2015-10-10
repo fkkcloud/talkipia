@@ -27,7 +27,7 @@ setInterval(function(){
 	.exec(function(err, posts){
 		if (err) { return next(err); }
 
-		for (int i = 0; i < posts.length; i++)
+		for (var i = 0; i < posts.length; i++)
 		{
 			var post = posts[i];
 			var currentDate = new Date();
