@@ -44,7 +44,10 @@ setInterval(function(){
 					if (err) { return next(err); }
 					websockets.broadcast('remove_post', post._id);
 
+					console.log("about to remove the stuff");
 					if (post.isPost){
+												console.log("sengind notification to remove the stuff");
+
 						var content = "Your room is about to be disappear '" + post.body + "'";
 						var pushids = [];
 						pushids.push(post.pushid);
@@ -59,7 +62,7 @@ setInterval(function(){
 					    };
 
 					    request.post('https://onesignal.com/api/v1/notifications', 
-					    	{ 'form': notificationObj}, 
+					    	{ 'form': notificationObj }, 
 					    	function (err, httpResponse, body) {
 						  		if (err) {
 						    		return console.error('post failed:', err);
