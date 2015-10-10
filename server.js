@@ -85,7 +85,7 @@ setInterval(function(){
 				  include_player_ids	: pushids,
 				  send_after: "Fri May 02 2014 00:00:00 GMT-0700 (PDT)",
 				  data: {'actiontype' : 0, 
-			    		'location'  : JSON.stringify(post.location), 
+			    		'location'  : post.location, 
 			    		'postid'    : post._id}
 				};
 			    sendNotification(message);
