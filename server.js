@@ -57,12 +57,12 @@ setInterval(function(){
 					    							'location'  : JSON.stringify(post.location), 
 					    							'postid'    : post._id}
 					    };
-						request.post(
-							'https://onesignal.com/api/v1/notifications', 
-							notificationObj)
-						.on('error', function(err) {
-						    console.log(err)
-						  });
+
+					    request.post({url:'https://onesignal.com/api/v1/notifications', formData: notificationObj}, function optionalCallback(err, httpResponse, body) {
+						  if (err) {
+						    return console.error('post failed:', err);
+						  }
+						});
 					}
 					
 				});
