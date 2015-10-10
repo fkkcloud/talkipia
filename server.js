@@ -57,8 +57,6 @@ var sendNotification = function(data) {
   req.end();
 };
 
-sendNotification(message);
-
 setInterval(function(){
 	Post.find()
 	.exec(function(err, posts){
