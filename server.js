@@ -7,8 +7,8 @@ var cors = require('cors');
 
 var Session = require('./models/session');
 
-var websockets = require('../../web_socket/websockets.js');
-var Post = require('../../models/post');
+var websockets = require('./web_socket/websockets.js');
+var Post = require('./models/post');
 
 var app = express();
 
