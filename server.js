@@ -71,12 +71,9 @@ setInterval(function(){
 			var lifespan = currentDateMillSec - post.lifeend;
 			var bIsAboutToDie = (lifespan > 0) && (lifespan < 10000);
 			if (post.isPost && bIsAboutToDie){
-				console.log("sending notification to remove the stuff");
 
-				console.log('this is about to removed:', post.body);
 				var content = "Your room is about to be disappear '" + post.body + "'";
 				var pushids = [];
-				console.log('sent pushid:', post.pushid);
 				pushids.push(post.pushid);
 
 				var message = { 
