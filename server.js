@@ -67,30 +67,32 @@ setInterval(function(){
 			var post = posts[i];
 			var currentDate = new Date();
 			var currentDateMillSec = currentDate.getTime();
+
+			var lifespan = currentDateMillSec - post.lifeend;
+			var bIsAboutToDie = (lifespan > 0) && (lifespan < 10000);
+			if (post.isPost && bIsAboutToDie){
+				console.log("sending notification to remove the stuff");
+
+				console.log('this is about to removed:', post.body);
+				var content = "Your room is about to be disappear '" + post.body + "'";
+				var pushids = [];
+				console.log('sent pushid:', post.pushid);
+				pushids.push(post.pushid);
+
+				var message = { 
+				  app_id: "e1a8e08a-600e-11e5-a4f5-4b146350fa11",
+				  contents: {en: content},
+				  include_player_ids	: pushids,
+				  send_after: "Fri May 02 2014 00:00:00 GMT-0700 (PDT)",
+				  data: {'actiontype' : 0, 
+			    		'location'  : JSON.stringify(post.location), 
+			    		'postid'    : post._id}
+				};
+			    sendNotification(message);
+			}
+
 			if (post.lifeend < currentDateMillSec)
 			{
-				var lifespan = currentDateMillSec - post.lifeend;
-				var bIsAboutToDie = (lifespan > 0) && (lifespan < 15000);
-				if (post.isPost && bIsAboutToDie){
-					console.log("sengind notification to remove the stuff");
-
-					console.log('this is about to removed:', post.body);
-					var content = "Your room is about to be disappear '" + post.body + "'";
-					var pushids = [];
-					pushids.push(post.pushid);
-
-					var message = { 
-					  app_id: "e1a8e08a-600e-11e5-a4f5-4b146350fa11",
-					  contents: {en: content},
-					  include_player_ids	: pushids,
-					  send_after: "Fri May 02 2014 00:00:00 GMT-0700 (PDT)",
-					  data: {'actiontype' : 0, 
-				    		'location'  : JSON.stringify(post.location), 
-				    		'postid'    : post._id}
-					};
-				    sendNotification(message);
-				}
-
 				Post.findOneAndRemove({ _id: post._id }, function(err){
 					if (err) { return next(err); }
 					websockets.broadcast('remove_post', post._id);
