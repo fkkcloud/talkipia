@@ -10,8 +10,6 @@ var Session = require('./models/session');
 var websockets = require('./web_socket/websockets.js');
 var Post = require('./models/post');
 
-var request = require('request');
-
 var app = express();
 
 app.use(favicon(__dirname + '/resources/favicon.ico'));
@@ -27,6 +25,39 @@ var server = app.listen(process.env.PORT || 5000, function(){
 });
 
 socket.connect(server); // web socket server가 된다.
+
+var sendNotification = function(data) {
+  var headers = {
+    "Content-Type": "application/json",
+    "Authorization": "Basic NGEwMGZmMjItY2NkNy0xMWUzLTk5ZDUtMDAwYzI5NDBlNjJj"
+  };
+  
+  var options = {
+    host: "onesignal.com",
+    port: 443,
+    path: "/api/v1/notifications",
+    method: "POST",
+    headers: headers
+  };
+  
+  var https = require('https');
+  var req = https.request(options, function(res) {  
+    res.on('data', function(data) {
+      console.log("Response:");
+      console.log(JSON.parse(data));
+    });
+  });
+  
+  req.on('error', function(e) {
+    console.log("ERROR:");
+    console.log(e);
+  });
+  
+  req.write(JSON.stringify(data));
+  req.end();
+};
+
+sendNotification(message);
 
 setInterval(function(){
 	Post.find()
@@ -44,30 +75,23 @@ setInterval(function(){
 					if (err) { return next(err); }
 					websockets.broadcast('remove_post', post._id);
 
-					console.log("about to remove the stuff");
 					if (post.isPost){
-												console.log("sengind notification to remove the stuff");
+						console.log("sengind notification to remove the stuff");
 
 						var content = "Your room is about to be disappear '" + post.body + "'";
 						var pushids = [];
 						pushids.push(post.pushid);
 
-						var notificationObj = { 
-							app_id              : "e1a8e08a-600e-11e5-a4f5-4b146350fa11",
-							contents			: {en: content},
-					        include_player_ids	: pushids,
-					    	data				: {'actiontype' : 0, 
-					    							'location'  : JSON.stringify(post.location), 
-					    							'postid'    : post._id}
-					    };
-
-					    request.post('https://onesignal.com/api/v1/notifications', 
-					    	{ 'form': notificationObj }, 
-					    	function (err, httpResponse, body) {
-						  		if (err) {
-						    		return console.error('post failed:', err);
-						  		}
-							});
+						var message = { 
+						  app_id: "e1a8e08a-600e-11e5-a4f5-4b146350fa11",
+						  contents: {en: content},
+						  include_player_ids	: pushids,
+						  send_after: "Fri May 02 2014 00:00:00 GMT-0700 (PDT)",
+						  data: {'actiontype' : 0, 
+					    		'location'  : JSON.stringify(post.location), 
+					    		'postid'    : post._id}
+						};
+					    sendNotification(message);
 					}
 					
 				});
