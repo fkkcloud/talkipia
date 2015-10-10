@@ -99,15 +99,18 @@ router.post('/', cors(), function(req, res, next){
 		// post will destryo itself after the lifespan
 		// 포스트가 됨과 동시에 자기 스스로 lifespan이 다 되면 사라지는 것을 넣어주 (스스로 지워진다)
 		// 서버가 24시간 항상 돌고 있어야 post들이 알아서 잘 지워진다.
-		setTimeout( function() {
-			Post.findOneAndRemove({ _id: post._id }, function(err){
-				if (err) { return next(err); }
-				//console.log("post removed successfully");
-				//https://onesignal.com/api/v1/notifications // 노티보내주
-				websockets.broadcast('remove_post', post._id);
-			});
-		},  
-		relativeLifeSpan);
+		if (!post.isPost){ // 방은 길어서 이 프로세스로 지원하지 않고, 메세지만 이걸로 지원!
+			setTimeout( function() {
+				Post.findOneAndRemove({ _id: post._id }, function(err){
+					if (err) { return next(err); }
+					//console.log("post removed successfully");
+					//https://onesignal.com/api/v1/notifications // 노티보내주
+					websockets.broadcast('remove_post', post._id);
+				});
+			},  
+			relativeLifeSpan);
+		}
+		
 
 		// 201 - The request has been fulfilled and resulted in a new resource being created.
 		res.status(201).json(post); 
