@@ -100,6 +100,7 @@ router.post('/', cors(), function(req, res, next){
 		userid      : req.body.userid,
 		userplace   : req.body.userplace,
 		bgimg       : req.body.bgimg,
+		profileImg  : req.body.profileImg
 	});
 
 	room.save(function(err, room){

@@ -13,7 +13,8 @@ var Room = db.model('Room', {
 	userid  :    { type: String,  required: true },
 	userplace:   { type: String,  required: true },
 	bgimg   :    { type: String, required: true },
-	islocal :    { type: Boolean, required: true}
+	islocal :    { type: Boolean, required: true},
+	profileImg : { type: String, required: true }
 });
 
 module.exports = Room;

@@ -76,7 +76,8 @@ router.post('/', cors(), function(req, res, next){
 		pushid      : req.body.pushid,
 		width       : req.body.width,
 		userid      : req.body.userid,
-		userplace   : req.body.userplace
+		userplace   : req.body.userplace,
+		profileImg  : req.body.profileImg
 	});
 
 	reply.save(function(err, reply){

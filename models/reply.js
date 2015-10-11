@@ -12,6 +12,7 @@ var Reply = db.model('Reply', {
 	isOnline:    { type: String,  required: false, default: false},
 	userid  :    { type: String,  required: true },
 	userplace:   { type: String,  required: true },
+	profileImg : { type: String,  required: true }
 });
 
 module.exports = Reply;
