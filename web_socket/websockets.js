@@ -1,7 +1,7 @@
 var _ = require('lodash');
 var ws = require('ws');
 
-var Session = require('../../models/session');
+var Session = require('../models/session');
 
 
 /* ----------------------- OLD SOCKET MANAGEMENT --------------------------*/
