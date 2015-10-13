@@ -79,7 +79,7 @@ exports.connect = function(server){
 					var newOnlinestat = {'onlinestat' :true};
 					var options       = {upsert:false};
 					Session.findOneAndUpdate(query, newOnlinestat, options, function(err, session){
-				    	if (err) res.send(500, { error: err });
+				    	//if (err) res.send(500, { error: err });
 					});
 					//console.log('clients_table', clients_table);
 				}
@@ -106,7 +106,7 @@ exports.connect = function(server){
 				var newOnlinestat = {'onlinestat' :false};
 				var options       = {upsert:false};
 				Session.findOneAndUpdate(query, newOnlinestat, options, function(err, session){
-			    	if (err) res.send(500, { error: err });
+			    	if (err) console.log("error on closing socket");
 
 			    	//onsole.log('socket closed:', session.userid, key)
 
