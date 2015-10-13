@@ -38,6 +38,8 @@ exports.connect = function(server){
 
 			var received_package = JSON.parse(message);
 
+			console.log(message);
+
 			if (received_package.type == '101386')
 			{
 				var guid = received_package.guid;
