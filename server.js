@@ -115,16 +115,11 @@ setInterval(function(){
 			for (var i = 0; i < sessions.length; i++)
 			{
 				var session = sessions[i];
-				console.log('session online stat:', session.onlinestat, session.userid, session.guid);
 				
 				if (!session.onlinestat){
 					for (var j = 0; j < pois.length; j++)
 					{
-						var poi = pois[j];
-
-						console.log('in poi loop session online:', session.onlinestat);
-						console.log(session.onlinestat, 'session guid:', session.guid, 'poi guid:', poi.guid);
-						
+						var poi = pois[j];						
 						if (poi.guid == session.guid)
 							websockets.broadcast('remove_POI', poi);
 					}
