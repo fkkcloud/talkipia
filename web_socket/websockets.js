@@ -88,7 +88,7 @@ exports.connect = function(server){
 		// 꼭 끊어줘야 된다는 것을 명심하자!
 		/* -----------------------  CLOSING SOCKET  --------------------------*/
 		ws.on('close', function(){ 
-			console.log('user socket closed:');
+			console.log('user socket closeing..');
 
 			// for new socket array
 			for (var key in clients_table) {

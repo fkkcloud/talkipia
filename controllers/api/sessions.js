@@ -16,6 +16,7 @@ router.get('/', cors(), function(req, res, next){
 	});
 });
 
+/* if there is no session - create, if there is, - update */
 router.post('/', cors(), function(req, res, next){
 	var query = {'guid': req.body.guid};
 	var update_session = {
