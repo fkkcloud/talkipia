@@ -122,6 +122,7 @@ setInterval(function(){
 					{
 						var poi = pois[j];
 
+						console.log(session.onlinestat);
 						console.log(session.onlinestat, 'session guid:', session.guid, 'poi guid:', poi.guid);
 						
 						if (poi.guid == session.guid)
