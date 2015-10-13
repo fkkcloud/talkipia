@@ -1,4 +1,5 @@
 var POI = require('../../models/poi');
+var Session = require('../../models/session');
 var router = require('express').Router();
 var db = require('../../db.js');
 var websockets = require('../../web_socket/websockets.js');
@@ -30,6 +31,15 @@ router.post('/', cors(), function(req, res, next){
 	    if (debug) console.log('POI upsert :', doc);
 
 	    websockets.broadcast('update_POI', doc);
+
+	    // update session online stat when POI gets updated opens
+		var query         = {'guid'       :req.body.guid};
+		var newOnlinestat = {'onlinestat' :true};
+		var options       = {upsert:false};
+		Session.findOneAndUpdate(query, newOnlinestat, options, function(err, session){
+	    	if (err) res.send(500, { error: err });
+	    	delete clients_table[key];
+		});
 
 	    res.status(201).json(doc);
 	});
