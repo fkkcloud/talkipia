@@ -1,6 +1,8 @@
 var _ = require('lodash');
 var ws = require('ws');
 
+var websockets = require('websockets.js');
+
 var Session = require('../models/session');
 
 
@@ -88,7 +90,7 @@ exports.connect = function(server){
 		// 꼭 끊어줘야 된다는 것을 명심하자!
 		/* -----------------------  CLOSING SOCKET  --------------------------*/
 		ws.on('close', function(){ 
-			console.log('user socket closed:', ws);
+			console.log('user socket closed:');
 
 			// for new socket array
 			for (var key in clients_table) {
@@ -101,7 +103,7 @@ exports.connect = function(server){
 			    	if (err) res.send(500, { error: err });
 
 			    	// let the front-end app know that we updated user location since its updating POI
-			    	ws.broadcast('update_POI', session);
+			    	websockets.broadcast('update_POI', session);
 
 			    	console.log('socket closed:', key)
 
