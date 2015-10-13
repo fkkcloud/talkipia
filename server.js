@@ -119,7 +119,8 @@ setInterval(function(){
 				if (!session.onlinestat){
 					for (var j = 0; j < pois.length; j++)
 					{
-						var poi = pois[j];						
+						var poi = pois[j];
+										
 						if (poi.guid == session.guid){
 							var poi_guid = poi.guid;
 							var query = { guid: poi.guid };
