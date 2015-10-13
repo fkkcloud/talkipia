@@ -117,9 +117,11 @@ setInterval(function(){
 
 					for (var j = 0; j < pois.length; j++)
 					{
+						var poi = pois[j];
+						
 						console.log('session guid:', session.guid);
 						console.log('poi guid:', poi.guid);
-						var poi = pois[j];
+						
 						if (poi.guid == session.guid)
 							websockets.broadcast('remove_POI', poi);
 					}
