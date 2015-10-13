@@ -109,7 +109,7 @@ setInterval(function(){
 		for (var i = 0; i < sessions.length; i++)
 		{
 			var session = sessions[i];
-			console.log('session online stat:', session.onlinestat);
+			console.log('session online stat:', session.onlinestat, session.userid, session.guid);
 			if (session.onlinestat == false){
 				POI.find()
 				.exec(function(err, pois){
@@ -118,7 +118,7 @@ setInterval(function(){
 					for (var j = 0; j < pois.length; j++)
 					{
 						var poi = pois[j];
-						
+
 						console.log('session guid:', session.guid);
 						console.log('poi guid:', poi.guid);
 						
