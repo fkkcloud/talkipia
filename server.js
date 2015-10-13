@@ -120,14 +120,13 @@ setInterval(function(){
 					for (var j = 0; j < pois.length; j++)
 					{
 						var poi = pois[j];
-										
+
 						if (poi.guid == session.guid){
 							var poi_guid = poi.guid;
 							var query = { guid: poi.guid };
 							POI.remove(query, function(err, doc){
 								if (err) { return next(err); }	
 								websockets.broadcast('remove_POI', poi_guid);
-								res.status(201);
 							});
 						}
 					}
