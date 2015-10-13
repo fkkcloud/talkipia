@@ -20,7 +20,7 @@ router.post('/', cors(), function(req, res, next){
 		location 	: req.body.location,
 		guid     	: req.body.guid,
 	};
-	var options = {upsert:true};
+	var options = {upsert:true, 'new':true};
 
 	POI.findOneAndUpdate(query, upsert_poi, options, function(err, doc){
 	    if (err) res.send(500, { error: err });
