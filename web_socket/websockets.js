@@ -80,7 +80,6 @@ exports.connect = function(server){
 					var options       = {upsert:false};
 					Session.findOneAndUpdate(query, newOnlinestat, options, function(err, session){
 				    	if (err) res.send(500, { error: err });
-				    	delete clients_table[key];
 					});
 					//console.log('clients_table', clients_table);
 				}

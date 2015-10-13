@@ -38,7 +38,6 @@ router.post('/', cors(), function(req, res, next){
 		var options       = {upsert:false};
 		Session.findOneAndUpdate(query, newOnlinestat, options, function(err, session){
 	    	if (err) res.send(500, { error: err });
-	    	delete clients_table[key];
 		});
 
 	    res.status(201).json(doc);
