@@ -36,16 +36,22 @@ exports.connect = function(server){
 		ws.on('message', function incoming(message){
 			console.log('received message: %s', message);
 
-			var received_package = JSON.parse(message);
+			try {
+			    var received_package = JSON.parse(message);
 
-			console.log(received_package);
+				console.log(received_package);
 
-			if (received_package.payload_type == '101386')
-			{
-				var guid = received_package.guid;
-				clients_table[guid] = ws;
-				console.log('clients_table', clients_table);
+				if (received_package.payload_type == '101386')
+				{
+					var guid = received_package.guid;
+					clients_table[guid] = ws;
+					console.log('clients_table', clients_table);
+				}
 			}
+			catch(err) {
+			    console.log('error on the message conveint to JSON:', message);
+			}
+			
 			
 		})
 
