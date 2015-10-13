@@ -95,7 +95,7 @@ exports.connect = function(server){
 			  if (clients_table.hasOwnProperty(key) && clients_table[key] == ws) {
 			    delete clients_table[key];
 			    // online stat to be false
-				var query         = {'guid'       :req.body.guid};
+				var query         = {'guid'       :key};
 				var newOnlinestat = {'onlinestat' :false};
 				var options       = {upsert:false};
 				Session.findOneAndUpdate(query, newOnlinestat, options, function(err, session){
