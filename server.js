@@ -110,7 +110,8 @@ setInterval(function(){
 		{
 			var session = sessions[i];
 			console.log('session online stat:', session.onlinestat, session.userid, session.guid);
-			if (session.onlinestat == false){
+			
+			if (!session.onlinestat){
 				POI.find()
 				.exec(function(err, pois){
 					if (err) { return next(err); }
