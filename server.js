@@ -113,7 +113,7 @@ setInterval(function(){
 			
 			if (!session.onlinestat){
 
-				console.log(session.onlinestat);
+				console.log('session online:', session.onlinestat);
 				POI.find()
 				.exec(function(err, pois){
 					if (err) { return next(err); }
@@ -122,7 +122,7 @@ setInterval(function(){
 					{
 						var poi = pois[j];
 
-						console.log(session.onlinestat);
+						console.log('in poi loop session online:', session.onlinestat);
 						console.log(session.onlinestat, 'session guid:', session.guid, 'poi guid:', poi.guid);
 						
 						if (poi.guid == session.guid)
