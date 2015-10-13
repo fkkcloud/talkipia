@@ -5,10 +5,12 @@ var socket = require('./web_socket/websockets');
 var favicon = require('serve-favicon');
 var cors = require('cors');
 
-var Session = require('./models/session');
+
 
 var websockets = require('./web_socket/websockets.js');
 var Post = require('./models/post');
+var Session = require('./models/session');
+var POI  = require('./models/poi');
 
 var app = express();
 
@@ -58,6 +60,8 @@ var sendNotification = function(data) {
 };
 
 setInterval(function(){
+
+	// check if the msg /room is dying and do action about it
 	Post.find()
 	.exec(function(err, posts){
 		if (err) { return next(err); }
@@ -96,6 +100,34 @@ setInterval(function(){
 			}
 		}
 	});
+
+	// check online stat for sessions and update POI
+	Session.find()
+	.exec(function(err, sessions){
+		if (err) { return next(err); }
+
+		for (var i = 0; i < sessions.length; i++)
+		{
+			var session = sessions[i];
+			console.log('session online stat:', session.onlinestat);
+			if (session.onlinestat == false){
+				POI.find()
+				.exec(function(err, pois){
+					if (err) { return next(err); }
+
+					for (var j = 0; j < pois.length; j++)
+					{
+						console.log('session guid:', session.guid);
+						console.log('poi guid:', poi.guid);
+						var poi = pois[j];
+						if (poi.guid == session.guid)
+							websockets.broadcast('remove_POI', poi);
+					}
+				})
+				
+			}
+		}
+	})
 			
 }, 4000);
 /*
