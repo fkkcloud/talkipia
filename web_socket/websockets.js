@@ -73,6 +73,18 @@ exports.connect = function(server){
 				{
 					var guid = received_package.guid;
 					clients_table[guid] = ws;
+
+					// update session online stat when socket opens
+					var query         = {'guid'       :guid};
+					var newOnlinestat = {'onlinestat' :true};
+					var options       = {upsert:false};
+					Session.findOneAndUpdate(query, newOnlinestat, options, function(err, session){
+				    	if (err) res.send(500, { error: err });
+
+				    	console.log('socket closed:', key)
+
+				    	delete clients_table[key];
+					});
 					//console.log('clients_table', clients_table);
 				}
 			}
