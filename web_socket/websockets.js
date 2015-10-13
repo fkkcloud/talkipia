@@ -41,6 +41,8 @@ exports.connect = function(server){
 			var received_package = JSON.parse(message);
 			var guid = received_package.guid;
 			clients_table[guid] = ws;
+
+			console.log('clients_table', clients_table);
 		})
 
 		// 클라이언트가 연결을 끊으면 Lo-Dash를 사용해 목록에서 클라이언트를 제거한다.

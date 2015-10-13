@@ -69,7 +69,7 @@ setInterval(function(){
 			var currentDateMillSec = currentDate.getTime();
 
 			var lifespan = currentDateMillSec - post.lifeend;
-			var bIsAboutToDie = (lifespan > 0) && (lifespan < 45000);
+			var bIsAboutToDie = (lifespan > 0) && (lifespan < 120000);
 			if (post.isPost && bIsAboutToDie){
 
 				var content = "Your room is about to be disappear '" + post.body + "'";
