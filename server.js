@@ -64,7 +64,7 @@ setInterval(function(){
 	// check if the msg /room is dying and do action about it
 	Post.find()
 	.exec(function(err, posts){
-		if (err) { return next(err); }
+		if (err) { console.log(err); }
 
 		for (var i = 0; i < posts.length; i++)
 		{
@@ -94,7 +94,7 @@ setInterval(function(){
 			if (post.lifeend < currentDateMillSec)
 			{
 				Post.findOneAndRemove({ _id: post._id }, function(err){
-					if (err) { return next(err); }
+					if (err) { console.log(err); }
 					websockets.broadcast('remove_post', post._id);
 				});
 			}
@@ -104,12 +104,12 @@ setInterval(function(){
 	// check online stat for sessions and update POI
 	Session.find()
 	.exec(function(err, sessions){
-		if (err) { return next(err); }
+		if (err) { console.log(err); }
 
 		var pois_data;
 		POI.find()
 		.exec(function(err, data){
-			if (err) { return next(err); }
+			if (err) { console.log(err); }
 			pois = data;
 
 			for (var i = 0; i < sessions.length; i++)
@@ -125,7 +125,7 @@ setInterval(function(){
 							var poi_guid = poi.guid;
 							var query = { guid: poi.guid };
 							POI.remove(query, function(err, doc){
-								if (err) { return next(err); }	
+								if (err) { console.log(err); }	
 								websockets.broadcast('remove_POI', poi_guid);
 							});
 						}
