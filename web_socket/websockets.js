@@ -106,8 +106,6 @@ exports.connect = function(server){
 			    	console.log('socket closed:', key)
 
 			    	delete clients_table[key];
-
-			    	res.status(200).json(session);
 				});
 			  }
 			}
