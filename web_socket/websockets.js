@@ -36,7 +36,7 @@ exports.getClient = function(guid){
 	@ data
 	expect data that will be send to client
 */
-exports.broadcastTo = function(guid_list, data){
+exports.broadcastTo = function(guid_list, type, data){
 	var json = JSON.stringify({type: type, data: data});
 
 	guid_list.forEach(function(guid){
@@ -88,12 +88,11 @@ exports.connect = function(server){
 		// 꼭 끊어줘야 된다는 것을 명심하자!
 		/* -----------------------  CLOSING SOCKET  --------------------------*/
 		ws.on('close', function(){ 
-			console.log('user socket closed.');
+			console.log('user socket closed:', ws);
 
 			// for new socket array
 			for (var key in clients_table) {
 			  if (clients_table.hasOwnProperty(key) && clients_table[key] == ws) {
-			    delete clients_table[key];
 			    // online stat to be false
 				var query         = {'guid'       :key};
 				var newOnlinestat = {'onlinestat' :false};
@@ -105,6 +104,8 @@ exports.connect = function(server){
 			    	ws.broadcast('update_POI', session);
 
 			    	console.log('socket closed:', key)
+
+			    	delete clients_table[key];
 
 			    	res.status(200).json(session);
 				});
