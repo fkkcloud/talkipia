@@ -106,18 +106,18 @@ setInterval(function(){
 	.exec(function(err, sessions){
 		if (err) { return next(err); }
 
-		for (var i = 0; i < sessions.length; i++)
-		{
-			var session = sessions[i];
-			console.log('session online stat:', session.onlinestat, session.userid, session.guid);
-			
-			if (!session.onlinestat){
+		var pois_data;
+		POI.find()
+		.exec(function(err, data){
+			if (err) { return next(err); }
+			pois = data;
 
-				console.log('session online:', session.onlinestat);
-				POI.find()
-				.exec(function(err, pois){
-					if (err) { return next(err); }
-
+			for (var i = 0; i < sessions.length; i++)
+			{
+				var session = sessions[i];
+				console.log('session online stat:', session.onlinestat, session.userid, session.guid);
+				
+				if (!session.onlinestat){
 					for (var j = 0; j < pois.length; j++)
 					{
 						var poi = pois[j];
@@ -128,10 +128,12 @@ setInterval(function(){
 						if (poi.guid == session.guid)
 							websockets.broadcast('remove_POI', poi);
 					}
-				})
-				
+					
+				}
 			}
-		}
+		})
+				
+
 	})
 			
 }, 4000);
