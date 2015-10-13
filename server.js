@@ -113,7 +113,7 @@ setInterval(function(){
 			
 			if (!session.onlinestat){
 
-				console.log(session.onlinestate);
+				console.log(session.onlinestat);
 				POI.find()
 				.exec(function(err, pois){
 					if (err) { return next(err); }
