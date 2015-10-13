@@ -38,9 +38,9 @@ exports.connect = function(server){
 
 			var received_package = JSON.parse(message);
 
-			console.log(message);
+			console.log(received_package);
 
-			if (received_package.type == '101386')
+			if (received_package.payload_type == '101386')
 			{
 				var guid = received_package.guid;
 				clients_table[guid] = ws;
