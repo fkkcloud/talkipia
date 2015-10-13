@@ -94,21 +94,23 @@ exports.connect = function(server){
 			for (var key in clients_table) {
 			  if (clients_table.hasOwnProperty(key) && clients_table[key] == ws) {
 			    delete clients_table[key];
+			    // online stat to be false
+				var query         = {'guid'       :req.body.guid};
+				var newOnlinestat = {'onlinestat' :false};
+				var options       = {upsert:false};
+				Session.findOneAndUpdate(query, newOnlinestat, options, function(err, session){
+			    	if (err) res.send(500, { error: err });
+
+			    	// let the front-end app know that we updated user location since its updating POI
+			    	websockets.broadcast('update_POI', session);
+
+			    	console.log('socket closed:', key)
+
+			    	res.status(200).json(session);
+				});
 			  }
 			}
-			// online stat to be false
-			var query         = {'guid'       :req.body.guid};
-			var newOnlinestat = {'onlinestat' :false};
-			var options       = {upsert:false};
-			Session.findOneAndUpdate(query, newOnlinestat, options, function(err, session){
-		    	if (err) res.send(500, { error: err });
-
-		    	// let the front-end app know that we updated user location since its updating POI
-		    	websockets.broadcast('update_POI', session);
-
-		    	res.status(200).json(session);
-			});
-
+			
 			// for old socket array
 			_.remove(clients, ws);
 		});
