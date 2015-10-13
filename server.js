@@ -80,7 +80,6 @@ setInterval(function(){
 				  app_id: "e1a8e08a-600e-11e5-a4f5-4b146350fa11",
 				  contents: {en: content},
 				  include_player_ids	: pushids,
-				  send_after: "Fri May 02 2014 00:00:00 GMT-0700 (PDT)",
 				  data: {'actiontype' : 0, 
 			    		'location'  : post.location, 
 			    		'postid'    : post._id}

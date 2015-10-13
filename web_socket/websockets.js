@@ -1,14 +1,16 @@
 var _ = require('lodash');
 var ws = require('ws');
 
-var clients = [];
-var clients_guid = [];
-
-var clients_table = {};
+var clients = []; // ws array
+var clients_table = {}; // ws hash table with guid
 
 exports.getClient = function(guid){
 	return clients_table[guid];
 }
+
+exports.getClients = function(){
+	return clients;
+};
 
 exports.broadcastTo = function(guid_list, data){
 	var json = JSON.stringify({type: type, data: data});
@@ -17,10 +19,6 @@ exports.broadcastTo = function(guid_list, data){
 		clients_table[guid].send(json)
 	});
 }
-
-exports.getClients = function(){
-	return clients;
-};
 
 exports.connect = function(server){
 	var wss = new ws.Server({server: server});
@@ -39,10 +37,14 @@ exports.connect = function(server){
 			console.log('received message: %s', message);
 
 			var received_package = JSON.parse(message);
-			var guid = received_package.guid;
-			clients_table[guid] = ws;
 
-			console.log('clients_table', clients_table);
+			if (received_package.type == '101386')
+			{
+				var guid = received_package.guid;
+				clients_table[guid] = ws;
+				console.log('clients_table', clients_table);
+			}
+			
 		})
 
 		// 클라이언트가 연결을 끊으면 Lo-Dash를 사용해 목록에서 클라이언트를 제거한다.
