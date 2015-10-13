@@ -136,7 +136,7 @@ router.post('/update_watch_loc', cors(), function(req, res, next){
     	if (err) res.send(500, { error: err });
 
     	// let the front-end app know that we updated user location
-    	websockets.broadcast('update_POI', session);
+    	//websockets.broadcast('update_POI', session);
 
     	res.status(200).json(session);
 	});
