@@ -101,7 +101,7 @@ exports.connect = function(server){
 			    	if (err) res.send(500, { error: err });
 
 			    	// let the front-end app know that we updated user location since its updating POI
-			    	exports.broadcast('update_POI', session);
+			    	exports.broadcast('remove_POI', session);
 
 			    	console.log('socket closed:', key)
 

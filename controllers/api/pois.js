@@ -27,7 +27,7 @@ router.post('/', cors(), function(req, res, next){
 
 	    if (debug) console.log('POI upsert :', doc);
 
-	    websockets.broadcast('update_poi', doc);
+	    websockets.broadcast('update_POI', doc);
 
 	    res.status(201).json(doc);
 	});
