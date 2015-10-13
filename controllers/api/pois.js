@@ -4,6 +4,8 @@ var db = require('../../db.js');
 var websockets = require('../../web_socket/websockets.js');
 var cors = require('cors');
 
+var debug = 0;
+
 // get all the emoticons
 router.get('/', cors(), function(req, res, next){
 	POI.find()
