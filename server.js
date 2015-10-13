@@ -112,6 +112,8 @@ setInterval(function(){
 			console.log('session online stat:', session.onlinestat, session.userid, session.guid);
 			
 			if (!session.onlinestat){
+
+				console.log(session.onlinestate);
 				POI.find()
 				.exec(function(err, pois){
 					if (err) { return next(err); }
