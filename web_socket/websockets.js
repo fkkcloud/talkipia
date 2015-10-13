@@ -1,8 +1,6 @@
 var _ = require('lodash');
 var ws = require('ws');
 
-var websockets = require('websockets.js');
-
 var Session = require('../models/session');
 
 
