@@ -38,7 +38,7 @@ router.post('/', cors(), function(req, res, next){
 	    	if (debug) console.log("session history saved");
 	    });
 
-	    websockets.broadcast('new_session', doc);
+	    //websockets.broadcast('new_session', doc);
 
 	    res.status(201).json(doc);
 	});
