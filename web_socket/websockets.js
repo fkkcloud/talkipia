@@ -108,7 +108,7 @@ exports.connect = function(server){
 				Session.findOneAndUpdate(query, newOnlinestat, options, function(err, session){
 			    	if (err) res.send(500, { error: err });
 
-			    	console.log('socket closed:', session.userid, key)
+			    	//onsole.log('socket closed:', session.userid, key)
 
 			    	delete clients_table[key];
 				});
