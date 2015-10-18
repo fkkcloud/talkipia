@@ -144,6 +144,7 @@ router.post('/', cors(), function(req, res, next){
 
 		var res_list = [];
 		var filtered_sessions = [];
+		var pushids = [];
 		Session.find()
 		.exec(function(err, sessions){
 			if (err) { return next(err); }
@@ -175,8 +176,10 @@ router.post('/', cors(), function(req, res, next){
 					};
 					filtered_sessions.push(guid);
 
-					if (session.pushid && (session.guid != post.guid))
+					if (session.pushid && (session.guid != post.guid)){
 						res_list.push(location);
+						pushids.push(session.pushid);
+					}
 				}
 				else if (isNearby) // less than 5 km
 				{
@@ -184,8 +187,10 @@ router.post('/', cors(), function(req, res, next){
 					var location = session.location;
 					filtered_sessions.push(guid);
 
-					if (session.pushid && (session.guid != post.guid))
+					if (session.pushid && (session.guid != post.guid)){
 						res_list.push(location);
+						pushids.push(session.pushid);
+					}
 				}
 				else
 				{
@@ -198,7 +203,8 @@ router.post('/', cors(), function(req, res, next){
 
 			var res_data = {
 				post: post,
-				res_list : res_list
+				res_list : res_list,
+				pushids : pushids
 			}
 			// 201 - The request has been fulfilled and resulted in a new resource being created.
 			res.status(201).json(res_data); 

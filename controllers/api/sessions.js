@@ -188,7 +188,9 @@ router.post('/update_blocklist', cors(), function(req, res, next){
 	    	if (err) res.send(500, { error: err });
 
 	    	// send block id to client so they can remove reply or post at the same time
-    		websockets.broadcast('block_id', block_id);
+    		// only send socket msg to whom it sent
+    		var guid_list = [req.body.guid];
+    		websockets.broadcastTo(guid_list, 'block_id', block_id);
 
 	    	res.status(200);
 		});
@@ -204,13 +206,16 @@ router.post('/clear_blocklist', cors(), function(req, res, next){
     	if (err) res.send(500, { error: err });
 
     	// send socket to clear local blocklist on client side
-    	websockets.broadcast('clear_blocklist', req.body.guid);
+    	// only send socket msg to whom it sent
+		var guid_list = [req.body.guid];
+		websockets.broadcastTo(guid_list, 'clear_blocklist', req.body.guid);
 
     	res.status(200).json(session);
 	});
 });
 
 // for updating watch location constantly
+/*
 router.post('/update_coupling', cors(), function(req, res, next){
 
 	var query      = {'guid'    :req.body.guid};
@@ -231,6 +236,6 @@ router.post('/update_coupling', cors(), function(req, res, next){
     		res.status(200).json(session);
     	});
 	});
-});
+});*/
 
 module.exports = router;

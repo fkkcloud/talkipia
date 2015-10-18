@@ -38,6 +38,9 @@ router.post('/findbywatchlocation', cors(), function(req, res, next){
 	        }
 	        else
 	        {
+	        	// later, we might need to check online state for each session corresponding to the poi
+	        	// and do http://stackoverflow.com/questions/21024411/angular-q-how-to-chain-multiple-promises-within-and-after-a-for-loop
+	        	// to get the most correct pois. - need $q.all()
 	        	filtered_pois.push(poi)
 	        }
 		}
