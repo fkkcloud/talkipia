@@ -124,10 +124,13 @@ router.post('/', cors(), function(req, res, next){
 
 		// broadcast to all clients about the new message coming in!
 		//websockets.broadcast('new_post', post);
+		function deg2rad(deg) {
+		    return deg * (Math.PI/180);
+		  };
 		function getDistanceFromLatLonInKm(lat1,lon1,lat2,lon2) {
 		    var R = 6371;
-		    var dLat = svc.deg2rad(lat2-lat1);
-		    var dLon = svc.deg2rad(lon2-lon1); 
+		    var dLat = deg2rad(lat2-lat1);
+		    var dLon = deg2rad(lon2-lon1); 
 		    var a = 
 		      Math.sin(dLat/2) * Math.sin(dLat/2) +
 		      Math.cos(svc.deg2rad(lat1)) * Math.cos(svc.deg2rad(lat2)) * 
