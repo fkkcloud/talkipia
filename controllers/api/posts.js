@@ -8,7 +8,7 @@ var cors = require('cors');
 // get all the posts
 router.get('/', cors(), function(req, res, next){
 	Post.find()
-	.sort('-date')
+	//.sort('-date')
 	.exec(function(err, posts){
 		if (err) { return next(err); }
 		res.status(200).json(posts);
@@ -25,13 +25,41 @@ router.get('/:page', cors(), function(req, res, next){
 
 	/* Post use instead of History for test*/
 	Post.find()
-	.sort('-date')
+	//.sort('-date')
     .limit(perPage)
 	.skip(perPage * page)  	
 	.exec(function(err, posts) {
      	res.status(200).json(posts);
     })
 });
+
+router.post('/findbywatchlocation', cors(), function(req, res, next){
+	var watchlocation = JSON.parse(req.body.watchlocation);
+
+	Post.find()
+	.exec(function(err, posts){
+		if (err) { return next(err); }
+
+		var filtered_posts = [];
+		for (var i = 0; i < posts.length; i++)
+		{	
+			var post = posts[i];
+			var location = JSON.parse(post.location);
+			if (!(location.lat < current_map_nw.lat) ||
+            !(location.lat > current_map_se.lat) ||
+            !(location.lon < current_map_se.lon) ||
+            !(location.lon > current_map_nw.lon) )
+	        {
+	            continue; // skip this post - no need to draw
+	        }
+	        else
+	        {
+	        	filtered_posts.push(post)
+	        }
+		}
+		res.status(200).json(filtered_posts);
+	});
+})
 
 // get pagination - histories
 router.get('/history/:page', cors(), function(req, res, next){
