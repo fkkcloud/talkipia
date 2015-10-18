@@ -143,6 +143,7 @@ router.post('/', cors(), function(req, res, next){
 		};
 
 		var res_list = [];
+		var filtered_sessions = [];
 		Session.find()
 		.exec(function(err, sessions){
 			if (err) { return next(err); }
@@ -151,19 +152,22 @@ router.post('/', cors(), function(req, res, next){
 			console.log("post_location", post_location);
 			for (var i = 0; i < sessions.length; i++)
 			{	
-				var filtered_sessions = [];
 				var session = sessions[i];
 				var watchloc = JSON.parse(session.watchloc);
 				var location = JSON.parse(session.location);
-				console.log('is_watching:', (post_location.lat < watchloc.nw_lat &&
+
+				var isWatching = (post_location.lat < watchloc.nw_lat &&
 					post_location.lat > watchloc.se_lat &&
 					post_location.lon > watchloc.nw_lon &&
 					post_location.lon < watchloc.se_lon));
-				
-				if (post_location.lat < watchloc.nw_lat &&
-					post_location.lat > watchloc.se_lat &&
-					post_location.lon > watchloc.nw_lon &&
-					post_location.lon < watchloc.se_lon)
+				var isNearby = getDistanceFromLatLonInKm(
+					post_location.lat, 
+					post_location.lon, 
+					location.lat,
+					location.lon)
+					< 5;
+
+				if (isWatching)
 				{
 					var guid = session.guid;
 					var location = {
@@ -173,12 +177,7 @@ router.post('/', cors(), function(req, res, next){
 					filtered_sessions.push(guid);
 					res_list.push(location);
 				}
-				else if (getDistanceFromLatLonInKm(
-					post_location.lat, 
-					post_location.lon, 
-					location.lat,
-					location.lon)
-					< 5) // less than 5 km
+				else if (isNearby) // less than 5 km
 				{
 					var guid = session.guid;
 					var location = session.location;
