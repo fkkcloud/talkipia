@@ -1,5 +1,6 @@
 var Post = require('../../models/post');
 var History = require('../../models/history');
+var Session = require('../../models/session');
 var router = require('express').Router();
 var db = require('../../db.js');
 var websockets = require('../../web_socket/websockets.js');
@@ -122,7 +123,58 @@ router.post('/', cors(), function(req, res, next){
 		});
 
 		// broadcast to all clients about the new message coming in!
-		websockets.broadcast('new_post', post);
+		//websockets.broadcast('new_post', post);
+		function getDistanceFromLatLonInKm(lat1,lon1,lat2,lon2) {
+		    var R = 6371;
+		    var dLat = svc.deg2rad(lat2-lat1);
+		    var dLon = svc.deg2rad(lon2-lon1); 
+		    var a = 
+		      Math.sin(dLat/2) * Math.sin(dLat/2) +
+		      Math.cos(svc.deg2rad(lat1)) * Math.cos(svc.deg2rad(lat2)) * 
+		      Math.sin(dLon/2) * Math.sin(dLon/2)
+		      ; 
+		    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+		    var d = R * c;
+		    return d;
+		};
+		Session.find()
+		.exec(function(err, sessions){
+			if (err) { return next(err); }
+
+			var post_location = JSON.parse(post.location);
+			var filtered_sessions = [];
+			for (var i = 0; i < sessions.length; i++)
+			{	
+				var session = sessions[i];
+				var watchloc = JSON.parse(session.watchloc);
+				if (post_location.lat < watchloc.nw_lat &&
+					post_location.lat > watchloc.se_lat &&
+					post_location.lon > watchloc.nw_lon &&
+					post_location.lon < watchloc.se_lon)
+				{
+					var guid = session.guid;
+					filtered_sessions.push(guid);
+				}
+				else if (getDistanceFromLatLonInKm(
+					post_location.lat, 
+					post_location.lon, 
+					watchloc.center_lat,
+					watchloc.center_loc)
+					< 5) // less than 5 km
+				{
+					var guid = session.guid;
+					filtered_sessions.push(guid);
+				}
+				else
+				{
+					continue;
+				}
+			}
+
+			console.log(filtered_sessions);
+			websockets.broadcastTo(filtered_sessions);
+		});
+		
 
 		// post will destryo itself after the lifespan
 		// 포스트가 됨과 동시에 자기 스스로 lifespan이 다 되면 사라지는 것을 넣어주 (스스로 지워진다)
