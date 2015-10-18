@@ -148,6 +148,7 @@ router.post('/', cors(), function(req, res, next){
 			if (err) { return next(err); }
 
 			var post_location = JSON.parse(post.location);
+			console.log("post_location", post_location);
 			for (var i = 0; i < sessions.length; i++)
 			{	
 				var filtered_sessions = [];
