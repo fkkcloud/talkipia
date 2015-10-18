@@ -149,7 +149,6 @@ router.post('/', cors(), function(req, res, next){
 			if (err) { return next(err); }
 
 			var post_location = JSON.parse(post.location);
-			console.log("post_location", post_location);
 			for (var i = 0; i < sessions.length; i++)
 			{	
 				var session = sessions[i];
@@ -159,7 +158,7 @@ router.post('/', cors(), function(req, res, next){
 				var isWatching = (post_location.lat < watchloc.nw_lat &&
 					post_location.lat > watchloc.se_lat &&
 					post_location.lon > watchloc.nw_lon &&
-					post_location.lon < watchloc.se_lon));
+					post_location.lon < watchloc.se_lon);
 				var isNearby = getDistanceFromLatLonInKm(
 					post_location.lat, 
 					post_location.lon, 
@@ -191,7 +190,7 @@ router.post('/', cors(), function(req, res, next){
 			}
 
 			console.log('flitered sessions', filtered_sessions);
-			websockets.broadcastTo(filtered_sessions);
+			websockets.broadcastTo(filtered_sessions, 'new_post', post);
 		});
 		
 

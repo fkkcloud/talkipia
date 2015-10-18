@@ -97,6 +97,7 @@ router.post('/', cors(), function(req, res, next){
 		};
 
 		var res_list = [];
+		var filtered_sessions = [];
 		Session.find()
 		.exec(function(err, sessions){
 			if (err) { return next(err); }
@@ -104,14 +105,22 @@ router.post('/', cors(), function(req, res, next){
 			var emoticon_location = JSON.parse(emoticon.location);
 			for (var i = 0; i < sessions.length; i++)
 			{	
-				var filtered_sessions = [];
 				var session = sessions[i];
 				var watchloc = JSON.parse(session.watchloc);
 				var location = JSON.parse(session.location);
-				if (emoticon_location.lat < watchloc.nw_lat &&
+
+				var isWatching = (emoticon_location.lat < watchloc.nw_lat &&
 					emoticon_location.lat > watchloc.se_lat &&
 					emoticon_location.lon > watchloc.nw_lon &&
-					emoticon_location.lon < watchloc.se_lon)
+					emoticon_location.lon < watchloc.se_lon);
+				var isNearby = getDistanceFromLatLonInKm(
+					emoticon_location.lat, 
+					emoticon_location.lon, 
+					location.lat,
+					location.lon)
+					< 5;
+
+				if (isWatching)
 				{
 					var guid = session.guid;
 					var location = {
@@ -121,12 +130,7 @@ router.post('/', cors(), function(req, res, next){
 					filtered_sessions.push(guid);
 					res_list.push(location);
 				}
-				else if (getDistanceFromLatLonInKm(
-					emoticon_location.lat, 
-					emoticon_location.lon, 
-					location.lat,
-					location.lon)
-					< 5) // less than 5 km
+				else if (isNearby) // less than 5 km
 				{
 					var guid = session.guid;
 					var location = session.location;
