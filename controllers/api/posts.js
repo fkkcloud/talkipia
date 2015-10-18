@@ -58,6 +58,7 @@ router.post('/findbywatchlocation', cors(), function(req, res, next){
 	        	filtered_posts.push(post)
 	        }
 		}
+		console.log(filtered_posts);
 		res.status(200).json(filtered_posts);
 	});
 })
