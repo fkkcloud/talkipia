@@ -175,7 +175,7 @@ router.post('/', cors(), function(req, res, next){
 					};
 					filtered_sessions.push(guid);
 
-					if (session.pushid)
+					if (session.pushid && (session.guid != post.guid))
 						res_list.push(location);
 				}
 				else if (isNearby) // less than 5 km
@@ -184,7 +184,7 @@ router.post('/', cors(), function(req, res, next){
 					var location = session.location;
 					filtered_sessions.push(guid);
 
-					if (session.pushid)
+					if (session.pushid && (session.guid != post.guid))
 						res_list.push(location);
 				}
 				else
@@ -193,7 +193,7 @@ router.post('/', cors(), function(req, res, next){
 				}
 			}
 
-			console.log('res list', res_list);
+			console.log('posts res list', res_list);
 			websockets.broadcastTo(filtered_sessions, 'new_post', post);
 		});
 		

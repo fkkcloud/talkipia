@@ -148,7 +148,7 @@ router.post('/', cors(), function(req, res, next){
 				}
 			}
 
-			console.log('emos', res_list);
+			console.log('emos res list', res_list);
 			websockets.broadcastTo(filtered_sessions, 'new_emoticon', emoticon);
 		});
 
