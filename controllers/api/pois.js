@@ -54,12 +54,43 @@ router.post('/', cors(), function(req, res, next){
 	};
 	var options = {upsert:true, 'new':true};
 
-	POI.findOneAndUpdate(query, upsert_poi, options, function(err, doc){
+	POI.findOneAndUpdate(query, upsert_poi, options, function(err, poi){
 	    if (err) res.send(500, { error: err });
 
-	    if (debug) console.log('POI upsert :', doc);
+	    if (debug) console.log('POI upsert :', poi);
 
-	    websockets.broadcast('update_POI', doc);
+
+	    //websockets.broadcast('update_POI', doc);
+		var filtered_sessions = [];
+		Session.find()
+		.exec(function(err, sessions){
+			if (err) { return next(err); }
+
+			var poi_location = JSON.parse(poi.location);
+			for (var i = 0; i < sessions.length; i++)
+			{	
+				var session = sessions[i];
+				var watchloc = JSON.parse(session.watchloc);
+
+				var isWatching = (poi_location.lat < watchloc.nw_lat &&
+					poi_location.lat > watchloc.se_lat &&
+					poi_location.lon > watchloc.nw_lon &&
+					poi_location.lon < watchloc.se_lon);
+
+				if (isWatching)
+				{
+					var guid = session.guid;
+					filtered_sessions.push(guid);
+				}
+				else
+				{
+					continue;
+				}
+			}
+
+			console.log('poi filtered poi list:', filtered_sessions);
+			websockets.broadcastTo(filtered_sessions, 'update_POI', poi);
+		});
 
 	    // update session online stat when POI gets updated opens
 		var query         = {'guid'       :req.body.guid};
@@ -69,7 +100,7 @@ router.post('/', cors(), function(req, res, next){
 	    	if (err) res.send(500, { error: err });
 		});
 
-	    res.status(201).json(doc);
+	    res.status(201).json(poi);
 	});
 });
 
