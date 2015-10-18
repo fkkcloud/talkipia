@@ -129,14 +129,18 @@ router.post('/', cors(), function(req, res, next){
 						lon : watchloc.center_lon
 					};
 					filtered_sessions.push(guid);
-					res_list.push(location);
+					
+					if (session.pushid)
+						res_list.push(location);
 				}
 				else if (isNearby) // less than 5 km
 				{
 					var guid = session.guid;
 					var location = session.location;
 					filtered_sessions.push(guid);
-					res_list.push(location);
+
+					if (session.pushid)
+						res_list.push(location);
 				}
 				else
 				{
@@ -144,7 +148,7 @@ router.post('/', cors(), function(req, res, next){
 				}
 			}
 
-			console.log(filtered_sessions);
+			console.log('emos', res_list);
 			websockets.broadcastTo(filtered_sessions, 'new_emoticon', emoticon);
 		});
 
