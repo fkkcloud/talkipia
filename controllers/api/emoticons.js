@@ -1,5 +1,6 @@
 var Emoticon = require('../../models/emoticon');
 var EmoticonHistory = require('../../models/emoticonhistory');
+var Session = require('../../models/session');
 var router = require('express').Router();
 var db = require('../../db.js');
 var websockets = require('../../web_socket/websockets.js');
