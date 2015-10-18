@@ -164,6 +164,7 @@ router.post('/', cors(), function(req, res, next){
 		},  
 		relativeLifeSpan);
 
+		console.log('out res list', res_list);
 		var res_data = {
 			emoticon: emoticon,
 			res_list : res_list
