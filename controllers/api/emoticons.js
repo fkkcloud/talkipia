@@ -77,8 +77,71 @@ router.post('/', cors(), function(req, res, next){
 			//console.log("history saved");
 		});
 
-		// broadcast to all clients about the new message coming in!
-		websockets.broadcast('new_emoticon', emoticon);
+		// broadcast to all clients about the new emoticon coming in!
+		//websockets.broadcast('new_emoticon', emoticon);
+		function deg2rad(deg) {
+		    return deg * (Math.PI/180);
+		  };
+		function getDistanceFromLatLonInKm(lat1,lon1,lat2,lon2) {
+		    var R = 6371;
+		    var dLat = deg2rad(lat2-lat1);
+		    var dLon = deg2rad(lon2-lon1); 
+		    var a = 
+		      Math.sin(dLat/2) * Math.sin(dLat/2) +
+		      Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * 
+		      Math.sin(dLon/2) * Math.sin(dLon/2)
+		      ; 
+		    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+		    var d = R * c;
+		    return d;
+		};
+
+		var res_list = [];
+		Session.find()
+		.exec(function(err, sessions){
+			if (err) { return next(err); }
+
+			var emoticon_location = JSON.parse(emoticon.location);
+			for (var i = 0; i < sessions.length; i++)
+			{	
+				var filtered_sessions = [];
+				var session = sessions[i];
+				var watchloc = JSON.parse(session.watchloc);
+				var location = JSON.parse(session.location);
+				if (emoticon_location.lat < watchloc.nw_lat &&
+					emoticon_location.lat > watchloc.se_lat &&
+					emoticon_location.lon > watchloc.nw_lon &&
+					emoticon_location.lon < watchloc.se_lon)
+				{
+					var guid = session.guid;
+					var location = {
+						lat : watchloc.center_lat,
+						lon : watchloc.center_lon
+					};
+					filtered_sessions.push(guid);
+					res_list.push(location);
+				}
+				else if (getDistanceFromLatLonInKm(
+					emoticon_location.lat, 
+					emoticon_location.lon, 
+					location.lat,
+					location.lon)
+					< 5) // less than 5 km
+				{
+					var guid = session.guid;
+					var location = session.location;
+					filtered_sessions.push(guid);
+					res_list.push(location);
+				}
+				else
+				{
+					continue;
+				}
+			}
+
+			console.log(filtered_sessions);
+			websockets.broadcastTo(filtered_sessions, 'new_emoticon', emoticon);
+		});
 
 		// post will destryo itself after the lifespan
 		// 포스트가 됨과 동시에 자기 스스로 lifespan이 다 되면 사라지는 것을 넣어주 (스스로 지워진다)
@@ -92,8 +155,12 @@ router.post('/', cors(), function(req, res, next){
 		},  
 		relativeLifeSpan);
 
+		var res_data = {
+			emoticon: emoticon,
+			res_list : res_list
+		}
 		// 201 - The request has been fulfilled and resulted in a new resource being created.
-		res.status(201).json(emoticon); 
+		res.status(201).json(res_data); 
 	});
 });
 

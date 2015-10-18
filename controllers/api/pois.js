@@ -41,7 +41,7 @@ router.post('/findbywatchlocation', cors(), function(req, res, next){
 	        	filtered_pois.push(poi)
 	        }
 		}
-		console.log(filtered_pois);
+		//console.log(filtered_pois);
 		res.status(200).json(filtered_pois);
 	});
 })
