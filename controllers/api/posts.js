@@ -198,7 +198,7 @@ router.post('/', cors(), function(req, res, next){
 				}
 			}
 
-			console.log('posts res list', res_list);
+			console.log('posts pushids', pushids);
 			websockets.broadcastTo(filtered_sessions, 'new_post', post);
 
 			var res_data = {
