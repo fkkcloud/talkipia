@@ -15,6 +15,35 @@ router.get('/', cors(), function(req, res, next){
 	});
 });
 
+router.post('/findbywatchlocation', cors(), function(req, res, next){
+	var watchlocation = JSON.parse(req.body.watchlocation);
+
+	Emoticon.find()
+	.exec(function(err, emos){
+		if (err) { return next(err); }
+
+		var filtered_emos = [];
+		for (var i = 0; i < emos.length; i++)
+		{	
+			var emo = emos[i];
+			var location = JSON.parse(emo.location);
+			if (!(location.lat < watchlocation.nw_lat) ||
+            !(location.lat > watchlocation.se_lat) ||
+            !(location.lon < watchlocation.se_lon) ||
+            !(location.lon > watchlocation.nw_lon) )
+	        {
+	            continue; // skip this post - no need to draw
+	        }
+	        else
+	        {
+	        	filtered_emos.push(emo)
+	        }
+		}
+		console.log(filtered_emos);
+		res.status(200).json(filtered_emos);
+	});
+})
+
 // create emoticon
 router.post('/', cors(), function(req, res, next){
 	var relativeLifeSpan = req.body.lifespan;

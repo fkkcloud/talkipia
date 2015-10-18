@@ -17,6 +17,35 @@ router.get('/', cors(), function(req, res, next){
 	});
 });
 
+router.post('/findbywatchlocation', cors(), function(req, res, next){
+	var watchlocation = JSON.parse(req.body.watchlocation);
+
+	POI.find()
+	.exec(function(err, pois){
+		if (err) { return next(err); }
+
+		var filtered_pois = [];
+		for (var i = 0; i < pois.length; i++)
+		{	
+			var poi = pois[i];
+			var location = JSON.parse(poi.location);
+			if (!(location.lat < watchlocation.nw_lat) ||
+            !(location.lat > watchlocation.se_lat) ||
+            !(location.lon < watchlocation.se_lon) ||
+            !(location.lon > watchlocation.nw_lon) )
+	        {
+	            continue; // skip this post - no need to draw
+	        }
+	        else
+	        {
+	        	filtered_pois.push(poi)
+	        }
+		}
+		console.log(filtered_pois);
+		res.status(200).json(filtered_pois);
+	});
+})
+
 router.post('/', cors(), function(req, res, next){
 	var query = {'guid': req.body.guid};
 	var upsert_poi = {

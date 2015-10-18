@@ -141,12 +141,13 @@ router.post('/', cors(), function(req, res, next){
 		    var d = R * c;
 		    return d;
 		};
+
+		var filtered_sessions = [];
 		Session.find()
 		.exec(function(err, sessions){
 			if (err) { return next(err); }
 
 			var post_location = JSON.parse(post.location);
-			var filtered_sessions = [];
 			for (var i = 0; i < sessions.length; i++)
 			{	
 				var session = sessions[i];
@@ -195,9 +196,12 @@ router.post('/', cors(), function(req, res, next){
 			relativeLifeSpan);
 		}
 		
-
+		var res_data = {
+			post: post,
+			res_list : filtered_sessions
+		}
 		// 201 - The request has been fulfilled and resulted in a new resource being created.
-		res.status(201).json(post); 
+		res.status(201).json(res_data); 
 	});
 });
 
