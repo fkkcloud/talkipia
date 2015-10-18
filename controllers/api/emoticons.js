@@ -150,6 +150,13 @@ router.post('/', cors(), function(req, res, next){
 
 			console.log('emos res list', res_list);
 			websockets.broadcastTo(filtered_sessions, 'new_emoticon', emoticon);
+
+			var res_data = {
+				emoticon: emoticon,
+				res_list : res_list
+			}
+			// 201 - The request has been fulfilled and resulted in a new resource being created.
+			res.status(201).json(res_data); 
 		});
 
 		// post will destryo itself after the lifespan
@@ -163,14 +170,6 @@ router.post('/', cors(), function(req, res, next){
 			});
 		},  
 		relativeLifeSpan);
-
-		console.log('out res list', res_list);
-		var res_data = {
-			emoticon: emoticon,
-			res_list : res_list
-		}
-		// 201 - The request has been fulfilled and resulted in a new resource being created.
-		res.status(201).json(res_data); 
 	});
 });
 

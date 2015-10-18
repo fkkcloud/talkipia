@@ -195,6 +195,13 @@ router.post('/', cors(), function(req, res, next){
 
 			console.log('posts res list', res_list);
 			websockets.broadcastTo(filtered_sessions, 'new_post', post);
+
+			var res_data = {
+				post: post,
+				res_list : res_list
+			}
+			// 201 - The request has been fulfilled and resulted in a new resource being created.
+			res.status(201).json(res_data); 
 		});
 		
 
@@ -212,13 +219,6 @@ router.post('/', cors(), function(req, res, next){
 			},  
 			relativeLifeSpan);
 		}
-		
-		var res_data = {
-			post: post,
-			res_list : res_list
-		}
-		// 201 - The request has been fulfilled and resulted in a new resource being created.
-		res.status(201).json(res_data); 
 	});
 });
 
