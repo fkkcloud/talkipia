@@ -45,10 +45,10 @@ router.post('/findbywatchlocation', cors(), function(req, res, next){
 		{	
 			var post = posts[i];
 			var location = JSON.parse(post.location);
-			if (!(location.lat < current_map_nw.lat) ||
-            !(location.lat > current_map_se.lat) ||
-            !(location.lon < current_map_se.lon) ||
-            !(location.lon > current_map_nw.lon) )
+			if (!(location.lat < watchlocation.nw_lat) ||
+            !(location.lat > watchlocation.se_lat) ||
+            !(location.lon < watchlocation.se_lon) ||
+            !(location.lon > watchlocation.nw_lon) )
 	        {
 	            continue; // skip this post - no need to draw
 	        }
