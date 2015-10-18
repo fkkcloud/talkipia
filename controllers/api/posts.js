@@ -154,7 +154,6 @@ router.post('/', cors(), function(req, res, next){
 				var filtered_sessions = [];
 				var session = sessions[i];
 				var watchloc = JSON.parse(session.watchloc);
-				console.log(watchloc);
 				var location = JSON.parse(session.location);
 				if (post_location.lat < watchloc.nw_lat &&
 					post_location.lat > watchloc.se_lat &&
