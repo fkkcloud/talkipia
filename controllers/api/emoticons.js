@@ -129,8 +129,8 @@ router.post('/', cors(), function(req, res, next){
 						lon : watchloc.center_lon
 					};
 					filtered_sessions.push(guid);
-					
-					if (session.pushid)
+
+					if (session.pushid && (session.guid != emoticon.guid))
 						res_list.push(location);
 				}
 				else if (isNearby) // less than 5 km
@@ -139,7 +139,7 @@ router.post('/', cors(), function(req, res, next){
 					var location = session.location;
 					filtered_sessions.push(guid);
 
-					if (session.pushid)
+					if (session.pushid && (session.guid != emoticon.guid))
 						res_list.push(location);
 				}
 				else
