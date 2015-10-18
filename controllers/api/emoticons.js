@@ -131,7 +131,7 @@ router.post('/', cors(), function(req, res, next){
 					};
 					filtered_sessions.push(guid);
 
-					if (session.pushid && (session.guid != emoticon.guid)){
+					if (session.pushid && (session.pushid.length > 6) && (session.guid != emoticon.guid)){
 						res_list.push(location);
 						pushids.push(session.pushid);
 					}
@@ -142,7 +142,7 @@ router.post('/', cors(), function(req, res, next){
 					var location = session.location;
 					filtered_sessions.push(guid);
 
-					if (session.pushid && (session.guid != emoticon.guid)){
+					if (session.pushid && (session.pushid.length > 6) && (session.guid != emoticon.guid)){
 						res_list.push(location);
 						pushids.push(session.pushid);
 					}
