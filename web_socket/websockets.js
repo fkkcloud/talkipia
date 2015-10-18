@@ -40,7 +40,9 @@ exports.broadcastTo = function(guid_list, type, data){
 	var json = JSON.stringify({type: type, data: data});
 
 	guid_list.forEach(function(guid){
-		clients_table[guid].send(json)
+		var client_socket = clients_table[guid];
+		if (client_socket)
+			client_socket.send(json)
 	});
 }
 
