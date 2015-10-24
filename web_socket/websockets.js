@@ -102,23 +102,27 @@ exports.connect = function(server){
 		ws.on('close', function(){ 
 			console.log('user socket closeing..');
 
-			// for new socket array
-			for (var key in clients_table) {
-				console.log('checking key:', key, ' is the one that we are removing');
-			  if (clients_table.hasOwnProperty(key) && clients_table[key] == ws) {
-			    // online stat to be false
-				var query         = {'guid'       :key};
-				var newOnlinestat = {'onlinestat' :false};
-				var options       = {upsert:false};
-				Session.findOneAndUpdate(query, newOnlinestat, options, function(err, session){
-			    	if (err) console.log("error on closing socket");
+			setTimeOut(function(){
+				// for new socket array
+				for (var key in clients_table) {
+					console.log('checking key:', key, ' is the one that we are removing');
 
-			    	console.log('socket closed:', key)
+				  if (clients_table.hasOwnProperty(key) && clients_table[key] == ws) {
+				    // online stat to be false
+					var query         = {'guid'       :key};
+					var newOnlinestat = {'onlinestat' :false};
+					var options       = {upsert:false};
+					Session.findOneAndUpdate(query, newOnlinestat, options, function(err, session){
+				    	if (err) console.log("error on closing socket");
 
-			    	delete clients_table[key];
-				});
-			  }
-			}
+				    	console.log('socket closed:', key)
+
+				    	delete clients_table[key];
+					});
+				  }
+				}
+			}, 2500)
+			
 			
 			// for old socket array
 			_.remove(clients, ws);
