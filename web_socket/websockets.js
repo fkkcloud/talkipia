@@ -104,6 +104,7 @@ exports.connect = function(server){
 
 			// for new socket array
 			for (var key in clients_table) {
+				console.log('checking key:', key, ' is the one that we are removing');
 			  if (clients_table.hasOwnProperty(key) && clients_table[key] == ws) {
 			    // online stat to be false
 				var query         = {'guid'       :key};
