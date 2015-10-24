@@ -95,13 +95,14 @@ router.post('/', cors(), function(req, res, next){
 			websockets.broadcastTo(filtered_sessions, 'update_POI', poi);
 		});
 
+		/*
 	    // update session online stat when POI gets updated opens
 		var query         = {'guid'       :req.body.guid};
 		var newOnlinestat = {'onlinestat' :true};
 		var options       = {upsert:false};
 		Session.findOneAndUpdate(query, newOnlinestat, options, function(err, session){
 	    	if (err) res.send(500, { error: err });
-		});
+		});*/
 
 	    res.status(201).json(poi);
 	});
