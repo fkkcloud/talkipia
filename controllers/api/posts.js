@@ -134,7 +134,7 @@ router.post('/findbywatchlocation', cors(), function(req, res, next){
 				clustered_posts.push(clusterer);
 			}
 
-			var data = {'posts':clustered_posts, 'type':0};
+			var data = {'posts':clustered_posts, 'type':1};
 			console.log('clustered_section:', data);
 			res.status(200).json(data);
  		}

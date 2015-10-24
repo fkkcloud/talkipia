@@ -134,8 +134,61 @@ setInterval(function(){
 				}
 			}
 		})
-				
+	})	
+}, 4000);
 
+setInterval(function(){
+
+	// check online stat for sessions and update POI
+	Session.find()
+	.exec(function(err, sessions){
+		if (err) { console.log(err); }
+		
+		var guids = [];
+		for (var i = 0; i < sessions.length; i++)
+		{
+			var session = sessions[i];
+			if (session.onlinestat){
+				guids.push(session.guid);
+			};
+		}
+
+		websockets.broadcastTo(guids, 'check_onlinestat');
+
+		if (guids.length > 0)
+		{
+			setTimeout(function(){		
+				Session.find()		
+				.exec(function(err, sessions){		
+					if (err) { return next(err); }		
+					for (var i = 0; i < sessions.length; i++) {		
+						var session = sessions[i];		
+				
+						// get time between 2 date		
+						var t1 = session.lastupdate;		
+						var t2 = new Date();		
+						var dif = t1 - t2.getTime();		
+				
+						var Seconds_from_T1_to_T2 = dif / 1000;		
+						var Seconds_Between_Dates = Math.abs(Seconds_from_T1_to_T2);		
+				
+						if (Seconds_Between_Dates > 250) // more than 4min 10s		
+						{		
+							var query         = {'guid'       : session.guid};		
+							var newOnlinestat = {'onlinestat' : false};		
+							var options       = {upsert       : false};		
+							Session.findOneAndUpdate(query, newOnlinestat, options, function(err, session){		
+						    	if (err) console.log(err);				
+							});		
+						}		
+					}		
+				});		
+				// check every sessions and see if its updated within 4m, if not, make it offline and let all the clients know		
+			}, 8000);	
+		}
+		
 	})
 			
-}, 4000);
+}, 240000); // every 4 minute
+
+
