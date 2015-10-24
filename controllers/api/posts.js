@@ -34,6 +34,7 @@ router.get('/:page', cors(), function(req, res, next){
     })
 });
 
+/* only find by watchlocation do clusterer */
 router.post('/findbywatchlocation', cors(), function(req, res, next){
 	var watchlocation = JSON.parse(req.body.watchlocation);
 
@@ -58,8 +59,85 @@ router.post('/findbywatchlocation', cors(), function(req, res, next){
 	        	filtered_posts.push(post)
 	        }
 		}
-		console.log(filtered_posts);
-		res.status(200).json(filtered_posts);
+		
+
+		// clustering logic
+		if (filtered_posts.length < 11){ // no need to cluster
+			console.log(filtered_posts);
+			var data = {'posts':filtered_posts, 'type':0};
+			res.status(200).json(data);
+		}
+		else 
+		{
+			var clustered_posts = [];
+			var height = watchlocation.nw_lat - watchlocation.se_lat;
+			var width = watchlocation.se_lon - watchlocation.nw_lon;
+			var height_margin = height * 0.2;
+			var width_margin  = width * 0.333;
+			var sections = [];
+
+			// create section bounds
+			for (var i = 0; i < sections.length; i++){
+				for (var j = 0; j < 5; j++){ // for lat, height - 5 times
+					for (var k = 0; k < 3; k++){ // for lon, width - 3 times
+						var section = {
+							'nw_lat':watchlocation.nw_lat + height_margin * j,
+							'nw_lon':watchlocation.nw_lon + width_margin * k,
+							'se_lat':watchlocation.se_lat + height_margin * j,
+							'se_lon':watchlocation.se_lon + width_margin * k
+						}
+						sections.push(section);
+					}
+				}
+			}
+
+			for (var i = 0; i < sections.length; i++){
+				var section = sections[i];
+				var section_posts = [];
+
+				// collect posts within each section
+				for (int j = 0; j < filtered_posts.length; j++){
+					var post = filtered_posts[j];
+					var location = JSON.parse(post.location);
+					if (!(location.lat < section.nw_lat) ||
+		            !(location.lat > section.se_lat) ||
+		            !(location.lon < section.se_lon) ||
+		            !(location.lon > section.nw_lon) )
+			        {
+			            continue; // skip this post - not exist in section 1
+			        }
+			        else
+			        {
+			        	section_posts.push(post)
+			        }
+				}
+
+				// if the section don't have any posts skip it
+				if (section_posts.length == 0)
+					continue;
+
+				// if the section has posts, cluster it. get avg location per section,
+				var sum_lat = 0;
+				var sum_lon = 0;
+				var section_len = section_posts.length;
+				for (int j = 0; j < section_len; j++){
+					var post = section_posts[j];
+					var location = JSON.parse(post.location);
+					sum_lat += location.lat;
+					sum_lon += location.lon;
+				}
+				var avg_lat = sum_lat / section_len;
+				var avg_lon = sum_lon / section_len;
+				var avg_coords = {'lat':avg_lat, 'lon':avg_lon};
+				var age_coords_str = JSON.stringify(avg_coords);
+				var clusterer = {'location': avg_coords_str, 'len': section_len};
+				clustered_posts.push(clusterer);
+			}
+
+			var data = {'posts':clustered_posts, 'type':0};
+			console.log('clustered_section:', data);
+			res.status(200).json(data);
+ 		}
 	});
 })
 
