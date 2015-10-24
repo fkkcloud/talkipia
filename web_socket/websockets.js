@@ -102,7 +102,7 @@ exports.connect = function(server){
 		ws.on('close', function(){ 
 			console.log('user socket closeing..');
 
-			setTimeOut(function(){
+			setTimeout(function(){
 				// for new socket array
 				for (var key in clients_table) {
 					console.log('checking key:', key, ' is the one that we are removing');
