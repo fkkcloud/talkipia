@@ -96,7 +96,7 @@ router.post('/findbywatchlocation', cors(), function(req, res, next){
 				var section_posts = [];
 
 				// collect posts within each section
-				for (int j = 0; j < filtered_posts.length; j++){
+				for (var j = 0; j < filtered_posts.length; j++){
 					var post = filtered_posts[j];
 					var location = JSON.parse(post.location);
 					if (!(location.lat < section.nw_lat) ||
@@ -120,7 +120,7 @@ router.post('/findbywatchlocation', cors(), function(req, res, next){
 				var sum_lat = 0;
 				var sum_lon = 0;
 				var section_len = section_posts.length;
-				for (int j = 0; j < section_len; j++){
+				for (var j = 0; j < section_len; j++){
 					var post = section_posts[j];
 					var location = JSON.parse(post.location);
 					sum_lat += location.lat;
