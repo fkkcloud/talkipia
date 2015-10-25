@@ -165,6 +165,16 @@ setInterval(function(){
 					for (var i = 0; i < sessions.length; i++) {		
 						var session = sessions[i];		
 				
+						if (!session.lastupdate)
+						{
+							var query         = {'guid'       : session.guid};		
+							var newOnlinestat = {'onlinestat' : false};		
+							var options       = {upsert       : false};		
+							Session.findOneAndUpdate(query, newOnlinestat, options, function(err, session){		
+						    	if (err) console.log(err);				
+							});	
+						}
+
 						// get time between 2 date		
 						var t1 = session.lastupdate;		
 						var t2 = new Date();		
