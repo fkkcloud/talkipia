@@ -42,8 +42,13 @@ exports.broadcastTo = function(guid_list, type, data){
 	guid_list.forEach(function(guid){
 		var client_socket = clients_table[guid];
 		if (client_socket){
-			client_socket.send(json)
-			console.log('sent socket msg to ', guid);
+			try {
+				client_socket.send(json)
+				console.log('sent socket msg to ', guid);	
+			}
+			catch(err) {
+				console.log('catch:', error);
+			}
 		}
 	});
 }
@@ -89,6 +94,7 @@ exports.connect = function(server){
 				}
 			}
 			catch(err) {
+				console.log('catch:', error);
 			    //console.log('error on the message conveint to JSON:', message);
 			}
 			/* -----------------------  END RECEIVING GUID from client  --------------------------*/
