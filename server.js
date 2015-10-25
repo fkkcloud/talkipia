@@ -116,15 +116,16 @@ setInterval(function(){
 			{
 				var session = sessions[i];
 				
+				console.log('trying POI for the offline user : ', session.userid, session.guid, session.onlinestat);
 				if (!session.onlinestat){
 					for (var j = 0; j < pois.length; j++)
 					{
 						var poi = pois[j];
 						if (poi.guid == session.guid){
-							var poi_guid = poi.guid;
-							var query = { guid: poi.guid };
+							var query = { 'guid' : session.guid };
 							POI.remove(query, function(err, doc){
-								if (err) { console.log(err); }	
+								if (err) { console.log(err); }
+
 								console.log('removing POI for the offline user : ', session.userid, session.guid, session.onlinestat);
 								websockets.broadcast('remove_POI', poi_guid);
 							});
