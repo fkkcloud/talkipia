@@ -5,6 +5,7 @@ var router = require('express').Router();
 var db = require('../../db.js');
 var websockets = require('../../web_socket/websockets.js');
 var cors = require('cors');
+var NotiCtrl = require('../../noti.ctrl.js');
 
 // get all the posts
 router.get('/', cors(), function(req, res, next){
@@ -254,10 +255,12 @@ router.post('/', cors(), function(req, res, next){
 					};
 					filtered_sessions.push(guid);
 
+					/*
 					if (session.pushid && (session.pushid.length > 6) && (session.guid != post.guid)){
 						res_list.push(location);
 						pushids.push(session.pushid);
-					}
+					}*/
+					NotiCtrl.getPushids(res_list, pushids, session);
 				}
 				else if (isNearby) // less than 5 km
 				{
@@ -265,10 +268,13 @@ router.post('/', cors(), function(req, res, next){
 					var location = session.location;
 					filtered_sessions.push(guid);
 
+					/*
 					if (session.pushid && (session.pushid.length > 6) && (session.guid != post.guid)){
 						res_list.push(location);
 						pushids.push(session.pushid);
 					}
+					*/
+					NotiCtrl.getPushids(res_list, pushids, session);
 				}
 				else
 				{
