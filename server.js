@@ -117,6 +117,7 @@ setInterval(function(){
 				var session = sessions[i];
 				
 				if (!session.onlinestat){
+					console.log('removing POI for the offline users..');
 					for (var j = 0; j < pois.length; j++)
 					{
 						var poi = pois[j];
@@ -153,6 +154,7 @@ setInterval(function(){
 			};
 		}
 
+		console.log('send socket to check online users..');
 		websockets.broadcastTo(guids, 'check_onlinestat');
 
 		if (guids.length > 0)
