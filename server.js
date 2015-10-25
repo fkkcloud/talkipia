@@ -116,7 +116,7 @@ setInterval(function(){
 			{
 				var session = sessions[i];
 				
-				console.log('trying POI for the offline user : ', session.userid, session.guid, session.onlinestat);
+				//console.log('trying POI for the offline user : ', session.userid, session.guid, session.onlinestat);
 				if (!session.onlinestat){
 					for (var j = 0; j < pois.length; j++)
 					{
@@ -126,7 +126,7 @@ setInterval(function(){
 							POI.remove(query, function(err, doc){
 								if (err) { console.log(err); }
 
-								console.log('removing POI for the offline user : ', session.userid, session.guid, session.onlinestat);
+								//console.log('removing POI for the offline user : ', session.userid, session.guid, session.onlinestat);
 								websockets.broadcast('remove_POI', session.guid);
 							});
 						}
@@ -154,7 +154,7 @@ setInterval(function(){
 			};
 		}
 
-		console.log('send socket to check online users..');
+		//console.log('send socket to check online users..');
 		websockets.broadcastTo(guids, 'check_onlinestat');
 
 		if (guids.length > 0)
@@ -171,10 +171,6 @@ setInterval(function(){
 						var t2 = new Date();		
 						var dif = t1.getTime() - t2.getTime();
 
-						console.log('raw time', t1, t2);
-						console.log('time getTime()', t1.getTime(), t2.getTime());
-
-						console.log('time dif:', dif/1000);
 
 						var Seconds_from_T1_to_T2 = dif / 1000;		
 						var Seconds_Between_Dates = Math.abs(Seconds_from_T1_to_T2);		
