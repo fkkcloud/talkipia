@@ -260,7 +260,7 @@ router.post('/', cors(), function(req, res, next){
 						res_list.push(location);
 						pushids.push(session.pushid);
 					}*/
-					NotiCtrl.getPushids(res_list, pushids, session, post);
+					NotiCtrl.getPushids(res_list, pushids, session, post, location);
 				}
 				else if (isNearby) // less than 5 km
 				{
@@ -274,7 +274,7 @@ router.post('/', cors(), function(req, res, next){
 						pushids.push(session.pushid);
 					}
 					*/
-					NotiCtrl.getPushids(res_list, pushids, session, post);
+					NotiCtrl.getPushids(res_list, pushids, session, post, location);
 				}
 				else
 				{

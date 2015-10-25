@@ -1,5 +1,5 @@
 
-exports.getPushids = function(res_list, pushids, session, post){
+exports.getPushids = function(res_list, pushids, session, post, location){
 
 	if (session.pushid == 'undefined') // there should be pushid
 		return;
