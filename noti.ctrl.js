@@ -1,5 +1,5 @@
 
-exports.getPushids = function(res_list, pushids, session){
+exports.getPushids = function(res_list, pushids, session, post){
 
 	if (session.pushid == 'undefined') // there should be pushid
 		return;
@@ -7,7 +7,7 @@ exports.getPushids = function(res_list, pushids, session){
 	if (session.pushid.length < 6) // pushid usually is bigger then 6 letters
 		return;
 
-	if (session.guid -= post.guid) // we dont send push to themselves
+	if (session.guid == post.guid) // we dont send push to themselves
 		return;		
 
 	if (session.onlinestat == true)
