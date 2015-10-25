@@ -166,7 +166,8 @@ setInterval(function(){
 					for (var i = 0; i < sessions.length; i++) {		
 						var session = sessions[i];		
 				
-						if (!session.lastupdate || session.lastupdate == 'undefined' || session.lastupdate == null)
+						console.log(session.userid, session.lastupdate);
+						if (session.lastupdate == 'undefined' || session.lastupdate == null)
 						{
 							var query         = {'guid'       : session.guid};		
 							var newOnlinestat = {'onlinestat' : false};		
