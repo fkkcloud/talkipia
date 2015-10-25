@@ -165,7 +165,7 @@ setInterval(function(){
 					for (var i = 0; i < sessions.length; i++) {		
 						var session = sessions[i];		
 				
-						if (!session.lastupdate)
+						if (!session.lastupdate || session.lastupdate == 'undefined' || session.lastupdate == null)
 						{
 							var query         = {'guid'       : session.guid};		
 							var newOnlinestat = {'onlinestat' : false};		
@@ -200,6 +200,6 @@ setInterval(function(){
 		
 	})
 			
-}, 240000); // every 4 minute
+}, 60000); // every 2 minute
 
 
