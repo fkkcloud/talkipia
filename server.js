@@ -179,7 +179,7 @@ setInterval(function(){
 						var Seconds_from_T1_to_T2 = dif / 1000;		
 						var Seconds_Between_Dates = Math.abs(Seconds_from_T1_to_T2);		
 				
-						if (Seconds_Between_Dates > 250) // more than 4min 10s		
+						if (Seconds_Between_Dates > 60) // more than 1min		
 						{		
 							var query         = {'guid'       : session.guid};		
 							var newOnlinestat = {'onlinestat' : false};		
