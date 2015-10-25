@@ -173,6 +173,8 @@ setInterval(function(){
 							Session.findOneAndUpdate(query, newOnlinestat, options, function(err, session){		
 						    	if (err) console.log(err);				
 							});	
+
+							continue;
 						}
 
 						// get time between 2 date		
