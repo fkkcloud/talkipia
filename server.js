@@ -169,7 +169,7 @@ setInterval(function(){
 						// get time between 2 date		
 						var t1 = session.lastupdate;		
 						var t2 = new Date();		
-						var dif = t1.getTime(); - t2.getTime();
+						var dif = t1.getTime() - t2.getTime();
 
 						console.log('raw time', t1, t2);
 						console.log('time getTime()', t1.getTime(), t2.getTime());
