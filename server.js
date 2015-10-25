@@ -165,25 +165,17 @@ setInterval(function(){
 					if (err) { return next(err); }		
 					for (var i = 0; i < sessions.length; i++) {		
 						var session = sessions[i];		
-				
-						console.log(session.userid, session.lastupdate);
-						if (session.lastupdate == 'undefined' || session.lastupdate == null)
-						{
-							var query         = {'guid'       : session.guid};		
-							var newOnlinestat = {'onlinestat' : false};		
-							var options       = {upsert       : false};		
-							Session.findOneAndUpdate(query, newOnlinestat, options, function(err, session){		
-						    	if (err) console.log(err);				
-							});	
-
-							continue;
-						}
 
 						// get time between 2 date		
 						var t1 = session.lastupdate;		
 						var t2 = new Date();		
-						var dif = t1 - t2.getTime();		
-				
+						var dif = t1.getTime(); - t2.getTime();
+
+						console.log('raw time', t1, t2);
+						console.log('time getTime()', t1.getTime(), t2.getTime());
+
+						console.log('time dif:', dif/1000);
+
 						var Seconds_from_T1_to_T2 = dif / 1000;		
 						var Seconds_Between_Dates = Math.abs(Seconds_from_T1_to_T2);		
 				
