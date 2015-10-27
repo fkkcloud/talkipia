@@ -24,7 +24,7 @@ exports.getPushids = function(res_list, pushids, session, post, location){
 		var Seconds_from_T1_to_T2 = dif / 1000;		
 		var Seconds_Between_Dates = Math.abs(Seconds_from_T1_to_T2);		
 
-		if (Seconds_Between_Dates < 60 * 2 + 30) // offline less than 2min and 30s
+		if (Seconds_Between_Dates < 60 * 5 + 30) // offline less than 5min and 30s
 		{
 			res_list.push(location);
 			pushids.push(session.pushid);
