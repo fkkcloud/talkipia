@@ -64,7 +64,7 @@ router.post('/findbywatchlocation', cors(), function(req, res, next){
 
 		// clustering logic
 		if (filtered_posts.length < 11){ // no need to cluster
-			console.log(filtered_posts);
+			//console.log(filtered_posts);
 			var data = {'posts':filtered_posts, 'type':0};
 			res.status(200).json(data);
 		}
