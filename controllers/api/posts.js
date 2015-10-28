@@ -206,7 +206,8 @@ router.post('/', cors(), function(req, res, next){
 		pushid      : req.body.pushid,
 		userid      : req.body.userid,
 		userplace   : req.body.userplace,
-		isPost      : req.body.isPost
+		isPost      : req.body.isPost,
+		geometry    : req.body.geometry
 	});
 
 	var history = new History({
