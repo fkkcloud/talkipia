@@ -45,8 +45,6 @@ router.get('/findbycoords/:page', cors(), function(req, res, next){
 	var latitude =  req.query.latitude;
 	var longitude = req.query.longitude;
 
-	console.log('location:', latitude, longitude);
-
 	var query = {'geometry.coordinates' :
 		    {
 		        $geometry: {
@@ -57,8 +55,6 @@ router.get('/findbycoords/:page', cors(), function(req, res, next){
 		    }
 		};
 	}
-
-	console.log('query location:', query);
 
 	/* Post use instead of History for test*/
 	Post.find(query)
