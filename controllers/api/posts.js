@@ -53,15 +53,11 @@ router.get('/findbycoords/:page', cors(), function(req, res, next){
 	console.log('latitude', latitude);
 
 
-	var query = {
-		    $near: {
-		        $geometry: {
-		             type: "Point" ,
-		             coordinates: [ latitude , longitude ]
-		        },
-		        $maxDistance: 100
-		    }
-		};
+	var query = 
+	{ geometry: { '$near': { 
+        '$maxDistance': 100,
+        '$geometry': { type: 'Point', coordinates: [ latitude, longitude ] } } } 
+    };
 
 	/* Post use instead of History for test*/
 	Post.find(query)
