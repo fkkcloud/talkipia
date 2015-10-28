@@ -44,8 +44,8 @@ router.get('/findbycoords/:page', cors(), function(req, res, next){
 	var perPage 	= req.query.perpage;
 	var latitude 	= req.query.latitude;
 	var longitude 	= req.query.longitude;
-	
-	
+
+
 	console.log('page', page);
 	console.log('perPage', perPage);
 
@@ -53,8 +53,8 @@ router.get('/findbycoords/:page', cors(), function(req, res, next){
 	console.log('latitude', latitude);
 
 
-	var query = {'geometry.coordinates' :
-		    {
+	var query = {
+		    $near: {
 		        $geometry: {
 		             type: "Point" ,
 		             coordinates: [ latitude , longitude ]
