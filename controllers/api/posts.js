@@ -44,6 +44,10 @@ router.get('/findbycoords/:page', cors(), function(req, res, next){
 	var perPage 	= req.query.perpage;
 	var latitude 	= req.query.latitude;
 	var longitude 	= req.query.longitude;
+	
+	
+	console.log('page', page);
+	console.log('perPage', perPage);
 
 	console.log('longitude', longitude);
 	console.log('latitude', latitude);
