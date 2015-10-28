@@ -42,15 +42,16 @@ router.get('/:page', cors(), function(req, res, next){
 router.get('/findbycoords/:page', cors(), function(req, res, next){
 	var perPage = req.query.perpage;
 	var page    = req.params.page;
-	var location =  JSON.parse(req.query.location);
+	var latitude =  req.query.latitude;
+	var longitude = req.query.longitude;
 
-	console.log('location:', req.query.location, location);
+	console.log('location:', latitude, longitude);
 
 	var query = {
 	  $near : {
 	    $geometry : {
 	      type : "Point",
-	      coordinates : [location.lat, location.lot] 
+	      coordinates : [latitude, longitude] 
 	    },
 	    $maxDistance : 50
 	  }
