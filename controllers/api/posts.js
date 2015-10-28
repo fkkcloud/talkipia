@@ -55,15 +55,15 @@ router.get('/findbycoords/:page', cors(), function(req, res, next){
 
 	var query = 
 	{ geometry: { '$near': { 
-        '$maxDistance': 1,
+        '$maxDistance': 100000,
         '$geometry': { type: 'Point', coordinates: [ latitude, longitude ] } } } 
     };
 
 	/* Post use instead of History for test*/
 	Post.find(query)
 	//.sort('-date')
-    //.limit(perPage)
-	//.skip(perPage * page)  	
+    .limit(perPage)
+	.skip(perPage * page)  	
 	.exec(function(err, posts) {
 		console.log('found:', posts);
      	res.status(200).json(posts);
