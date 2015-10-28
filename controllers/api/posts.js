@@ -54,7 +54,6 @@ router.get('/findbycoords/:page', cors(), function(req, res, next){
 		        $maxDistance: 100
 		    }
 		};
-	}
 
 	/* Post use instead of History for test*/
 	Post.find(query)
