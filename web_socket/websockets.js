@@ -47,7 +47,7 @@ exports.broadcastTo = function(guid_list, type, data){
 				console.log('sent socket msg to ', guid);	
 			}
 			catch(err) {
-				console.log('catch:', error);
+				console.log('catch:', err);
 			}
 		}
 	});
