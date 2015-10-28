@@ -35,6 +35,27 @@ router.get('/:page', cors(), function(req, res, next){
     })
 });
 
+/* pagination with coords
+	http://localhost:3000/api/posts/page?perpage=page
+	http://localhost:3000/api/posts/1?perpage=2
+*/
+router.get('/findbycoords/:page', cors(), function(req, res, next){
+	var perPage = req.query.perpage;
+	var page    = req.params.page;
+	var location =  JSON.parse(req.query.location);
+
+	/* Post use instead of History for test*/
+	Post.find()
+	.where('loc')
+	.near({ center: [location.lat, location.lot], maxDistance: 50 });
+	//.sort('-date')
+    .limit(perPage)
+	.skip(perPage * page)  	
+	.exec(function(err, posts) {
+     	res.status(200).json(posts);
+    })
+});
+
 /* only find by watchlocation do clusterer */
 router.post('/findbywatchlocation', cors(), function(req, res, next){
 	var watchlocation = JSON.parse(req.body.watchlocation);
