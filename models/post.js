@@ -15,9 +15,12 @@ var Post = db.model('Post', {
 	userid  :    { type: String,  required: true },
 	userplace:   { type: String,  required: true },
 	isPost  :    { type: Boolean, required: true },
-	geometry:     {
-				      type: { type: String }
-				    , coordinates: []
+	geometry:     location : {
+				    type: { 
+				      type: String,
+				      default: 'Point'
+				    }, 
+				    coordinates: [Number]
 				  }
 });
 
