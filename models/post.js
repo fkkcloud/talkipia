@@ -18,8 +18,8 @@ var PostSchema = new mongoose.Schema({
 	isPost  :    { type: Boolean, required: true },
 	geometry:    {
 				    type: { 
-				      type: 'Point'
-				      //default: 'Point'
+				      type: String,
+				      default: 'Point'
 				    }, 
 				    coordinates: [Number]
 				  }
