@@ -62,8 +62,8 @@ router.get('/findbycoords/:page', cors(), function(req, res, next){
 	/* Post use instead of History for test*/
 	Post.find(query)
 	//.sort('-date')
-    .limit(perPage)
-	.skip(perPage * page)  	
+    //.limit(perPage)
+	//.skip(perPage * page)  	
 	.exec(function(err, posts) {
 		console.log('found:', posts);
      	res.status(200).json(posts);
