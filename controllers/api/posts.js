@@ -44,8 +44,7 @@ router.get('/findbycoords/:page', cors(), function(req, res, next){
 	var page    = req.params.page;
 	var location =  JSON.parse(req.query.location);
 
-	var query;
-	query.geometry = {
+	var query = {
 	  $near : {
 	    $geometry : {
 	      type : "Point",
