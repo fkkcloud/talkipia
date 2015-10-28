@@ -54,14 +54,13 @@ router.get('/findbycoords/:page', cors(), function(req, res, next){
 
 
 	var query = {
-		/*
 		    $near: {
 		        $geometry: {
 		             type: "Point" ,
 		             coordinates: [ latitude , longitude ]
 		        },
 		        $maxDistance: 100
-		    }*/
+		    }
 		};
 
 	/* Post use instead of History for test*/
