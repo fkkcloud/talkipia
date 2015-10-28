@@ -15,7 +15,10 @@ var Post = db.model('Post', {
 	userid  :    { type: String,  required: true },
 	userplace:   { type: String,  required: true },
 	isPost  :    { type: Boolean, required: true },
-	geometry:    { type: { type: String }, coordinates: [Number] }
+	geometry:     {
+				      type: { type: String }
+				    , coordinates: []
+				  }
 });
 
 module.exports = Post;
