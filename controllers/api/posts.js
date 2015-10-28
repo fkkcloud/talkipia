@@ -44,10 +44,17 @@ router.get('/findbycoords/:page', cors(), function(req, res, next){
 	var page    = req.params.page;
 	var location =  JSON.parse(req.query.location);
 
-	var query = { loc: { '$near': { 
-        '$maxDistance': 1,
-        '$geometry': { type: 'Point', coordinates: [location.lat, location.lot] } } } 
-    }
+	var query;
+	query.location = {
+	  $near : {
+	    $geometry : {
+	      type : "Point",
+	      coordinates : [location.lat, location.lot] 
+	    },
+	    $maxDistance : 50
+	  }
+	}
+
 	/* Post use instead of History for test*/
 	Post.find(query)
 	//.sort('-date')
