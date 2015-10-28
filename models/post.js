@@ -14,7 +14,8 @@ var Post = db.model('Post', {
 	pushid  : 	 { type: String, required: false, default: '0' },
 	userid  :    { type: String,  required: true },
 	userplace:   { type: String,  required: true },
-	isPost  :    { type: Boolean, required: true }
+	isPost  :    { type: Boolean, required: true },
+	geometry:    { type: { type: String }, coordinates: [Number] }
 });
 
 module.exports = Post;
