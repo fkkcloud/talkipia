@@ -15,7 +15,7 @@ var PostSchema = new mongoose.Schema({
 	userid  :    { type: String,  required: true },
 	userplace:   { type: String,  required: true },
 	isPost  :    { type: Boolean, required: true },
-	geometry:     location : {
+	geometry:    {
 				    type: { 
 				      type: String,
 				      default: 'Point'
