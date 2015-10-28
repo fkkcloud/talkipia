@@ -40,12 +40,12 @@ router.get('/:page', cors(), function(req, res, next){
 	http://localhost:3000/api/posts/1?perpage=2
 */
 router.get('/findbycoords/:page', cors(), function(req, res, next){
-	var perPage = req.query.perpage;
-	var page    = req.params.page;
-	var latitude =  req.query.latitude;
-	var longitude = req.query.longitude;
+	var page    	= req.params.page;
+	var perPage 	= req.query.perpage;
+	var latitude 	= req.query.latitude;
+	var longitude 	= req.query.longitude;
 
-	console.log('info',longitude);
+	console.log(longitude);
 
 
 	var query = {'geometry.coordinates' :
