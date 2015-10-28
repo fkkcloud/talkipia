@@ -54,6 +54,8 @@ router.get('/findbycoords/:page', cors(), function(req, res, next){
 	  }
 	}
 
+	console.log('query location:', query);
+
 	/* Post use instead of History for test*/
 	Post.find(query)
 	//.sort('-date')
