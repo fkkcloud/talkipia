@@ -1,6 +1,6 @@
 var db = require('../db');
 
-var Post = db.model('Post', {
+var PostSchema = new mongoose.Schema({
 	_id     :    { type: String,  required: true },
 	body    :    { type: String,  required: true },
 	place   :  	 { type: String,  required: true },
@@ -23,5 +23,9 @@ var Post = db.model('Post', {
 				    coordinates: [Number]
 				  }
 });
+
+PostSchema.index({ geometry : '2dsphere' });
+
+var Post = db.model('Post', PostSchema);
 
 module.exports = Post;
