@@ -47,14 +47,15 @@ router.get('/findbycoords/:page', cors(), function(req, res, next){
 
 	console.log('location:', latitude, longitude);
 
-	var query = {
-	  $near : {
-	    $geometry : {
-	      type : "Point",
-	      coordinates : [latitude, longitude] 
-	    },
-	    $maxDistance : 50
-	  }
+	var query = {'location.coordinates' :
+		    {
+		        $geometry: {
+		             type: "Point" ,
+		             coordinates: [ latitude , longitude ]
+		        },
+		        $maxDistance: 100
+		    }
+		};
 	}
 
 	console.log('query location:', query);
