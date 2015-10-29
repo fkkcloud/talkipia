@@ -25,7 +25,7 @@ var PostSchema = new mongoose.Schema({
 				  }
 });
 
-PostSchema.index({ geometry : '2dsphere' });
+PostSchema.index({ 'geometry' : '2dsphere' });
 
 var Post = db.model('Post', PostSchema);
 
