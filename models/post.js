@@ -19,6 +19,7 @@ var PostSchema = new mongoose.Schema({
 	geometry:    {
 				    type: { 
 				      type: String,
+				      index: true,
 				      default: 'Point'
 				    }, 
 				    coordinates: [Number]
