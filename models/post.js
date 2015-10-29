@@ -17,10 +17,9 @@ var PostSchema = new mongoose.Schema({
 	userplace:   { type: String,  required: true },
 	isPost  :    { type: Boolean, required: true },
 	loc     :    {
-					index: '2dsphere',
 				    type: { 
 				      type: String
-				      //default: 'Point'
+				      default: 'Point'
 				    }, 
 				    coordinates: []
 				  }
