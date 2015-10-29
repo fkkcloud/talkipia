@@ -68,6 +68,8 @@ router.get('/findbycoords/:page', cors(), function(req, res, next){
     .limit(perPage)
 	.skip(perPage * page)  	
 	.exec(function(err, posts) {
+		if (err) console.log(err);
+		
 		console.log('found:', posts);
      	res.status(200).json(posts);
     })
