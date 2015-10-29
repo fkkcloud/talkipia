@@ -62,7 +62,7 @@ router.get('/findbycoords/:page', cors(), function(req, res, next){
     	} 
     };
 
-    Post.ensureIndex({geometry:"2dsphere"});
+    db.posts.ensureIndex({geometry:"2dsphere"});
 
 	/* Post use instead of History for test*/
 	Post.find(query)
