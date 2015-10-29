@@ -18,7 +18,7 @@ var PostSchema = new mongoose.Schema({
 	isPost  :    { type: Boolean, required: true },
 	loc     :    {
 				    type: { 
-				      type: String
+				      type: String,
 				      default: 'Point'
 				    }, 
 				    coordinates: []
