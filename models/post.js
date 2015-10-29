@@ -16,13 +16,12 @@ var PostSchema = new mongoose.Schema({
 	userid  :    { type: String,  required: true },
 	userplace:   { type: String,  required: true },
 	isPost  :    { type: Boolean, required: true },
-	geometry:    {
+	loc     :    {
 				    type: { 
-				      type: String,
-				      index: true,
-				      default: 'Point'
+				      type: String
+				      //default: 'Point'
 				    }, 
-				    coordinates: [Number]
+				    coordinates: []
 				  }
 });
 

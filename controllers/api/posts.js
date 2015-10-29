@@ -54,7 +54,7 @@ router.get('/findbycoords/:page', cors(), function(req, res, next){
 
 
 	var query = 
-	{ geometry: { '$near': 
+	{ loc: { '$near': 
 			{ 
         		'$maxDistance': 10000000000,
         		'$geometry': { type: 'Point', coordinates: [ longitude, latitude ] } 
@@ -220,7 +220,7 @@ router.post('/', cors(), function(req, res, next){
 		userid      : req.body.userid,
 		userplace   : req.body.userplace,
 		isPost      : req.body.isPost,
-		geometry    : req.body.geometry
+		loc         : req.body.loc
 	});
 
 	var history = new History({
