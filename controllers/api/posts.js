@@ -56,7 +56,7 @@ router.get('/findbycoords/:page', cors(), function(req, res, next){
 	var query = 
 	{ geometry: { '$near': { 
         '$maxDistance': 100000,
-        '$geometry': { type: 'Point', coordinates: [ latitude, longitude ] } } 
+        '$geometry': { type: 'Point', coordinates: [ longitude, latitude ] } } 
     	} 
     };
 
