@@ -54,9 +54,11 @@ router.get('/findbycoords/:page', cors(), function(req, res, next){
 
 
 	var query = 
-	{ geometry: { '$near': { 
-        '$maxDistance': 100000,
-        '$geometry': { type: 'Point', coordinates: [ longitude, latitude ] } } 
+	{ geometry: { '$near': 
+			{ 
+        		'$maxDistance': 10000000000,
+        		'$geometry': { type: 'Point', coordinates: [ longitude, latitude ] } 
+    		} 
     	} 
     };
 
