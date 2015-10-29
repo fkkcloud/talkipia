@@ -44,15 +44,6 @@ router.get('/findbycoords/:page', cors(), function(req, res, next){
 	var perPage 	= req.query.perpage;
 	var latitude 	= req.query.latitude;
 	var longitude 	= req.query.longitude;
-
-
-	console.log('page', page);
-	console.log('perPage', perPage);
-
-	console.log('longitude', longitude);
-	console.log('latitude', latitude);
-
-
 	var query = 
 	{ loc: { '$near': 
 			{ 
@@ -62,9 +53,6 @@ router.get('/findbycoords/:page', cors(), function(req, res, next){
     	} 
     };
 
-
-    //Post.index({'geometry':"2dsphere"});
-
 	/* Post use instead of History for test*/
 	Post.find(query)
 	//.sort('-date')
@@ -73,7 +61,6 @@ router.get('/findbycoords/:page', cors(), function(req, res, next){
 	.exec(function(err, posts) {
 		if (err) { console.log(err); }
 
-		console.log('found:', posts);
      	res.status(200).json(posts);
     })
 });
