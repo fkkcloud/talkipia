@@ -94,7 +94,7 @@ exports.connect = function(server){
 				}
 			}
 			catch(err) {
-				console.log('catch:', error);
+				console.log('catch:', err);
 			    //console.log('error on the message conveint to JSON:', message);
 			}
 			/* -----------------------  END RECEIVING GUID from client  --------------------------*/

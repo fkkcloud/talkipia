@@ -5,7 +5,7 @@ angular.module('app')
     //------------------------------------------------------------------------------------
     // INITIAL
     //------------------------------------------------------------------------------------
-
+    
     window.onbeforeunload = function(e) {
     	SessionSvc.updateOnlinestat(false, $scope.guid)
     	//SessionSvc.remove($scope.guid)
@@ -18,6 +18,7 @@ angular.module('app')
 	};
 
 	window.onpageshow = function(e) {
+
 		$scope.initSession();
 
 		SessionSvc.updateOnlinestat(true, $scope.guid);

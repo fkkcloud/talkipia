@@ -1,0 +1,111 @@
+<!-- navigation bar -->
+	<nav class='navbar navbar-default navbar-noround navbar-scale' role='navigation'>
+		<div class='container'>
+   			<div class="navbar-header">
+	   			<button type="button" class="navbar-toggle navbar-scale" ng-click="navCollapsed = !navCollapsed">
+	   				<span class='sr-only'>Toggle navigation</span>
+	   				<span class='icon-bar'></span>
+	   				<span class='icon-bar'></span>
+	   				<span class='icon-bar'></span>
+	   			</button>
+	            <a class="navbar-brand" href="/#/">
+	            	<!--<img ng-src="logo_letter.png" width="90" height="34" />-->
+	            </a>
+			</div>
+			<!-- 
+				*To collapse correctly, we need ng-class/ng-click/ng-init*
+				http://stackoverflow.com/questions/16268606/responsive-dropdown-navbar-with-angular-ui-bootstrap-done-in-the-correct-angula 
+			-->
+			<div ng-class="{'in':!navCollapsed}" class="navbar-collapse collapse" collapse="navCollapsed">
+				<ul class='nav navbar-nav'>
+					<li ng-if='!currentUser'>
+	                  	<a ng-href="/privacy" ng-click="collapse()">
+	                  	</a>
+	                </li>
+				</ul>
+
+				<p class='navbar-text navbar-right share-button '>
+					<a href="#"
+					socialshare
+					socialshare-provider="google+"
+					socialshare-text="#Talkipia #anonymous #realtime #map"
+					socialshare-url="http://talkipia.com">
+					<img ng-src="share_g.png" width="40" height="40"/>
+					</a>
+				</p>
+				<p class='navbar-text navbar-right share-button '>
+					<a href="#"
+					socialshare
+					socialshare-provider="twitter"
+					socialshare-text="#Talkipia #anonymous #realtime #map"
+					socialshare-url="http://talkipia.com">
+					<img ng-src="share_twitter.png" width="40" height="40"/>
+					</a>
+				</p>
+				<p class='navbar-text navbar-right share-button '>
+					<a href="#"
+					socialshare
+					socialshare-provider="facebook"
+					socialshare-text="#Talkipia #anonymous #realtime #map"
+					socialshare-url="http://talkipia.com">
+					<img ng-src="share_fb.png" width="40" height="40"/>
+					</a>
+				</p>
+				
+			</div>
+		</div>
+	</nav>
+
+	<!-- global map -->
+	<div> <!-- this is for multiple page setup later <div ng-if='currentPageId == pageId.post'>-->
+		<!-- Map -->
+		<div app-map=""></div>
+
+		<!-- Search Location Toggle -->
+		<div class="nav-burger" id="map-search-toggle">
+		  <div class="line"></div>
+		  <div class="text">Find</div>
+		  <div class="line"></div>
+		</div>
+
+		<!-- Search Location -->
+		<input ng-show="toggleSearchLocation == true" id="pac-input" class="controls" type="text" placeholder="Search Location">
+
+		<!-- Move to current location -->
+      	<button ng-click= 'moveToCurrentLocation()' id='map-btn-curr'>
+      		<img ng-src="paper-airplane.png" width="22" height="22"/>
+      	</button>
+
+      	<!-- Posting on map 
+      	<div id='map-post-center'>
+      		{{content}}
+      	</div>
+		-->
+		
+      	<!-- Posting -->
+      	<form ng-controller='PostsCtrl' onSubmit="return false;" ng-submit='addPost()' name='postForm' id='map-posting-form' novalidate>
+
+      		<input  type='text' 
+      				ng-model='content' 
+      				ng-focus='moveToPostLocation()'
+      				maxlength='50' 
+      				id='map-posting' 
+      				placeholder='Shout out to people around you!' required>
+
+      		<button ng-disabled='postForm.$invalid' 
+  				ng-click='addPost()' 
+  				class="btn btn-danger btn-lg btn-block" 
+  				id='map-btn-submit'> 
+  				{{ isInstant(timevalue) && 'Instant' || (timevalue | date:"mm : ss") }}
+  			</button>	
+
+      	</form>
+
+      	<!-- Time Slider -->
+      	<div ng-show="toggleTimeSlider == true" id='map-time-slider'>
+			<slider floor="5000" ceiling="1200000" step="20" precision="2" ng-model="timevalue"></slider>
+		</div>
+	</div>
+
+	<!-- pages ngview temp filter for iPhone-->
+	<!-- <div ng-show='!isMobile()' ng-view></div> -->
