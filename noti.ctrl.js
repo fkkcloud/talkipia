@@ -1,7 +1,7 @@
 
 exports.getPushids = function(res_list, pushids, session, post, location){
 
-	if (session.pushid == 'undefined' || session.pushid == 'null') // there should be pushid
+	if (session.pushid == 'undefined' || session.pushid == null || session.pushid.length == 'undefined' || session.pushid.length == null) // there should be pushid
 		return;
 
 	if (session.pushid.length < 6) // pushid usually is bigger then 6 letters
