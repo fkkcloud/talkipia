@@ -73,7 +73,7 @@ setInterval(function(){
 			var currentDateMillSec = currentDate.getTime();
 
 			var lifespan = currentDateMillSec - post.lifeend;
-			var bIsAboutToDie = (lifespan > 0) && (lifespan < 120000);
+			var bIsAboutToDie = (lifespan > 0) && (lifespan < 720000); // when its still within 12 min efore the delete
 			if (post.isPost && bIsAboutToDie){
 
 				var content = "Your room is about to be disappear '" + post.body + "'";
