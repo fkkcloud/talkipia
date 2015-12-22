@@ -65,6 +65,38 @@ router.post('/find', cors(), function(req, res, next){
 });
 
 // for manual remove
+router.post('/checkrejectroom', cors(), function(req, res, next){
+	var query = { 'guid': req.body.guid };
+	var roomid = req.body.roomid;
+
+	if (debug) console.log("session remove request for :", req.body.guid);
+
+	Session.findOne(query, function(err, session){
+    	if (err) res.send(500, { error: err });
+
+    	var rejectCheck = {
+    		isRejected : undefined
+    	}
+
+    	var current_rejectrooms = JSON.parse(session.rejectrooms);
+    	
+    	/* look for duplicates */
+    	for (var val in current_rejectrooms)
+    	{
+    		if (current_rejectrooms[val] == roomid)
+    		{
+    			rejectCheck.isRejected = true;
+    			res.status(200).json(rejectCheck);
+    			return; // end process here
+    		}
+    	}
+
+    	rejectCheck.isRejected = false;
+    	res.status(200).json(rejectCheck);
+	});
+});
+
+// for manual remove
 router.post('/delete', cors(), function(req, res, next){
 	var query = { 'guid': req.body.guid };
 
