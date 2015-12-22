@@ -214,6 +214,75 @@ router.post('/clear_blocklist', cors(), function(req, res, next){
 	});
 });
 
+// for updating rejectrooms
+router.post('/update_rejectrooms', cors(), function(req, res, next){
+	var query       = {'guid'    :req.body.guid};
+	var roomid      = req.body.roomid;
+
+	Session.findOne(query, function(err, session){
+    	if (err) res.send(500, { error: err });
+
+    	var current_rejectrooms = JSON.parse(session.rejectrooms);
+    	
+    	/* look for duplicates */
+    	for (var val in current_rejectrooms)
+    	{
+    		if (current_rejectrooms[val] == roomid)
+    		{
+    			res.status(200);
+    			return; // end process here
+    		}
+    	}
+
+    	current_rejectrooms.push(roomid);
+
+    	var updated_rejectrooms = JSON.stringify(current_rejectrooms);
+
+    	var updates = {'rejectrooms': updated_rejectrooms};
+
+    	Session.findOneAndUpdate(query, updates, function(err, session){
+	    	if (err) res.send(500, { error: err });
+
+	    	res.status(200);
+		});
+	});
+});
+
+// for updating current location constantly
+router.post('/remove_rejectrooms', cors(), function(req, res, next){
+	var query       = {'guid'    :req.body.guid};
+	var roomid      = req.body.roomid;
+
+	Session.findOne(query, function(err, session){
+    	if (err) res.send(500, { error: err });
+
+    	var current_rejectrooms = JSON.parse(session.rejectrooms);
+    	
+    	/* look for duplicates */
+    	for (var val in current_rejectrooms)
+    	{
+    		if (current_rejectrooms[val] == roomid)
+    		{
+    			current_rejectrooms.splice(val, 1);
+
+		    	var updated_rejectrooms = JSON.stringify(current_rejectrooms);
+
+		    	var updates = {'rejectrooms': updated_rejectrooms};
+
+		    	Session.findOneAndUpdate(query, updates, function(err, session){
+			    	if (err) res.send(500, { error: err });
+
+			    	res.status(200);
+			    	return;
+				});
+    		}
+    	}
+
+    	res.status(200);
+    	return; // end process here
+	});
+});
+
 // for updating watch location constantly
 /*
 router.post('/update_coupling', cors(), function(req, res, next){

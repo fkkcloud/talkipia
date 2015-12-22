@@ -11,6 +11,7 @@ var Session = db.model('Session', {
 	onlinestat  :    { type: Boolean, required:true,  default: false },
 	lastupdate  :    { type: Date,   required: true,  default: Date.now },
 	blocklist   :    { type: String, required: true, default: "[\"1234\"]"},
+	rejectrooms :    { type: String, required: true, default: "[\"1234\"]"},
 });
 
 module.exports = Session;
