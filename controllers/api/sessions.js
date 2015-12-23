@@ -255,6 +255,7 @@ router.post('/update_rejectrooms', cors(), function(req, res, next){
     	if (err) res.send(500, { error: err });
 
     	console.log('rejected rooms', session.rejectrooms);
+    	res.status(200);
 
     	var current_rejectrooms = JSON.parse(session.rejectrooms);
     	
