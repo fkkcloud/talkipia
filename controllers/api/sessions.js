@@ -247,7 +247,7 @@ router.post('/clear_blocklist', cors(), function(req, res, next){
 });
 
 // for updating rejectrooms
-router.post('/update_rejectrooms', function(req, res, next){
+router.post('/update_rejectrooms', cors(), function(req, res, next){
 	var query       = {'guid'    :req.body.guid};
 	var roomid      = req.body.roomid;
 
