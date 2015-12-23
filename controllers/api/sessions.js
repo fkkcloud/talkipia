@@ -264,15 +264,15 @@ router.post('/update_rejectrooms', cors(), function(req, res, next){
     	{
     		if (current_rejectrooms[val] == roomid)
     		{
-    			console.log("update reject room duplicated");
     			isDuplicated = true;
     			break;
     		}
     	}
 
     	if (isDuplicated){
-    		res.status(200);
-    		//return; // end process here
+    		console.log("update reject room duplicated");
+    		res.status(304);
+    		return; // end process here
     	}
 
     	current_rejectrooms.push(roomid);
@@ -316,13 +316,13 @@ router.post('/remove_rejectrooms', cors(), function(req, res, next){
 
 			    	console.log("remove reject room succeed");
 			    	res.status(200);
-			    	//return;
+			    	return;
 				});
     		}
     	}
 
     	console.log("remove reject room done - no room found");
-    	res.status(200);
+    	res.status(304);
     	//return; // end process here
 	});
 });
