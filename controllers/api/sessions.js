@@ -261,7 +261,7 @@ router.post('/update_rejectrooms', cors(), function(req, res, next){
     	{
     		if (current_rejectrooms[val] == roomid)
     		{
-    			res.status(200);
+    			res.status(200).json( {res:"already rejected"} );
     			return; // end process here
     		}
     	}
@@ -275,7 +275,7 @@ router.post('/update_rejectrooms', cors(), function(req, res, next){
     	Session.findOneAndUpdate(query, updates, function(err, session){
 	    	if (err) res.send(500, { error: err });
 
-	    	res.status(200);
+	    	res.status(200).json( {res:"rejected"} );
 		});
 	});
 });
@@ -304,13 +304,13 @@ router.post('/remove_rejectrooms', cors(), function(req, res, next){
 		    	Session.findOneAndUpdate(query, updates, function(err, session){
 			    	if (err) res.send(500, { error: err });
 
-			    	res.status(200);
+			    	res.status(200).json( {res:"roomid removed"} );
 			    	return;
 				});
     		}
     	}
 
-    	res.status(200);
+    	res.status(200).json( {res:"roomid does nto exists"} );
     	return; // end process here
 	});
 });
