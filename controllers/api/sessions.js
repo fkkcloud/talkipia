@@ -251,17 +251,12 @@ router.post('/update_rejectrooms', cors(), function(req, res, next){
 	var query       = {'guid'    :req.body.guid};
 	var roomid      = req.body.roomid;
 
-	if (req.method == 'OPTIONS') { // Handle preflight
-        response.writeHead(200, {
-           "Access-Control-Allow-Origin": "*",
-           "Access-Control-Allow-Headers": "X-Foo"
-        });
-    }
-
 	Session.findOne(query, function(err, session){
     	if (err) res.send(500, { error: err });
 
     	console.log('rejected rooms', session.rejectrooms);
+
+    	res.status(200);
 
     	var current_rejectrooms = JSON.parse(session.rejectrooms);
     	
