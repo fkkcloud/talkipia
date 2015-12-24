@@ -314,12 +314,12 @@ router.post('/remove_rejectrooms', cors(), function(req, res, next){
 		    	var updates = {'rejectrooms': updated_rejectrooms};
 
 		    	Session.findOneAndUpdate(query, updates, function(err, session){
-			    	if (err) res.send(500, { error: err });
+			    	if (err) res.sendStatus(500, { error: err });
 
-			    	console.log("remove reject room succeed");
+			    	//console.log("remove reject room succeed");
 
-			    	res.sendStatus(200);
-			    	return;
+			    	//res.sendStatus(200);
+			    	//return;
 			    	
 				});
     		}
