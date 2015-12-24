@@ -17,7 +17,7 @@ var app = express();
 app.use(favicon(__dirname + '/resources/favicon.ico'));
 app.use(bodyParser.json());
 app.use(logger('dev'));
-//app.use(cors());
+app.use(cors());
 
 app.use('/', require('./controllers')); // get router from controller's index.js
 
