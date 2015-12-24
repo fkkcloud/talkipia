@@ -19,6 +19,20 @@ app.use(bodyParser.json());
 app.use(logger('dev'));
 app.use(cors());
 
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+  res.header("Access-Control-Allow-Headers", "Cache-Control, Pragma, Origin, X-Requested-With, Content-Type, Accept");
+  res.header("Access-Control-Max-Age", "1728000");
+  res.header("Access-Control-Expose-Headers", "Cache-Control, Pragma, Origin, X-Requested-With, Content-Type, Accept");
+  if (req.method === 'OPTIONS') {
+    res.statusCode = 204;
+    return res.end();
+  } else {
+    return next();
+  }
+});
+
 app.use('/', require('./controllers')); // get router from controller's index.js
 
 // server 객체는 http.Server에서 얻는것인다 app.listen() 이 이를 리턴한다는 점
