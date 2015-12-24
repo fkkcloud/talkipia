@@ -254,8 +254,6 @@ router.post('/update_rejectrooms', cors(), function(req, res, next){
 	Session.findOne(query, function(err, session){
     	if (err) res.sendStatus(500, { error: err });
 
-    	console.log('rejected rooms', session.rejectrooms);
-
     	var current_rejectrooms = JSON.parse(session.rejectrooms);
     	
     	var isDuplicated = false;
@@ -270,7 +268,6 @@ router.post('/update_rejectrooms', cors(), function(req, res, next){
     	}
 
     	if (isDuplicated){
-    		console.log("update reject room duplicated");
     		res.sendStatus(200);
     		return; // end process here
     	}
@@ -284,7 +281,7 @@ router.post('/update_rejectrooms', cors(), function(req, res, next){
     	Session.findOneAndUpdate(query, updates, function(err, session){
 	    	if (err) res.send(500, { error: err });
 
-	    	console.log("update reject room succeed");
+	    	console.log("update reject room succeed", updated_rejectrooms);
 
 	    	res.sendStatus(200);
 	    	return;
@@ -311,6 +308,8 @@ router.post('/remove_rejectrooms', cors(), function(req, res, next){
 
 		    	var updated_rejectrooms = JSON.stringify(current_rejectrooms);
 
+		    	console.log("removed reject room", update_rejectrooms);
+
 		    	var updates = {'rejectrooms': updated_rejectrooms};
 
 		    	Session.findOneAndUpdate(query, updates, function(err, session){
@@ -325,7 +324,6 @@ router.post('/remove_rejectrooms', cors(), function(req, res, next){
     		}
     	}
 
-    	console.log("remove reject room done - no room found");
     	res.sendStatus(200);
     	return; // end process here
 	});
