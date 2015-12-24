@@ -252,7 +252,7 @@ router.post('/update_rejectrooms', cors(), function(req, res, next){
 	var roomid      = req.body.roomid;
 
 	Session.findOne(query, function(err, session){
-    	if (err) res.send(500, { error: err });
+    	if (err) res.sendStatus(500, { error: err });
 
     	console.log('rejected rooms', session.rejectrooms);
 
@@ -271,7 +271,7 @@ router.post('/update_rejectrooms', cors(), function(req, res, next){
 
     	if (isDuplicated){
     		console.log("update reject room duplicated");
-    		res.send(304);
+    		res.sendStatus(200);
     		//return; // end process here
     	}
 
@@ -286,7 +286,7 @@ router.post('/update_rejectrooms', cors(), function(req, res, next){
 
 	    	console.log("update reject room succeed");
 
-	    	res.send(200);
+	    	res.sendStatus(200);
 		});
 	});
 });
@@ -297,7 +297,7 @@ router.post('/remove_rejectrooms', cors(), function(req, res, next){
 	var roomid      = req.body.roomid;
 
 	Session.findOne(query, function(err, session){
-    	if (err) res.send(500, { error: err });
+    	if (err) res.sendStatus(500, { error: err });
 
     	var current_rejectrooms = JSON.parse(session.rejectrooms);
     	
@@ -317,14 +317,14 @@ router.post('/remove_rejectrooms', cors(), function(req, res, next){
 
 			    	console.log("remove reject room succeed");
 
-			    	res.send(200);
+			    	res.sendStatus(200);
 			    	
 				});
     		}
     	}
 
     	console.log("remove reject room done - no room found");
-    	res.send(304);
+    	res.sendStatus(200);
     	//return; // end process here
 	});
 });
