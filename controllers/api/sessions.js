@@ -308,7 +308,7 @@ router.post('/remove_rejectrooms', cors(), function(req, res, next){
 
 		    	var updated_rejectrooms = JSON.stringify(current_rejectrooms);
 
-		    	console.log("removed reject room", update_rejectrooms);
+		    	console.log("removed reject room", updated_rejectrooms);
 
 		    	var updates = {'rejectrooms': updated_rejectrooms};
 
